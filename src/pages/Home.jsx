@@ -6,7 +6,7 @@ export default function Home() {
   const [matchedCheat, setMatchedCheat] = useState(null)
   const [particles, setParticles] = useState([])
   const [isKeyboardInput, setIsKeyboardInput] = useState(false)
-  const MAX_INPUTS = 14
+  const MAX_INPUTS = 40
   const prevStateRef = useRef(new Map())
   const clearTimerRef = useRef(null)
   const audioRef = useRef(null)
