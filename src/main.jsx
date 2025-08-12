@@ -8,7 +8,7 @@ const base = new URL(document.baseURI).pathname
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter basename={base}>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <App />
     </BrowserRouter>
   </StrictMode>,
