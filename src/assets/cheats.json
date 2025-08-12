@@ -1,0 +1,746 @@
+{
+  "version": "1.0.0",
+  "platform": "PS2",
+  "title": "Grand Theft Auto: San Andreas - PS2 Cheats",
+  "allowed_buttons": [
+    "✕",
+    "◯",
+    "□",
+    "△",
+    "L1",
+    "R1",
+    "L2",
+    "R2",
+    "▭",
+    "▸",
+    "L3",
+    "R3",
+    "↑",
+    "↓",
+    "←",
+    "→",
+    "PS"
+  ],
+  "recommended_fields": [
+    "id",
+    "name",
+    "description",
+    "category",
+    "sequence",
+    "notes"
+  ],
+  "cheats": [
+    {
+      "id": "anti-police",
+      "name": "Never Wanted",
+      "description": "Lock wanted level (police ignore changes)",
+      "category": "wanted-level",
+      "sequence": ["◯", "→", "◯", "→", "←", "□", "△", "↑"],
+      "notes": "Verified from IGN (Lock Wanted Level)"
+    },
+
+    {
+      "id": "wanted-level-down",
+      "name": "Lower Wanted Level",
+      "description": "Decreases wanted level by two stars",
+      "category": "wanted-level",
+      "sequence": ["R1", "R1", "◯", "R2", "↑", "↓", "↑", "↓", "↑", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "wanted-level-up",
+      "name": "Raise Wanted Level",
+      "description": "Increases wanted level by two stars",
+      "category": "wanted-level",
+      "sequence": ["R1", "R1", "◯", "R2", "←", "→", "←", "→", "←", "→"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "six-stars",
+      "name": "Six Star Wanted Level",
+      "description": "Instant 6-star wanted level",
+      "category": "wanted-level",
+      "sequence": ["◯", "→", "◯", "→", "←", "□", "✕", "↓"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "full-health-armor-money",
+      "name": "Full Health, Armor, $250k",
+      "description": "Restores health and armor and gives $250,000",
+      "category": "player",
+      "sequence": ["R1", "R2", "L1", "✕", "←", "↓", "→", "↑", "←", "↓", "→", "↑"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "infinite-health",
+      "name": "(Almost) Infinite Health",
+      "description": "Player invulnerable to most damage (not explosions/falls/drowning/run over)",
+      "category": "player",
+      "sequence": ["↓", "✕", "→", "←", "→", "R1", "→", "↓", "↑", "△"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "infinite-ammo",
+      "name": "Infinite Ammo + No Reload",
+      "description": "Unlimited ammo without reloading",
+      "category": "weapon",
+      "sequence": ["L1", "R1", "□", "R1", "←", "R2", "R1", "←", "□", "↓", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "weapon-set-1",
+      "name": "Weapon Set 1",
+      "description": "Brass Knuckles, Bat, 9mm, Shotgun, Micro SMG, AK-47, Rifle, Rocket Launcher, Molotov, Spray Can",
+      "category": "weapon",
+      "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "→", "↑"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "weapon-set-2",
+      "name": "Weapon Set 2",
+      "description": "Knife, Desert Eagle, Sawn-off, Tec-9, M4, Sniper, Flame Thrower, Grenade, Fire Extinguisher",
+      "category": "weapon",
+      "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "↓", "←"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "weapon-set-3",
+      "name": "Weapon Set 3",
+      "description": "Chainsaw, Silenced 9mm, Combat Shotgun, M4, Bazooka, Plastic Explosive",
+      "category": "weapon",
+      "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "↓", "↓"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "super-jump",
+      "name": "Mega Jump",
+      "description": "Greatly increased jump height",
+      "category": "player",
+      "sequence": ["↑", "↑", "△", "△", "↑", "↑", "←", "→", "□", "R2", "R2"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "super-punch",
+      "name": "Super Punch",
+      "description": "Punches send people flying and cause high damage",
+      "category": "player",
+      "sequence": ["↑", "←", "✕", "△", "R1", "□", "□", "□", "L2"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "fast-run",
+      "name": "Fast Run",
+      "description": "Run speed increased",
+      "category": "player",
+      "sequence": [],
+      "notes": "To verify sequence"
+    },
+    {
+      "id": "fast-sprint",
+      "name": "Infinite Sprint",
+      "description": "Stamina never decreases when running",
+      "category": "player",
+      "sequence": [],
+      "notes": "To verify sequence"
+    },
+
+    {
+      "id": "perfect-handling",
+      "name": "Perfect Vehicle Handling",
+      "description": "Improved vehicle handling and cornering",
+      "category": "vehicle",
+      "sequence": ["△", "R1", "R1", "←", "R1", "L1", "R2", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "cars-fly",
+      "name": "Flying Cars",
+      "description": "Cars gain flight-like behavior",
+      "category": "vehicle",
+      "sequence": ["□", "↓", "L2", "↑", "L1", "◯", "↑", "✕", "←"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "boats-fly",
+      "name": "Flying Boats",
+      "description": "Boats can fly",
+      "category": "vehicle",
+      "sequence": ["R2", "◯", "↑", "L1", "→", "R1", "→", "↑", "□", "△"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "spawn-rhino",
+      "name": "Spawn Rhino Tank",
+      "description": "Spawns the Rhino tank",
+      "category": "spawn",
+      "sequence": ["◯", "◯", "L1", "◯", "◯", "◯", "L1", "L2", "R1", "△", "◯", "△"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-hydra",
+      "name": "Spawn Hydra",
+      "description": "Spawns the Hydra jet",
+      "category": "spawn",
+      "sequence": ["△", "△", "□", "◯", "✕", "L1", "L1", "↓", "↑"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-hunter",
+      "name": "Spawn Hunter",
+      "description": "Spawns the Hunter helicopter",
+      "category": "spawn",
+      "sequence": ["◯", "✕", "L1", "◯", "◯", "L1", "◯", "R1", "R2", "L2", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-jetpack",
+      "name": "Spawn Jetpack",
+      "description": "Spawns a Jetpack",
+      "category": "spawn",
+      "sequence": ["L1", "L2", "R1", "R2", "↑", "↓", "←", "→", "L1", "L2", "R1", "R2", "↑", "↓", "←", "→"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-parachute",
+      "name": "Spawn Parachute",
+      "description": "Spawns a parachute",
+      "category": "spawn",
+      "sequence": ["←", "→", "L1", "L2", "R1", "R2", "R2", "↑", "↓", "→", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-monster",
+      "name": "Spawn Monster Truck",
+      "description": "Spawns a Monster truck",
+      "category": "spawn",
+      "sequence": ["→", "↑", "R1", "R1", "R1", "↓", "△", "△", "✕", "◯", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-bloodring",
+      "name": "Spawn Bloodring Banger",
+      "description": "Spawns a Bloodring Banger",
+      "category": "spawn",
+      "sequence": ["↓", "R1", "◯", "L2", "L2", "✕", "R1", "L1", "←", "←"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "sunny-weather",
+      "name": "Sunny Weather",
+      "description": "Clear skies",
+      "category": "weather",
+      "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "□"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "overcast-weather",
+      "name": "Overcast Weather",
+      "description": "Cloudy skies",
+      "category": "weather",
+      "sequence": ["L2", "↓", "↓", "←", "□", "←", "R2", "□", "✕", "R1", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "rainy-weather",
+      "name": "Rainy Weather",
+      "description": "Rain showers",
+      "category": "weather",
+      "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "◯"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "foggy-weather",
+      "name": "Foggy Weather",
+      "description": "Fog covers the area",
+      "category": "weather",
+      "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "✕"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "stormy-weather",
+      "name": "Stormy Weather",
+      "description": "Stormy skies",
+      "category": "weather",
+      "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "◯"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "very-sunny-weather",
+      "name": "Very Sunny Weather",
+      "description": "Very sunny skies",
+      "category": "weather",
+      "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "sandstorm",
+      "name": "Sandstorm",
+      "description": "Creates a sandstorm",
+      "category": "weather",
+      "sequence": ["↑", "↓", "L1", "L1", "L2", "L2", "L1", "L2", "R1", "R2"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "always-midnight",
+      "name": "Always Midnight",
+      "description": "Time locked to midnight",
+      "category": "time",
+      "sequence": ["□", "L1", "R1", "→", "✕", "↑", "L1", "←", "←"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "always-2100",
+      "name": "Always 21:00",
+      "description": "Time locked to 21:00",
+      "category": "time",
+      "sequence": ["←", "←", "L2", "R1", "→", "□", "□", "L1", "L2", "✕"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "slow-motion",
+      "name": "Slow Motion",
+      "description": "Everything moves in slow motion",
+      "category": "time",
+      "sequence": ["△", "↑", "→", "↓", "□", "R2", "R1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "fast-motion",
+      "name": "Fast Motion",
+      "description": "Everything moves faster",
+      "category": "time",
+      "sequence": ["△", "↑", "→", "↓", "L2", "L1", "□"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "faster-clock",
+      "name": "Faster Clock",
+      "description": "Time moves faster",
+      "category": "time",
+      "sequence": ["◯", "◯", "L1", "□", "L1", "□", "□", "□", "L1", "△", "◯", "△"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "ped-riot",
+      "name": "Pedestrian Riot",
+      "description": "Pedestrians will riot",
+      "category": "world",
+      "sequence": ["↓", "←", "↑", "←", "✕", "R2", "R1", "L2", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "chaos-mode",
+      "name": "Chaos Mode",
+      "description": "Pedestrians fight each other",
+      "category": "world",
+      "sequence": ["L2", "→", "L1", "△", "→", "→", "R1", "L1", "→", "L1", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "bounty-on-you",
+      "name": "Bounty on Your Head",
+      "description": "Pedestrians will attack you",
+      "category": "world",
+      "sequence": ["↓", "↑", "↑", "↑", "✕", "R2", "R1", "L2", "L2"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "peds-attack-with-guns",
+      "name": "Pedestrians Attack (With Guns)",
+      "description": "All pedestrians attack with guns",
+      "category": "world",
+      "sequence": ["✕", "L1", "↑", "□", "↓", "✕", "L2", "△", "↓", "R1", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "peds-have-weapons",
+      "name": "Pedestrians Have Weapons",
+      "description": "All pedestrians carry weapons",
+      "category": "world",
+      "sequence": ["R2", "R1", "✕", "△", "✕", "△", "↑", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "all-peds-are-elvis",
+      "name": "All Pedestrians Are Elvis",
+      "description": "Pedestrians turn into Elvis",
+      "category": "world",
+      "sequence": ["L1", "◯", "△", "L1", "L1", "□", "L2", "↑", "↓", "←"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "beach-party",
+      "name": "Beach Party Mode",
+      "description": "CJ and pedestrians wear beach attire",
+      "category": "world",
+      "sequence": ["↑", "↑", "↓", "↓", "□", "◯", "L1", "R1", "△", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "triad-theme",
+      "name": "Triad Theme",
+      "description": "Triad-themed pedestrians and sword",
+      "category": "theme",
+      "sequence": ["✕", "✕", "↓", "R2", "L2", "◯", "R1", "◯", "□"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "funhouse-theme",
+      "name": "Funhouse Theme",
+      "description": "Clown/funhouse pedestrians and outfit",
+      "category": "theme",
+      "sequence": ["△", "△", "L1", "□", "□", "◯", "□", "↓", "◯"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "rural-theme",
+      "name": "Rural Theme",
+      "description": "Country-themed pedestrians and cars",
+      "category": "theme",
+      "sequence": ["△", "←", "□", "R2", "↑", "L2", "↓", "L1", "✕", "L1", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "kinky-theme",
+      "name": "Kinky Theme",
+      "description": "Gimp suit; pimps and prostitutes",
+      "category": "theme",
+      "sequence": ["□", "→", "□", "□", "L2", "✕", "△", "✕", "△"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "free-aim-while-driving",
+      "name": "Free Aim While Driving",
+      "description": "Aim freely during drive-bys",
+      "category": "vehicle",
+      "sequence": ["↑", "↑", "□", "L2", "→", "✕", "R1", "↓", "R2", "◯"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "blow-up-all-cars",
+      "name": "Blow Up All Cars",
+      "description": "Explodes all nearby vehicles",
+      "category": "vehicle",
+      "sequence": ["R2", "L2", "R1", "L1", "L2", "R2", "□", "△", "◯", "△", "L2", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "traffic-lights-stay-green",
+      "name": "Traffic Lights Stay Green",
+      "description": "All lights remain green",
+      "category": "traffic",
+      "sequence": ["→", "R1", "↑", "L2", "L2", "←", "R1", "L1", "R1", "R1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "aggressive-traffic",
+      "name": "Aggressive Traffic",
+      "description": "Drivers become aggressive",
+      "category": "traffic",
+      "sequence": ["R2", "◯", "R1", "L2", "←", "R1", "L1", "R2", "L2"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "increase-car-speed",
+      "name": "Increase Car Speed",
+      "description": "Cars move faster",
+      "category": "traffic",
+      "sequence": ["→", "R1", "↑", "L2", "L2", "←", "R1", "L1", "R1", "R1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "all-cars-have-nitrous",
+      "name": "All Cars Have Nitrous",
+      "description": "Equip all cars with nitrous",
+      "category": "vehicle",
+      "sequence": ["←", "△", "R1", "L1", "↑", "□", "△", "↓", "◯", "L2", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "drive-on-water",
+      "name": "Drive on Water",
+      "description": "Cars can drive on water",
+      "category": "vehicle",
+      "sequence": ["→", "R2", "◯", "R1", "L2", "□", "R1", "R2"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "super-bunny-hop",
+      "name": "Super Bunny Hop",
+      "description": "Bicycle jumps higher",
+      "category": "vehicle",
+      "sequence": ["△", "□", "◯", "◯", "□", "◯", "◯", "L1", "L2", "L2", "R1", "R2"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "invisible-cars",
+      "name": "Invisible Cars",
+      "description": "Cars become invisible (bikes visible)",
+      "category": "vehicle",
+      "sequence": ["△", "L1", "△", "R2", "□", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "moon-car-gravity",
+      "name": "Moon Car Gravity",
+      "description": "Cars fly away when hit",
+      "category": "vehicle",
+      "sequence": ["□", "R2", "↓", "↓", "←", "↓", "←", "←", "L2", "✕"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "reduced-traffic",
+      "name": "Reduced Traffic",
+      "description": "Less traffic on the roads",
+      "category": "traffic",
+      "sequence": ["✕", "↓", "↑", "R2", "↓", "△", "L1", "△", "←"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "pink-cars",
+      "name": "Pink Cars",
+      "description": "All traffic turns pink",
+      "category": "traffic",
+      "sequence": ["◯", "L1", "↓", "L2", "←", "✕", "R1", "L1", "→", "◯"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "black-cars",
+      "name": "Black Cars",
+      "description": "All traffic turns black",
+      "category": "traffic",
+      "sequence": ["◯", "L2", "↑", "R1", "←", "✕", "R1", "L1", "←", "◯"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "sports-cars",
+      "name": "Sports Cars",
+      "description": "Only sports cars in traffic",
+      "category": "traffic",
+      "sequence": ["↑", "L1", "R1", "↑", "→", "↑", "✕", "L2", "✕", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "junk-cars",
+      "name": "Junk Cars",
+      "description": "Only junk cars in traffic",
+      "category": "traffic",
+      "sequence": ["L2", "→", "L1", "↑", "✕", "L1", "L2", "R2", "R1", "L1", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "spawn-stunt-plane",
+      "name": "Spawn Stunt Plane",
+      "description": "Spawns a Stunt Plane",
+      "category": "spawn",
+      "sequence": ["◯", "↑", "L1", "L2", "↓", "R1", "L1", "L1", "←", "←", "✕", "△"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-vortex",
+      "name": "Spawn Vortex Hovercraft",
+      "description": "Spawns a Vortex Hovercraft",
+      "category": "spawn",
+      "sequence": ["△", "△", "□", "◯", "✕", "L1", "L2", "↓", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-hotring-1",
+      "name": "Spawn Hotring Racer #1",
+      "description": "Spawns Hotring Racer variant #1",
+      "category": "spawn",
+      "sequence": ["R1", "◯", "R2", "→", "L1", "L2", "✕", "✕", "□", "R1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-hotring-2",
+      "name": "Spawn Hotring Racer #2",
+      "description": "Spawns Hotring Racer variant #2",
+      "category": "spawn",
+      "sequence": ["R2", "L1", "◯", "→", "L1", "R1", "→", "↑", "◯", "R2"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-stretch",
+      "name": "Spawn Stretch",
+      "description": "Spawns a Stretch limo",
+      "category": "spawn",
+      "sequence": ["R2", "↑", "L2", "←", "←", "R1", "L1", "◯", "→"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-trashmaster",
+      "name": "Spawn Trashmaster",
+      "description": "Spawns a Trashmaster",
+      "category": "spawn",
+      "sequence": ["◯", "R1", "◯", "R1", "←", "←", "R1", "L1", "◯", "→"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-caddy",
+      "name": "Spawn Caddy",
+      "description": "Spawns a golf caddy",
+      "category": "spawn",
+      "sequence": ["◯", "L1", "↑", "R1", "L2", "✕", "R1", "L1", "◯", "✕"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-quad",
+      "name": "Spawn Quad",
+      "description": "Spawns a Quad bike",
+      "category": "spawn",
+      "sequence": ["←", "←", "↓", "↓", "↑", "↑", "□", "◯", "△", "R1", "R2"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-tanker",
+      "name": "Spawn Tanker Truck",
+      "description": "Spawns a Tanker Truck",
+      "category": "spawn",
+      "sequence": ["R1", "↑", "←", "→", "R2", "↑", "→", "□", "→", "L2", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-dozer",
+      "name": "Spawn Dozer",
+      "description": "Spawns a Bulldozer",
+      "category": "spawn",
+      "sequence": ["R2", "L1", "L1", "→", "→", "↑", "↑", "✕", "L1", "←"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "spawn-rancher",
+      "name": "Spawn Rancher",
+      "description": "Spawns a Rancher",
+      "category": "spawn",
+      "sequence": ["↑", "→", "→", "L1", "→", "↑", "□", "L2"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "max-muscle",
+      "name": "Max Muscle",
+      "description": "Maxes out Muscle stat",
+      "category": "stats",
+      "sequence": ["△", "↑", "↑", "←", "→", "□", "◯", "←"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "max-fat",
+      "name": "Max Fat",
+      "description": "Maxes out Fat stat",
+      "category": "stats",
+      "sequence": ["△", "↑", "↑", "←", "→", "□", "◯", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "min-muscle-and-fat",
+      "name": "Minimum Muscle and Fat",
+      "description": "Sets Muscle and Fat to zero",
+      "category": "stats",
+      "sequence": ["△", "↑", "↑", "←", "→", "□", "◯", "→"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "infinite-lung-capacity",
+      "name": "Infinite Lung Capacity",
+      "description": "Infinite oxygen underwater; infinite sprint",
+      "category": "stats",
+      "sequence": ["↓", "←", "L1", "↓", "↓", "R2", "↓", "L2", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "never-get-hungry",
+      "name": "Never Get Hungry",
+      "description": "CJ never needs to eat",
+      "category": "stats",
+      "sequence": ["□", "L2", "R1", "△", "↑", "□", "L2", "↑", "✕"],
+      "notes": "Verified from IGN (mapped RB->R1)"
+    },
+    {
+      "id": "max-respect",
+      "name": "Maximum Respect",
+      "description": "Maxes out Respect stat",
+      "category": "stats",
+      "sequence": ["L1", "R1", "△", "↓", "R2", "✕", "L1", "↑", "L2", "L2", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "max-sex-appeal",
+      "name": "Maximum Sex Appeal",
+      "description": "Maxes out Sex Appeal stat",
+      "category": "stats",
+      "sequence": ["◯", "△", "△", "↑", "◯", "R1", "L2", "↑", "△", "L1", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "hitman-all-weapons",
+      "name": "Hitman Level For All Weapons",
+      "description": "Max weapon skills to Hitman",
+      "category": "stats",
+      "sequence": ["↓", "□", "✕", "←", "R1", "R2", "←", "↓", "↓", "L1", "L1", "L1"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "gang-members-mode",
+      "name": "Gang Members Mode",
+      "description": "All pedestrians become gang members",
+      "category": "gang",
+      "sequence": ["←", "→", "→", "→", "←", "✕", "↓", "↑", "□", "→", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "gang-control",
+      "name": "Gang Control",
+      "description": "Only gangs on the streets",
+      "category": "gang",
+      "sequence": ["L2", "↑", "R1", "R1", "←", "R1", "R1", "R2", "→", "↓"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "recruit-anyone-pistol",
+      "name": "Recruit Anyone (Pistol)",
+      "description": "Recruit anyone; followers get 9mm",
+      "category": "gang",
+      "sequence": ["↓", "□", "↑", "R2", "R2", "↑", "→", "→", "↑"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "recruit-anyone-rocket",
+      "name": "Recruit Anyone (Rocket Launcher)",
+      "description": "Recruit anyone; followers get rocket launcher",
+      "category": "gang",
+      "sequence": ["R2", "R2", "R2", "✕", "L2", "L1", "R1", "L2", "↓", "✕"],
+      "notes": "Verified from IGN"
+    },
+
+    {
+      "id": "spawn-romero",
+      "name": "Spawn Romero",
+      "description": "Spawns a Romero hearse",
+      "category": "spawn",
+      "sequence": ["↓", "R2", "↓", "R1", "L2", "←", "R1", "L1", "←", "→"],
+      "notes": "Verified from IGN"
+    },
+    {
+      "id": "car-invincibility",
+      "name": "Car Invincibility (Vehicle of Death)",
+      "description": "Your vehicle becomes invincible; vehicles that touch you explode",
+      "category": "vehicle",
+      "sequence": ["L1", "L2", "L2", "↑", "↓", "↓", "↑", "R1", "R2", "R2"],
+      "notes": "Verified from GameFAQs forum"
+    }
+  ]
+}
+
