@@ -36,7 +36,8 @@
       "description": "Lock wanted level (police ignore changes)",
       "category": "wanted-level",
       "sequence": ["◯", "→", "◯", "→", "←", "□", "△", "↑"],
-      "notes": "Verified from IGN (Lock Wanted Level)"
+      "pcSequence": ["A", "E", "Z", "A", "K", "M", "I"],
+      "notes": "Verified from IGN (Lock Wanted Level) | PC: AEZAKMI"
     },
 
     {
@@ -45,7 +46,8 @@
       "description": "Decreases wanted level by two stars",
       "category": "wanted-level",
       "sequence": ["R1", "R1", "◯", "R2", "↑", "↓", "↑", "↓", "↑", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["T", "U", "R", "N", "D", "O", "W", "N", "T", "H", "E", "H", "E", "A", "T"],
+      "notes": "Verified from IGN | PC: TURNDOWNTHEHEAT"
     },
     {
       "id": "wanted-level-up",
@@ -53,7 +55,8 @@
       "description": "Increases wanted level by two stars",
       "category": "wanted-level",
       "sequence": ["R1", "R1", "◯", "R2", "←", "→", "←", "→", "←", "→"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["T", "U", "R", "N", "U", "P", "T", "H", "E", "H", "E", "A", "T"],
+      "notes": "Verified from IGN | PC: TURNUPTHEHEAT"
     },
     {
       "id": "six-stars",
@@ -61,7 +64,8 @@
       "description": "Instant 6-star wanted level",
       "category": "wanted-level",
       "sequence": ["◯", "→", "◯", "→", "←", "□", "✕", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["B", "R", "I", "N", "G", "I", "T", "O", "N"],
+      "notes": "Verified from IGN | PC: BRINGITON"
     },
 
     {
@@ -70,7 +74,8 @@
       "description": "Restores health and armor and gives $250,000",
       "category": "player",
       "sequence": ["R1", "R2", "L1", "✕", "←", "↓", "→", "↑", "←", "↓", "→", "↑"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["H", "E", "S", "O", "Y", "A", "M"],
+      "notes": "Verified from IGN | PC: HESOYAM"
     },
     {
       "id": "infinite-health",
@@ -78,7 +83,8 @@
       "description": "Player invulnerable to most damage (not explosions/falls/drowning/run over)",
       "category": "player",
       "sequence": ["↓", "✕", "→", "←", "→", "R1", "→", "↓", "↑", "△"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["B", "A", "G", "U", "V", "I", "X"],
+      "notes": "Verified from IGN | PC: BAGUVIX"
     },
     {
       "id": "infinite-ammo",
@@ -86,7 +92,8 @@
       "description": "Unlimited ammo without reloading",
       "category": "weapon",
       "sequence": ["L1", "R1", "□", "R1", "←", "R2", "R1", "←", "□", "↓", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["F", "U", "L", "L", "C", "L", "I", "P"],
+      "notes": "Verified from IGN | PC: FULLCLIP"
     },
 
     {
@@ -95,7 +102,8 @@
       "description": "Brass Knuckles, Bat, 9mm, Shotgun, Micro SMG, AK-47, Rifle, Rocket Launcher, Molotov, Spray Can",
       "category": "weapon",
       "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "→", "↑"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["L", "X", "G", "I", "W", "Y", "L"],
+      "notes": "Verified from IGN | PC: LXGIWYL"
     },
     {
       "id": "weapon-set-2",
@@ -103,7 +111,8 @@
       "description": "Knife, Desert Eagle, Sawn-off, Tec-9, M4, Sniper, Flame Thrower, Grenade, Fire Extinguisher",
       "category": "weapon",
       "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "↓", "←"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["P", "R", "O", "F", "E", "S", "S", "I", "O", "N", "A", "L", "S", "K", "I", "T"],
+      "notes": "Verified from IGN | PC: PROFESSIONALSKIT"
     },
     {
       "id": "weapon-set-3",
@@ -111,7 +120,8 @@
       "description": "Chainsaw, Silenced 9mm, Combat Shotgun, M4, Bazooka, Plastic Explosive",
       "category": "weapon",
       "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "↓", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["U", "Z", "U", "M", "Y", "M", "W"],
+      "notes": "Verified from IGN | PC: UZUMYMW"
     },
 
     {

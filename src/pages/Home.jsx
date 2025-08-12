@@ -5,9 +5,11 @@ export default function Home() {
   const [inputs, setInputs] = useState([])
   const [matchedCheat, setMatchedCheat] = useState(null)
   const [particles, setParticles] = useState([])
+  const [isKeyboardInput, setIsKeyboardInput] = useState(false)
   const MAX_INPUTS = 14
   const prevStateRef = useRef(new Map())
   const clearTimerRef = useRef(null)
+  const audioRef = useRef(null)
 
   const buttonSymbols = useMemo(
     () => [
@@ -45,15 +47,30 @@ export default function Home() {
       if (!cheatsData || !Array.isArray(cheatsData.cheats)) return null
       let best = null
       for (const cheat of cheatsData.cheats) {
+        // Check gamepad sequence
         const seq = cheat.sequence || []
         const n = seq.length
-        if (n === 0 || n > arr.length) continue
-        let ok = true
-        for (let i = 0; i < n; i++) {
-          if (arr[arr.length - n + i] !== seq[i]) { ok = false; break }
+        if (n > 0 && n <= arr.length) {
+          let ok = true
+          for (let i = 0; i < n; i++) {
+            if (arr[arr.length - n + i] !== seq[i]) { ok = false; break }
+          }
+          if (ok) {
+            if (!best || (seq.length > (best.sequence?.length || 0))) best = cheat
+          }
         }
-        if (ok) {
-          if (!best || (seq.length > (best.sequence?.length || 0))) best = cheat
+        
+        // Check PC keyboard sequence
+        const pcSeq = cheat.pcSequence || []
+        const pcN = pcSeq.length
+        if (pcN > 0 && pcN <= arr.length) {
+          let ok = true
+          for (let i = 0; i < pcN; i++) {
+            if (arr[arr.length - pcN + i] !== pcSeq[i]) { ok = false; break }
+          }
+          if (ok) {
+            if (!best || (pcSeq.length > (best.pcSequence?.length || best.sequence?.length || 0))) best = cheat
+          }
         }
       }
       return best
@@ -65,7 +82,7 @@ export default function Home() {
         setInputs([])
         setMatchedCheat(null)
         clearTimerRef.current = null
-      }, 5000)
+      }, 2000)
     }
 
     const triggerFireworks = () => {
@@ -84,7 +101,19 @@ export default function Home() {
       setTimeout(() => setParticles([]), 1000)
     }
 
-    const clampAndSet = (nextItem) => {
+    const playNotif = () => {
+      const a = audioRef.current
+      if (!a) return
+      try {
+        a.currentTime = 0
+        a.play().catch(() => {})
+      } catch (e) {
+        console.error(e)
+       }
+    }
+
+    const clampAndSet = (nextItem, fromKeyboard = false) => {
+      setIsKeyboardInput(fromKeyboard)
       setInputs((prev) => {
         // If a cheat was already matched, reset buffer so user can try a new one immediately
         const base = matchedCheat ? [] : prev
@@ -94,6 +123,8 @@ export default function Home() {
         const wasDifferent = (!matchedCheat || matchedCheat.id !== found?.id) && !!found
         setMatchedCheat(found)
         if (wasDifferent) {
+          // Play sound immediately and trigger fireworks shortly after
+          playNotif()
           setTimeout(triggerFireworks, 300)
         }
         return next
@@ -149,14 +180,35 @@ export default function Home() {
       raf = requestAnimationFrame(loop)
     }
 
+    // Keyboard input handling for PC cheat codes
+    const handleKeyDown = (event) => {
+      // Only capture letter keys A-Z
+      if (event.key.length === 1 && /[A-Za-z]/.test(event.key)) {
+        const letter = event.key.toUpperCase()
+        clampAndSet(letter, true)
+        event.preventDefault()
+      }
+    }
+
     // Autostart and also after user gesture for browsers that require it
     const start = () => {
       if (!raf) raf = requestAnimationFrame(loop)
+      // Prepare audio on first user gesture for autoplay policies
+      if (!audioRef.current) {
+        audioRef.current = new Audio('cheat_activated.mp3')
+        audioRef.current.volume = 0.6
+        // Try to unlock audio; ignore failures
+        audioRef.current.play().then(() => {
+          audioRef.current.pause()
+          audioRef.current.currentTime = 0
+        }).catch(() => {})
+      }
       window.removeEventListener('click', start)
       window.removeEventListener('keydown', start)
     }
     window.addEventListener('click', start)
     window.addEventListener('keydown', start)
+    window.addEventListener('keydown', handleKeyDown)
     raf = requestAnimationFrame(loop)
 
     // Keep UI in sync on connect/disconnect without adding status text
@@ -169,6 +221,7 @@ export default function Home() {
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener('click', start)
       window.removeEventListener('keydown', start)
+      window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('gamepadconnected', onConnect)
       window.removeEventListener('gamepaddisconnected', onDisconnect)
       // clear pending auto-clear timer
@@ -204,9 +257,9 @@ export default function Home() {
         </div>
       )}
       <div className="text-center text-base leading-6 max-w-3xl break-words">
-        {inputs.join(', ')}
+        {inputs.join(' ')}
 
-        {matchedCheat?.sequence?.join(' ')}
+        {isKeyboardInput && matchedCheat?.pcSequence ? matchedCheat.pcSequence.join('') : matchedCheat?.sequence?.join(' ')}
       </div>
     </main>
   )
