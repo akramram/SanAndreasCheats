@@ -116,10 +116,27 @@ Any static host works. Typical options:
 
 ## Roadmap / Ideas
 
+### Core Features
 - Fill in TBD sequences (e.g., Fast Run, Infinite Sprint) with verified inputs.
 - Add filtering/search UI for cheats.
 - Multi-platform datasets (Xbox/PC) with runtime platform switch.
 - Visual on-screen gamepad with live button feedback.
+
+### Gamification Features
+- **Speed & Accuracy Tracking**: Measure how fast and accurately users can input cheat code variants
+  - Track input speed (time from first button to completion)
+  - Measure accuracy (correct inputs vs. total inputs)
+  - Support multiple variants per cheat code for practice
+  - Display personal best times and accuracy percentages
+  - Show real-time feedback during input (speed meter, accuracy indicator)
+
+- **Leaderboards & Competition**:
+  - Global leaderboards for fastest and most accurate cheat inputs
+  - User name registration on first visit with unique device/IP identification
+  - Categories: fastest overall, fastest per cheat, highest accuracy, most cheats completed
+  - Weekly/monthly challenges and competitions
+  - Achievement system for milestones (e.g., "Speed Demon", "Perfect Accuracy", "Cheat Master")
+  - Anonymous but persistent user tracking using device fingerprinting + IP for uniqueness
 
 ## License
 
