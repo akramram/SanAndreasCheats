@@ -36,8 +36,13 @@
       "description": "Lock wanted level (police ignore changes)",
       "category": "wanted-level",
       "sequence": ["◯", "→", "◯", "→", "←", "□", "△", "↑"],
-      "pcSequence": ["A", "E", "Z", "A", "K", "M", "I"],
-      "notes": "Verified from IGN (Lock Wanted Level) | PC: AEZAKMI"
+      "pcSequence": [
+        ["A", "E", "Z", "A", "K", "M", "I"],
+        ["I", "F", "I", "R", "S", "T", "D", "O", "Z"],
+        ["T", "E", "S", "T", "E", "D", "U", "C", "A", "T", "I", "O", "N", "A", "L", "S", "K", "I", "L", "L", "S"],
+        ["I", "D", "O", "A", "S", "I", "P", "L", "E", "A", "S", "E"]
+      ],
+      "notes": "Verified from IGN | PC: AEZAKMI / IFIRSTDOZ / TESTEDUCATIONALSKILLS / IDOASIPLEASE"
     },
 
     {
@@ -46,8 +51,12 @@
       "description": "Decreases wanted level by two stars",
       "category": "wanted-level",
       "sequence": ["R1", "R1", "◯", "R2", "↑", "↓", "↑", "↓", "↑", "↓"],
-      "pcSequence": ["T", "U", "R", "N", "D", "O", "W", "N", "T", "H", "E", "H", "E", "A", "T"],
-      "notes": "Verified from IGN | PC: TURNDOWNTHEHEAT"
+      "pcSequence": [
+        ["A", "S", "N", "A", "E", "B"],
+        ["T", "U", "R", "N", "D", "O", "W", "N", "T", "H", "E", "H", "E", "A", "T"],
+        ["S", "O", "M", "E", "O", "N", "E", "S", "O", "M", "E", "T", "I", "M", "E", "A", "L", "A", "N"]
+      ],
+      "notes": "Verified from IGN | PC: ASNAEB / TURNDOWNTHEHEAT / SOMEONESOMETIMEALAN"
     },
     {
       "id": "wanted-level-up",
@@ -55,8 +64,11 @@
       "description": "Increases wanted level by two stars",
       "category": "wanted-level",
       "sequence": ["R1", "R1", "◯", "R2", "←", "→", "←", "→", "←", "→"],
-      "pcSequence": ["T", "U", "R", "N", "U", "P", "T", "H", "E", "H", "E", "A", "T"],
-      "notes": "Verified from IGN | PC: TURNUPTHEHEAT"
+      "pcSequence": [
+        ["O", "S", "R", "B", "L", "H", "H"],
+        ["T", "U", "R", "N", "U", "P", "T", "H", "E", "H", "E", "A", "T"]
+      ],
+      "notes": "Verified from IGN | PC: OSRBLHH / TURNUPTHEHEAT"
     },
     {
       "id": "six-stars",
@@ -74,8 +86,13 @@
       "description": "Restores health and armor and gives $250,000",
       "category": "player",
       "sequence": ["R1", "R2", "L1", "✕", "←", "↓", "→", "↑", "←", "↓", "→", "↑"],
-      "pcSequence": ["H", "E", "S", "O", "Y", "A", "M"],
-      "notes": "Verified from IGN | PC: HESOYAM"
+      "pcSequence": [
+        ["H", "E", "S", "O", "Y", "A", "M"],
+        ["I", "N", "E", "E", "D", "S", "O", "M", "E", "H", "E", "L", "P"],
+        ["E", "N", "A", "B", "L", "E", "F", "O", "R", "T", "U", "N", "E", "A", "S", "P", "E", "C", "T", "S"],
+        ["2", "A", "8", "7", "3", "S", "8", "A"]
+      ],
+      "notes": "Verified from IGN | PC: HESOYAM / INEEDSOMEHELP / ENABLEFORTUNEASPECTS / 2A873S8A"
     },
     {
       "id": "infinite-health",
@@ -83,8 +100,48 @@
       "description": "Player invulnerable to most damage (not explosions/falls/drowning/run over)",
       "category": "player",
       "sequence": ["↓", "✕", "→", "←", "→", "R1", "→", "↓", "↑", "△"],
-      "pcSequence": ["B", "A", "G", "U", "V", "I", "X"],
-      "notes": "Verified from IGN | PC: BAGUVIX"
+      "pcSequence": [
+        ["B", "A", "G", "U", "V", "I", "X"],
+        ["C", "A", "I", "N", "E", "M", "V", "H", "Z", "C"],
+        ["N", "O", "O", "N", "E", "C", "A", "N", "H", "U", "R", "T", "M", "E"]
+      ],
+      "notes": "Verified from IGN | PC: BAGUVIX / CAINEMVHZC / NOONECANHURTME"
+    },
+    {
+      "id": "adrenaline-effects",
+      "name": "Adrenaline Effects",
+      "description": "Slow motion adrenaline mode",
+      "category": "player",
+      "sequence": ["✕", "✕", "□", "R1", "L1", "✕", "↓", "←", "✕"],
+      "pcSequence": ["A", "N", "O", "S", "E", "O", "N", "G", "L", "A", "S", "S"],
+      "notes": "Verified from GTA Wiki | PC: ANOSEONGLASS"
+    },
+    {
+      "id": "suicide",
+      "name": "Commit Suicide",
+      "description": "Instant death (unless unlimited health is active)",
+      "category": "player",
+      "sequence": ["→", "L2", "↓", "R1", "←", "←", "R1", "L1", "L2", "L1"],
+      "pcSequence": ["G", "O", "O", "D", "B", "Y", "E", "C", "R", "U", "E", "L", "W", "O", "R", "L", "D"],
+      "notes": "Verified from GTA Wiki | PC: GOODBYECRUELWORLD"
+    },
+    {
+      "id": "max-vehicle-skills",
+      "name": "Maximum Vehicle Skills",
+      "description": "Max driving, flying, bike, and cycling skills",
+      "category": "stats",
+      "sequence": ["□", "L2", "✕", "R1", "L2", "L2", "←", "R1", "→", "L1", "L1", "L1"],
+      "pcSequence": ["N", "A", "T", "U", "R", "A", "L", "T", "A", "L", "E", "N", "T"],
+      "notes": "Verified from GTA Wiki | PC: NATURALTALENT"
+    },
+    {
+      "id": "never-hungry",
+      "name": "CJ Never Gets Hungry",
+      "description": "CJ's hunger never decreases",
+      "category": "player",
+      "sequence": ["□", "L2", "R1", "△", "↑", "□", "L2", "↑", "✕"],
+      "pcSequence": ["A", "E", "D", "U", "W", "N", "V"],
+      "notes": "Verified from GTA Wiki | PC: AEDUWNV"
     },
     {
       "id": "infinite-ammo",
@@ -102,8 +159,11 @@
       "description": "Brass Knuckles, Bat, 9mm, Shotgun, Micro SMG, AK-47, Rifle, Rocket Launcher, Molotov, Spray Can",
       "category": "weapon",
       "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "→", "↑"],
-      "pcSequence": ["L", "X", "G", "I", "W", "Y", "L"],
-      "notes": "Verified from IGN | PC: LXGIWYL"
+      "pcSequence": [
+        ["L", "X", "G", "I", "W", "Y", "L"],
+        ["T", "H", "U", "G", "S", "A", "R", "M", "O", "U", "R", "Y"]
+      ],
+      "notes": "Verified from IGN | PC: LXGIWYL / THUGSARMOURY"
     },
     {
       "id": "weapon-set-2",
@@ -111,8 +171,11 @@
       "description": "Knife, Desert Eagle, Sawn-off, Tec-9, M4, Sniper, Flame Thrower, Grenade, Fire Extinguisher",
       "category": "weapon",
       "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "↓", "←"],
-      "pcSequence": ["P", "R", "O", "F", "E", "S", "S", "I", "O", "N", "A", "L", "S", "K", "I", "T"],
-      "notes": "Verified from IGN | PC: PROFESSIONALSKIT"
+      "pcSequence": [
+        ["P", "R", "O", "F", "E", "S", "S", "I", "O", "N", "A", "L", "S", "K", "I", "T"],
+        ["K", "J", "K", "S", "Z", "P", "J"]
+      ],
+      "notes": "Verified from IGN | PC: PROFESSIONALSKIT / KJKSZPJ"
     },
     {
       "id": "weapon-set-3",
@@ -120,8 +183,11 @@
       "description": "Chainsaw, Silenced 9mm, Combat Shotgun, M4, Bazooka, Plastic Explosive",
       "category": "weapon",
       "sequence": ["R1", "R2", "L1", "R2", "←", "↓", "→", "↑", "←", "↓", "↓", "↓"],
-      "pcSequence": ["U", "Z", "U", "M", "Y", "M", "W"],
-      "notes": "Verified from IGN | PC: UZUMYMW"
+      "pcSequence": [
+        ["U", "Z", "U", "M", "Y", "M", "W"],
+        ["N", "U", "T", "T", "E", "R", "T", "O", "O", "L", "S"]
+      ],
+      "notes": "Verified from IGN | PC: UZUMYMW / NUTTERTOOLS"
     },
 
     {
@@ -130,7 +196,8 @@
       "description": "Greatly increased jump height",
       "category": "player",
       "sequence": ["↑", "↑", "△", "△", "↑", "↑", "←", "→", "□", "R2", "R2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["K", "A", "N", "G", "A", "R", "O", "O"],
+      "notes": "Verified from IGN | PC: KANGAROO"
     },
     {
       "id": "super-punch",
@@ -138,7 +205,8 @@
       "description": "Punches send people flying and cause high damage",
       "category": "player",
       "sequence": ["↑", "←", "✕", "△", "R1", "□", "□", "□", "L2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["I", "A", "V", "E", "N", "J", "Q"],
+      "notes": "Verified from IGN | PC: IAVENJQ"
     },
     {
       "id": "fast-run",
@@ -163,7 +231,8 @@
       "description": "Improved vehicle handling and cornering",
       "category": "vehicle",
       "sequence": ["△", "R1", "R1", "←", "R1", "L1", "R2", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["P", "I", "N", "K", "S", "L", "I", "P"],
+      "notes": "Verified from IGN | PC: PINKSLIP"
     },
     {
       "id": "cars-fly",
@@ -171,7 +240,11 @@
       "description": "Cars gain flight-like behavior",
       "category": "vehicle",
       "sequence": ["□", "↓", "L2", "↑", "L1", "◯", "↑", "✕", "←"],
-      "notes": "Verified from IGN"
+      "pcSequence": [
+        ["R", "I", "P", "A", "Z", "H", "A"],
+        ["C", "H", "I", "T", "T", "Y", "C", "H", "I", "T", "T", "Y", "B", "A", "N", "G", "B", "A", "N", "G"]
+      ],
+      "notes": "Verified from IGN | PC: RIPAZHA / CHITTYCHITTYBANGBANG"
     },
     {
       "id": "boats-fly",
@@ -179,16 +252,20 @@
       "description": "Boats can fly",
       "category": "vehicle",
       "sequence": ["R2", "◯", "↑", "L1", "→", "R1", "→", "↑", "□", "△"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["F", "L", "Y", "I", "N", "G", "F", "I", "S", "H"],
+      "notes": "Verified from IGN | PC: FLYINGFISH"
     },
-
     {
       "id": "spawn-rhino",
       "name": "Spawn Rhino Tank",
       "description": "Spawns the Rhino tank",
       "category": "spawn",
       "sequence": ["◯", "◯", "L1", "◯", "◯", "◯", "L1", "L2", "R1", "△", "◯", "△"],
-      "notes": "Verified from IGN"
+      "pcSequence": [
+        ["A", "I", "M", "V", "E", "H", "I", "C", "L", "E"],
+        ["T", "A", "N", "K", "S", "F", "O", "R", "N", "O", "T", "H", "I", "N", "G"]
+      ],
+      "notes": "Verified from IGN | PC: AIMVEHICLE / TANKSFORNOTHING"
     },
     {
       "id": "spawn-hydra",
@@ -196,7 +273,8 @@
       "description": "Spawns the Hydra jet",
       "category": "spawn",
       "sequence": ["△", "△", "□", "◯", "✕", "L1", "L1", "↓", "↑"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["J", "U", "M", "P", "J", "E", "T"],
+      "notes": "Verified from IGN | PC: JUMPJET"
     },
     {
       "id": "spawn-hunter",
@@ -204,7 +282,8 @@
       "description": "Spawns the Hunter helicopter",
       "category": "spawn",
       "sequence": ["◯", "✕", "L1", "◯", "◯", "L1", "◯", "R1", "R2", "L2", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["O", "H", "D", "U", "D", "E"],
+      "notes": "Verified from IGN | PC: OHDUDE"
     },
     {
       "id": "spawn-jetpack",
@@ -212,7 +291,11 @@
       "description": "Spawns a Jetpack",
       "category": "spawn",
       "sequence": ["L1", "L2", "R1", "R2", "↑", "↓", "←", "→", "L1", "L2", "R1", "R2", "↑", "↓", "←", "→"],
-      "notes": "Verified from IGN"
+      "pcSequence": [
+        ["R", "O", "C", "K", "E", "T", "M", "A", "N"],
+        ["Y", "E", "C", "G", "A", "A"]
+      ],
+      "notes": "Verified from IGN | PC: ROCKETMAN / YECGAA"
     },
     {
       "id": "spawn-parachute",
@@ -220,7 +303,8 @@
       "description": "Spawns a parachute",
       "category": "spawn",
       "sequence": ["←", "→", "L1", "L2", "R1", "R2", "R2", "↑", "↓", "→", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["A", "I", "R", "S", "H", "I", "P"],
+      "notes": "Verified from IGN | PC: AIRSHIP"
     },
     {
       "id": "spawn-monster",
@@ -228,7 +312,8 @@
       "description": "Spawns a Monster truck",
       "category": "spawn",
       "sequence": ["→", "↑", "R1", "R1", "R1", "↓", "△", "△", "✕", "◯", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["M", "O", "N", "S", "T", "E", "R"],
+      "notes": "Verified from IGN | PC: MONSTER"
     },
     {
       "id": "spawn-bloodring",
@@ -236,7 +321,8 @@
       "description": "Spawns a Bloodring Banger",
       "category": "spawn",
       "sequence": ["↓", "R1", "◯", "L2", "L2", "✕", "R1", "L1", "←", "←"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["C", "Q", "Z", "I", "J", "M", "B"],
+      "notes": "Verified from IGN | PC: CQZIJMB"
     },
 
     {
@@ -245,7 +331,11 @@
       "description": "Clear skies",
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "□"],
-      "notes": "Verified from IGN"
+      "pcSequence": [
+        ["I", "C", "I", "K", "L", "L", "E", "R"],
+        ["P", "L", "E", "A", "S", "A", "N", "T", "D", "A", "Y"]
+      ],
+      "notes": "Verified from IGN | PC: ICIKILLER / PLEASANTDAY"
     },
     {
       "id": "overcast-weather",
@@ -253,7 +343,8 @@
       "description": "Cloudy skies",
       "category": "weather",
       "sequence": ["L2", "↓", "↓", "←", "□", "←", "R2", "□", "✕", "R1", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["A", "L", "O", "H", "O", "M", "O", "R", "A"],
+      "notes": "Verified from IGN | PC: ALOHOMORA"
     },
     {
       "id": "rainy-weather",
@@ -261,7 +352,8 @@
       "description": "Rain showers",
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "◯"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["C", "F", "V", "F", "G", "M", "J"],
+      "notes": "Verified from IGN | PC: CFVFGMJ"
     },
     {
       "id": "foggy-weather",
@@ -269,7 +361,8 @@
       "description": "Fog covers the area",
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "✕"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["C", "F", "V", "F", "G", "M", "J"],
+      "notes": "Verified from IGN | PC: CFVFGMJ"
     },
     {
       "id": "stormy-weather",
@@ -277,7 +370,11 @@
       "description": "Stormy skies",
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "◯"],
-      "notes": "Verified from IGN"
+      "pcSequence": [
+        ["M", "G", "H", "X", "Y", "Q", "J"],
+        ["S", "C", "O", "T", "T", "I", "S", "H"]
+      ],
+      "notes": "Verified from IGN | PC: MGHXYQJ / SCOTTISH"
     },
     {
       "id": "very-sunny-weather",
@@ -285,7 +382,8 @@
       "description": "Very sunny skies",
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["T", "O", "O", "H", "O", "T"],
+      "notes": "Verified from IGN | PC: TOOHOT"
     },
     {
       "id": "sandstorm",
@@ -293,7 +391,8 @@
       "description": "Creates a sandstorm",
       "category": "weather",
       "sequence": ["↑", "↓", "L1", "L1", "L2", "L2", "L1", "L2", "R1", "R2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["C", "W", "J", "X", "Q", "Z", "V"],
+      "notes": "Verified from IGN | PC: CWJXQZV"
     },
 
     {
@@ -302,7 +401,8 @@
       "description": "Time locked to midnight",
       "category": "time",
       "sequence": ["□", "L1", "R1", "→", "✕", "↑", "L1", "←", "←"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["N", "I", "G", "H", "T", "P", "R", "O", "W", "L", "E", "R"],
+      "notes": "Verified from IGN | PC: NIGHTPROWLER"
     },
     {
       "id": "always-2100",
@@ -310,7 +410,8 @@
       "description": "Time locked to 21:00",
       "category": "time",
       "sequence": ["←", "←", "L2", "R1", "→", "□", "□", "L1", "L2", "✕"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["O", "F", "V", "I", "S"],
+      "notes": "Verified from IGN | PC: OFVIS"
     },
     {
       "id": "slow-motion",
@@ -318,7 +419,8 @@
       "description": "Everything moves in slow motion",
       "category": "time",
       "sequence": ["△", "↑", "→", "↓", "□", "R2", "R1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["L", "I", "Y", "O", "A", "A", "Y"],
+      "notes": "Verified from IGN | PC: LIYOAAY"
     },
     {
       "id": "fast-motion",
@@ -326,7 +428,8 @@
       "description": "Everything moves faster",
       "category": "time",
       "sequence": ["△", "↑", "→", "↓", "L2", "L1", "□"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["S", "P", "E", "E", "D", "I", "T", "U", "P"],
+      "notes": "Verified from IGN | PC: SPEEDITUP"
     },
     {
       "id": "faster-clock",
@@ -334,7 +437,8 @@
       "description": "Time moves faster",
       "category": "time",
       "sequence": ["◯", "◯", "L1", "□", "L1", "□", "□", "□", "L1", "△", "◯", "△"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["Y", "S", "O", "N", "N", "U", "T", "S"],
+      "notes": "Verified from IGN | PC: YSONNUTS"
     },
 
     {
@@ -343,7 +447,8 @@
       "description": "Pedestrians will riot",
       "category": "world",
       "sequence": ["↓", "←", "↑", "←", "✕", "R2", "R1", "L2", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["A", "J", "L", "O", "J", "Y", "U", "P"],
+      "notes": "Verified from IGN | PC: AJLOJYUP"
     },
     {
       "id": "chaos-mode",
@@ -351,7 +456,8 @@
       "description": "Pedestrians fight each other",
       "category": "world",
       "sequence": ["L2", "→", "L1", "△", "→", "→", "R1", "L1", "→", "L1", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["S", "T", "A", "T", "E", "O", "F", "E", "M", "E", "R", "G", "E", "N", "C", "Y"],
+      "notes": "Verified from IGN | PC: STATEOFEMERGENCY"
     },
     {
       "id": "bounty-on-you",
@@ -359,7 +465,8 @@
       "description": "Pedestrians will attack you",
       "category": "world",
       "sequence": ["↓", "↑", "↑", "↑", "✕", "R2", "R1", "L2", "L2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["B", "G", "L", "U", "A", "W", "M", "L"],
+      "notes": "Verified from IGN | PC: BGLUAWML"
     },
     {
       "id": "peds-attack-with-guns",
@@ -367,7 +474,8 @@
       "description": "All pedestrians attack with guns",
       "category": "world",
       "sequence": ["✕", "L1", "↑", "□", "↓", "✕", "L2", "△", "↓", "R1", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["F", "O", "O", "X", "F", "T"],
+      "notes": "Verified from IGN | PC: FOOXFT"
     },
     {
       "id": "peds-have-weapons",
@@ -375,7 +483,8 @@
       "description": "All pedestrians carry weapons",
       "category": "world",
       "sequence": ["R2", "R1", "✕", "△", "✕", "△", "↑", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["T", "H", "U", "G", "S", "T", "O", "O", "L", "S"],
+      "notes": "Verified from IGN | PC: THUGSTOOLS"
     },
     {
       "id": "all-peds-are-elvis",
@@ -383,7 +492,8 @@
       "description": "Pedestrians turn into Elvis",
       "category": "world",
       "sequence": ["L1", "◯", "△", "L1", "L1", "□", "L2", "↑", "↓", "←"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["B", "L", "U", "E", "S", "U", "E", "D", "E"],
+      "notes": "Verified from IGN | PC: BLUESUEDE"
     },
 
     {
@@ -392,7 +502,8 @@
       "description": "CJ and pedestrians wear beach attire",
       "category": "world",
       "sequence": ["↑", "↑", "↓", "↓", "□", "◯", "L1", "R1", "△", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["C", "I", "K", "G", "A", "B", "U", "Z"],
+      "notes": "Verified from IGN | PC: CIKGABUZ"
     },
     {
       "id": "triad-theme",
@@ -400,7 +511,8 @@
       "description": "Triad-themed pedestrians and sword",
       "category": "theme",
       "sequence": ["✕", "✕", "↓", "R2", "L2", "◯", "R1", "◯", "□"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["N", "I", "N", "J", "A"],
+      "notes": "Verified from IGN | PC: NINJA"
     },
     {
       "id": "funhouse-theme",
@@ -408,7 +520,8 @@
       "description": "Clown/funhouse pedestrians and outfit",
       "category": "theme",
       "sequence": ["△", "△", "L1", "□", "□", "◯", "□", "↓", "◯"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["P", "R", "I", "E", "B", "J"],
+      "notes": "Verified from IGN | PC: PRIEBJ"
     },
     {
       "id": "rural-theme",
@@ -416,7 +529,8 @@
       "description": "Country-themed pedestrians and cars",
       "category": "theme",
       "sequence": ["△", "←", "□", "R2", "↑", "L2", "↓", "L1", "✕", "L1", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["F", "V", "K", "Q", "K", "F", "V", "S"],
+      "notes": "Verified from IGN | PC: FVKQKFVS"
     },
     {
       "id": "kinky-theme",
@@ -424,7 +538,8 @@
       "description": "Gimp suit; pimps and prostitutes",
       "category": "theme",
       "sequence": ["□", "→", "□", "□", "L2", "✕", "△", "✕", "△"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["B", "E", "K", "K", "N", "Q", "V"],
+      "notes": "Verified from IGN | PC: BEKKNQV"
     },
 
     {
@@ -433,7 +548,8 @@
       "description": "Aim freely during drive-bys",
       "category": "vehicle",
       "sequence": ["↑", "↑", "□", "L2", "→", "✕", "R1", "↓", "R2", "◯"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["O", "U", "I", "F", "D", "M", "Y", "C", "S", "O"],
+      "notes": "Verified from IGN | PC: OUIFDMYCSO"
     },
     {
       "id": "blow-up-all-cars",
@@ -441,7 +557,8 @@
       "description": "Explodes all nearby vehicles",
       "category": "vehicle",
       "sequence": ["R2", "L2", "R1", "L1", "L2", "R2", "□", "△", "◯", "△", "L2", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["A", "L", "L", "C", "A", "R", "S", "G", "O", "B", "O", "O", "M"],
+      "notes": "Verified from IGN | PC: ALLCARSGOBOOM"
     },
     {
       "id": "traffic-lights-stay-green",
@@ -449,7 +566,8 @@
       "description": "All lights remain green",
       "category": "traffic",
       "sequence": ["→", "R1", "↑", "L2", "L2", "←", "R1", "L1", "R1", "R1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["D", "O", "N", "T", "B", "R", "I", "N", "G", "O", "N"],
+      "notes": "Verified from IGN | PC: DONTBRINGON"
     },
     {
       "id": "aggressive-traffic",
@@ -457,7 +575,8 @@
       "description": "Drivers become aggressive",
       "category": "traffic",
       "sequence": ["R2", "◯", "R1", "L2", "←", "R1", "L1", "R2", "L2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["Y", "L", "T", "E", "C", "R", "A", "Z", "Y"],
+      "notes": "Verified from IGN | PC: YLTECRAZY"
     },
     {
       "id": "increase-car-speed",
@@ -465,7 +584,8 @@
       "description": "Cars move faster",
       "category": "traffic",
       "sequence": ["→", "R1", "↑", "L2", "L2", "←", "R1", "L1", "R1", "R1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["Z", "E", "I", "I", "V", "G"],
+      "notes": "Verified from IGN | PC: ZEIIVG"
     },
     {
       "id": "all-cars-have-nitrous",
@@ -473,7 +593,8 @@
       "description": "Equip all cars with nitrous",
       "category": "vehicle",
       "sequence": ["←", "△", "R1", "L1", "↑", "□", "△", "↓", "◯", "L2", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["S", "P", "E", "E", "D", "F", "R", "E", "A", "K"],
+      "notes": "Verified from IGN | PC: SPEEDFREAK"
     },
     {
       "id": "drive-on-water",
@@ -481,7 +602,8 @@
       "description": "Cars can drive on water",
       "category": "vehicle",
       "sequence": ["→", "R2", "◯", "R1", "L2", "□", "R1", "R2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["G", "K", "T", "T", "D", "K"],
+      "notes": "Verified from IGN | PC: GKTTDK"
     },
     {
       "id": "super-bunny-hop",
@@ -489,7 +611,8 @@
       "description": "Bicycle jumps higher",
       "category": "vehicle",
       "sequence": ["△", "□", "◯", "◯", "□", "◯", "◯", "L1", "L2", "L2", "R1", "R2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["J", "H", "J", "O", "E", "B", "E", "C", "K", "Y", "D"],
+      "notes": "Verified from IGN | PC: JHJOEBECKYD"
     },
     {
       "id": "invisible-cars",
@@ -497,7 +620,8 @@
       "description": "Cars become invisible (bikes visible)",
       "category": "vehicle",
       "sequence": ["△", "L1", "△", "R2", "□", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["W", "H", "E", "E", "L", "A", "R", "E", "Y", "O", "U"],
+      "notes": "Verified from IGN | PC: WHEELAREYOU"
     },
     {
       "id": "moon-car-gravity",
@@ -505,7 +629,8 @@
       "description": "Cars fly away when hit",
       "category": "vehicle",
       "sequence": ["□", "R2", "↓", "↓", "←", "↓", "←", "←", "L2", "✕"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["C", "H", "I", "T", "T", "Y", "C", "H", "I", "T", "T", "Y"],
+      "notes": "Verified from IGN | PC: CHITTYCHITTY"
     },
     {
       "id": "reduced-traffic",
@@ -513,7 +638,8 @@
       "description": "Less traffic on the roads",
       "category": "traffic",
       "sequence": ["✕", "↓", "↑", "R2", "↓", "△", "L1", "△", "←"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["T", "H", "G", "L", "O", "J"],
+      "notes": "Verified from IGN | PC: THGLOJ"
     },
     {
       "id": "pink-cars",
@@ -521,7 +647,8 @@
       "description": "All traffic turns pink",
       "category": "traffic",
       "sequence": ["◯", "L1", "↓", "L2", "←", "✕", "R1", "L1", "→", "◯"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["L", "L", "Q", "P", "I", "N", "K"],
+      "notes": "Verified from IGN | PC: LLQPINK"
     },
     {
       "id": "black-cars",
@@ -529,7 +656,8 @@
       "description": "All traffic turns black",
       "category": "traffic",
       "sequence": ["◯", "L2", "↑", "R1", "←", "✕", "R1", "L1", "←", "◯"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["I", "O", "W", "D", "L", "A", "C"],
+      "notes": "Verified from IGN | PC: IOWDLAC"
     },
     {
       "id": "sports-cars",
@@ -537,7 +665,8 @@
       "description": "Only sports cars in traffic",
       "category": "traffic",
       "sequence": ["↑", "L1", "R1", "↑", "→", "↑", "✕", "L2", "✕", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["E", "V", "E", "R", "Y", "O", "N", "E", "I", "S", "R", "I", "C", "H"],
+      "notes": "Verified from IGN | PC: EVERYONEISRICH"
     },
     {
       "id": "junk-cars",
@@ -545,7 +674,8 @@
       "description": "Only junk cars in traffic",
       "category": "traffic",
       "sequence": ["L2", "→", "L1", "↑", "✕", "L1", "L2", "R2", "R1", "L1", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["E", "V", "E", "R", "Y", "O", "N", "E", "I", "S", "P", "O", "O", "R"],
+      "notes": "Verified from IGN | PC: EVERYONEISPOOR"
     },
 
     {
@@ -554,7 +684,8 @@
       "description": "Spawns a Stunt Plane",
       "category": "spawn",
       "sequence": ["◯", "↑", "L1", "L2", "↓", "R1", "L1", "L1", "←", "←", "✕", "△"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["U", "F", "L", "Y", "Y", "E", "R"],
+      "notes": "Verified from IGN | PC: UFLYER"
     },
     {
       "id": "spawn-vortex",
@@ -562,7 +693,8 @@
       "description": "Spawns a Vortex Hovercraft",
       "category": "spawn",
       "sequence": ["△", "△", "□", "◯", "✕", "L1", "L2", "↓", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["K", "J", "K", "J", "K", "G", "F", "F", "D"],
+      "notes": "Verified from IGN | PC: KJKJKGFFD"
     },
     {
       "id": "spawn-hotring-1",
@@ -570,7 +702,8 @@
       "description": "Spawns Hotring Racer variant #1",
       "category": "spawn",
       "sequence": ["R1", "◯", "R2", "→", "L1", "L2", "✕", "✕", "□", "R1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["P", "D", "N", "E", "T", "S", "C", "M"],
+      "notes": "Verified from IGN | PC: PDNETSCM"
     },
     {
       "id": "spawn-hotring-2",
@@ -578,7 +711,8 @@
       "description": "Spawns Hotring Racer variant #2",
       "category": "spawn",
       "sequence": ["R2", "L1", "◯", "→", "L1", "R1", "→", "↑", "◯", "R2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["V", "P", "I", "T", "M", "O", "N"],
+      "notes": "Verified from IGN | PC: VPITMON"
     },
     {
       "id": "spawn-stretch",
@@ -586,7 +720,8 @@
       "description": "Spawns a Stretch limo",
       "category": "spawn",
       "sequence": ["R2", "↑", "L2", "←", "←", "R1", "L1", "◯", "→"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["K", "N", "J", "K", "R", "F", "D"],
+      "notes": "Verified from IGN | PC: KNJKRFD"
     },
     {
       "id": "spawn-trashmaster",
@@ -594,7 +729,8 @@
       "description": "Spawns a Trashmaster",
       "category": "spawn",
       "sequence": ["◯", "R1", "◯", "R1", "←", "←", "R1", "L1", "◯", "→"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["U", "B", "H", "Y", "Z", "P", "G", "U", "K"],
+      "notes": "Verified from IGN | PC: UBHYZPGUK"
     },
     {
       "id": "spawn-caddy",
@@ -602,7 +738,8 @@
       "description": "Spawns a golf caddy",
       "category": "spawn",
       "sequence": ["◯", "L1", "↑", "R1", "L2", "✕", "R1", "L1", "◯", "✕"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["R", "Z", "H", "H", "U", "Q"],
+      "notes": "Verified from IGN | PC: RZHHUQ"
     },
     {
       "id": "spawn-quad",
@@ -610,7 +747,8 @@
       "description": "Spawns a Quad bike",
       "category": "spawn",
       "sequence": ["←", "←", "↓", "↓", "↑", "↑", "□", "◯", "△", "R1", "R2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["F", "O", "U", "R", "W", "H", "E", "E", "L", "F", "U", "N"],
+      "notes": "Verified from IGN | PC: FOURWHEELFUN"
     },
     {
       "id": "spawn-tanker",
@@ -618,7 +756,8 @@
       "description": "Spawns a Tanker Truck",
       "category": "spawn",
       "sequence": ["R1", "↑", "←", "→", "R2", "↑", "→", "□", "→", "L2", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["H", "I", "T", "T", "H", "E", "R", "O", "A", "D"],
+      "notes": "Verified from IGN | PC: HITTHEROAD"
     },
     {
       "id": "spawn-dozer",
@@ -626,7 +765,8 @@
       "description": "Spawns a Bulldozer",
       "category": "spawn",
       "sequence": ["R2", "L1", "L1", "→", "→", "↑", "↑", "✕", "L1", "←"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["I", "T", "S", "A", "L", "L", "B", "U", "L", "L"],
+      "notes": "Verified from IGN | PC: ITSALLBULL"
     },
     {
       "id": "spawn-rancher",
@@ -634,7 +774,8 @@
       "description": "Spawns a Rancher",
       "category": "spawn",
       "sequence": ["↑", "→", "→", "L1", "→", "↑", "□", "L2"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["J", "Q", "N", "T", "D", "M", "Q", "K"],
+      "notes": "Verified from IGN | PC: JQNTDMQK"
     },
 
     {
@@ -643,7 +784,8 @@
       "description": "Maxes out Muscle stat",
       "category": "stats",
       "sequence": ["△", "↑", "↑", "←", "→", "□", "◯", "←"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["J", "Y", "S", "D", "S", "O", "D"],
+      "notes": "Verified from IGN | PC: JYSDSOD"
     },
     {
       "id": "max-fat",
@@ -651,7 +793,8 @@
       "description": "Maxes out Fat stat",
       "category": "stats",
       "sequence": ["△", "↑", "↑", "←", "→", "□", "◯", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["B", "T", "C", "D", "B", "D", "C", "B", "A", "H"],
+      "notes": "Verified from IGN | PC: BTCDBDCBAH"
     },
     {
       "id": "min-muscle-and-fat",
@@ -659,7 +802,8 @@
       "description": "Sets Muscle and Fat to zero",
       "category": "stats",
       "sequence": ["△", "↑", "↑", "←", "→", "□", "◯", "→"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["K", "V", "G", "Y", "Z", "Q", "K"],
+      "notes": "Verified from IGN | PC: KVGYZQK"
     },
     {
       "id": "infinite-lung-capacity",
@@ -667,7 +811,8 @@
       "description": "Infinite oxygen underwater; infinite sprint",
       "category": "stats",
       "sequence": ["↓", "←", "L1", "↓", "↓", "R2", "↓", "L2", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["C", "V", "W", "K", "G", "J"],
+      "notes": "Verified from IGN | PC: CVWKGJ"
     },
     {
       "id": "never-get-hungry",
@@ -683,7 +828,8 @@
       "description": "Maxes out Respect stat",
       "category": "stats",
       "sequence": ["L1", "R1", "△", "↓", "R2", "✕", "L1", "↑", "L2", "L2", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["W", "O", "R", "S", "H", "I", "P", "M", "E"],
+      "notes": "Verified from IGN | PC: WORSHIPME"
     },
     {
       "id": "max-sex-appeal",
@@ -691,7 +837,8 @@
       "description": "Maxes out Sex Appeal stat",
       "category": "stats",
       "sequence": ["◯", "△", "△", "↑", "◯", "R1", "L2", "↑", "△", "L1", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["H", "E", "L", "L", "O", "L", "A", "D", "I", "E", "S"],
+      "notes": "Verified from IGN | PC: HELLOLADIES"
     },
     {
       "id": "hitman-all-weapons",
@@ -699,7 +846,8 @@
       "description": "Max weapon skills to Hitman",
       "category": "stats",
       "sequence": ["↓", "□", "✕", "←", "R1", "R2", "←", "↓", "↓", "L1", "L1", "L1"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["N", "C", "S", "G", "D", "A", "G"],
+      "notes": "Verified from IGN | PC: NCSGDAG"
     },
 
     {
@@ -708,7 +856,8 @@
       "description": "All pedestrians become gang members",
       "category": "gang",
       "sequence": ["←", "→", "→", "→", "←", "✕", "↓", "↑", "□", "→", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["L", "I", "F", "E", "S", "A", "B", "E", "A", "C", "H"],
+      "notes": "Verified from IGN | PC: LIFESABEACH"
     },
     {
       "id": "gang-control",
@@ -716,7 +865,62 @@
       "description": "Only gangs on the streets",
       "category": "gang",
       "sequence": ["L2", "↑", "R1", "R1", "←", "R1", "R1", "R2", "→", "↓"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["O", "N", "L", "Y", "H", "O", "M", "I", "E", "S"],
+      "notes": "Verified from IGN | PC: ONLYHOMIES"
+    },
+    {
+      "id": "pedestrian-riot",
+      "name": "Pedestrian Riot",
+      "description": "Pedestrians riot and attack each other",
+      "category": "world",
+      "sequence": ["↓", "←", "↑", "←", "✕", "R2", "R1", "L2", "L1"],
+      "pcSequence": ["A", "J", "L", "O", "J", "Y", "U", "P"],
+      "notes": "Verified from IGN | PC: AJLOJYUP"
+    },
+    {
+      "id": "aggressive-drivers",
+      "name": "Aggressive Drivers",
+      "description": "All drivers become aggressive",
+      "category": "traffic",
+      "sequence": ["→", "R2", "◯", "R1", "L2", "←", "R1", "L1", "R2", "R2"],
+      "pcSequence": ["Y", "L", "T", "E", "C", "R", "A", "Z", "Y"],
+      "notes": "Verified from IGN | PC: YLTECRAZY"
+    },
+    {
+      "id": "elvis-pedestrians",
+      "name": "Elvis Pedestrians",
+      "description": "Pedestrians are Elvis impersonators",
+      "category": "world",
+      "sequence": ["L1", "◯", "△", "L1", "L1", "□", "L2", "↑", "↓", "←"],
+      "pcSequence": ["B", "L", "U", "E", "S", "U", "E", "D", "E"],
+      "notes": "Verified from GTA Wiki | PC: BLUESUEDE (Permanent effect)"
+    },
+    {
+      "id": "beach-party",
+      "name": "Beach Party Theme",
+      "description": "Beach party pedestrians and vehicles",
+      "category": "world",
+      "sequence": ["↑", "↑", "↓", "↓", "□", "◯", "L1", "R1", "△", "↓"],
+      "pcSequence": ["C", "I", "K", "G", "C", "G", "X"],
+      "notes": "Verified from GTA Wiki | PC: CIKGCGX (Permanent effect)"
+    },
+    {
+      "id": "funhouse-theme",
+      "name": "Funhouse Theme",
+      "description": "Funhouse pedestrians and vehicles",
+      "category": "world",
+      "sequence": ["△", "△", "L1", "□", "□", "◯", "□", "↓", "◯"],
+      "pcSequence": ["P", "R", "I", "E", "B", "O", "H", "Y", "A", "H", "O", "O"],
+      "notes": "Verified from GTA Wiki | PC: PRIEBOHYAHOO (Permanent effect)"
+    },
+    {
+      "id": "ninja-theme",
+      "name": "Ninja Theme",
+      "description": "Pedestrians are ninjas with katanas",
+      "category": "world",
+      "sequence": ["✕", "✕", "↓", "R2", "L2", "◯", "R1", "◯", "□"],
+      "pcSequence": ["N", "I", "N", "J", "A"],
+      "notes": "Verified from GTA Wiki | PC: NINJA (Permanent effect)"
     },
     {
       "id": "recruit-anyone-pistol",
@@ -724,7 +928,8 @@
       "description": "Recruit anyone; followers get 9mm",
       "category": "gang",
       "sequence": ["↓", "□", "↑", "R2", "R2", "↑", "→", "→", "↑"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["Z", "J", "Y", "H", "H", "K"],
+      "notes": "Verified from IGN | PC: ZJYHHK"
     },
     {
       "id": "recruit-anyone-rocket",
@@ -732,7 +937,8 @@
       "description": "Recruit anyone; followers get rocket launcher",
       "category": "gang",
       "sequence": ["R2", "R2", "R2", "✕", "L2", "L1", "R1", "L2", "↓", "✕"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["S", "J", "M", "A", "H", "P", "E"],
+      "notes": "Verified from IGN | PC: SJMAHPE"
     },
 
     {
@@ -741,7 +947,8 @@
       "description": "Spawns a Romero hearse",
       "category": "spawn",
       "sequence": ["↓", "R2", "↓", "R1", "L2", "←", "R1", "L1", "←", "→"],
-      "notes": "Verified from IGN"
+      "pcSequence": ["A", "Q", "U", "A", "D", "M", "I", "K"],
+      "notes": "Verified from IGN | PC: AQUADMIK"
     },
     {
       "id": "car-invincibility",
@@ -749,8 +956,11 @@
       "description": "Your vehicle becomes invincible; vehicles that touch you explode",
       "category": "vehicle",
       "sequence": ["L1", "L2", "L2", "↑", "↓", "↓", "↑", "R1", "R2", "R2"],
-      "notes": "Verified from GameFAQs forum"
+      "pcSequence": [
+        ["J", "C", "N", "R", "U", "A", "D"],
+        ["T", "O", "U", "C", "H", "M", "Y", "C", "A", "R", "Y", "O", "U", "D", "I", "E"]
+      ],
+      "notes": "Verified from GameFAQs forum | PC: JCNRUAD / TOUCHMYCARYOUDIE"
     }
   ]
 }
-

@@ -61,16 +61,27 @@ export default function Home() {
           }
         }
         
-        // Check PC keyboard sequence
-        const pcSeq = cheat.pcSequence || []
-        const pcN = pcSeq.length
-        if (pcN > 0 && pcN <= arr.length) {
-          let ok = true
-          for (let i = 0; i < pcN; i++) {
-            if (arr[arr.length - pcN + i] !== pcSeq[i]) { ok = false; break }
-          }
-          if (ok) {
-            if (!best || (pcSeq.length > (best.pcSequence?.length || best.sequence?.length || 0))) best = cheat
+        // Check PC keyboard sequence(s)
+        const pcSeqs = cheat.pcSequence || []
+        // Handle both single array and array of arrays
+        const sequences = Array.isArray(pcSeqs[0]) ? pcSeqs : [pcSeqs]
+        
+        for (const pcSeq of sequences) {
+          const pcN = pcSeq.length
+          if (pcN > 0 && pcN <= arr.length) {
+            let ok = true
+            for (let i = 0; i < pcN; i++) {
+              if (arr[arr.length - pcN + i] !== pcSeq[i]) { ok = false; break }
+            }
+            if (ok) {
+              const currentBestLength = best?.pcSequence ? 
+                (Array.isArray(best.pcSequence[0]) ? Math.max(...best.pcSequence.map(seq => seq.length)) : best.pcSequence.length) :
+                (best?.sequence?.length || 0)
+              if (!best || (pcSeq.length > currentBestLength)) {
+                best = cheat
+                break // Found a match, no need to check other sequences for this cheat
+              }
+            }
           }
         }
       }
@@ -260,7 +271,19 @@ export default function Home() {
       <div className="text-center text-base leading-6 max-w-3xl break-words">
         {inputs.join(' ')}
 
-        {isKeyboardInput && matchedCheat?.pcSequence ? matchedCheat.pcSequence.join('') : matchedCheat?.sequence?.join(' ')}
+        {isKeyboardInput && matchedCheat?.pcSequence ? 
+          (() => {
+            const pcSeqs = matchedCheat.pcSequence
+            if (Array.isArray(pcSeqs[0])) {
+              // Multiple sequences - show all alternatives
+              return pcSeqs.map(seq => seq.join('')).join(' / ')
+            } else {
+              // Single sequence
+              return pcSeqs.join('')
+            }
+          })() : 
+          matchedCheat?.sequence?.join(' ')
+        }
       </div>
     </main>
   )
