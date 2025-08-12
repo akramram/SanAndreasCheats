@@ -10,6 +10,7 @@ export default function Home() {
   const prevStateRef = useRef(new Map())
   const clearTimerRef = useRef(null)
   const audioRef = useRef(null)
+  const base = new URL(document.baseURI).pathname
 
   const buttonSymbols = useMemo(
     () => [
@@ -232,7 +233,7 @@ export default function Home() {
   return (
     <main className="h-screen flex flex-col items-center justify-center gap-3 bg-black text-amber-200 px-4">
       <div className="text-2xl font-semibold tracking-tight text-center">
-        <img src={'cj.svg'} alt="Sup mf" className="w-16 h-16 object-contain" />
+        <img src={`${base}cj.svg`} alt="Sup mf" className="w-16 h-16 object-contain" />
       </div>
       {matchedCheat && (
         <div key={matchedCheat.id} className="text-center cheat-pop fireworks">
