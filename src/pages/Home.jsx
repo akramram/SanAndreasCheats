@@ -12,6 +12,8 @@ export default function Home() {
   const audioRef = useRef(null)
   const base = new URL(document.baseURI).pathname
   const [showLongDescription, setShowLongDescription] = useState(true)
+  const [showTimeoutMessage, setShowTimeoutMessage] = useState(true)
+  const timeoutMessageRef = useRef(null)
 
   const buttonSymbols = useMemo(
     () => [
@@ -98,6 +100,18 @@ export default function Home() {
       }, 2000)
     }
 
+    const scheduleTimeoutMessage = () => {
+      // Clear existing timeout message timer
+      if (timeoutMessageRef.current) clearTimeout(timeoutMessageRef.current)
+      // Hide message immediately when there's input
+      setShowTimeoutMessage(false)
+      // Show timeout message after 5 seconds of no input
+      timeoutMessageRef.current = setTimeout(() => {
+        setShowTimeoutMessage(true)
+        timeoutMessageRef.current = null
+      }, 3500)
+    }
+
     const triggerFireworks = () => {
       const colors = ['#f59e0b', '#fbbf24', '#fde68a', '#f87171', '#60a5fa', '#34d399']
       const COUNT = 28
@@ -143,6 +157,7 @@ export default function Home() {
         return next
       })
       scheduleClear()
+      scheduleTimeoutMessage()
     }
 
     const labelAxis = (dir, stick) => `${stick}${dir}`
@@ -223,6 +238,8 @@ export default function Home() {
     window.addEventListener('keydown', start)
     window.addEventListener('keydown', handleKeyDown)
     raf = requestAnimationFrame(loop)
+    // Start the timeout message timer
+    scheduleTimeoutMessage()
 
     // Keep UI in sync on connect/disconnect without adding status text
     const onConnect = () => setInputs((x) => x.slice())
@@ -239,6 +256,8 @@ export default function Home() {
       window.removeEventListener('gamepaddisconnected', onDisconnect)
       // clear pending auto-clear timer
       if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
+      // clear pending timeout message timer
+      if (timeoutMessageRef.current) clearTimeout(timeoutMessageRef.current)
     }
   }, [buttonSymbols, matchedCheat])
 
@@ -289,6 +308,12 @@ export default function Home() {
           matchedCheat?.psSequence?.join(' ')
         }
       </div>
+
+      {showTimeoutMessage && !matchedCheat && (
+        <div className="text-center text-lg font-medium text-amber-300 animate-pulse mt-4">
+          Press any key on keyboard or press any button on gamepad
+        </div>
+      )}
 
       <div 
         className='uppercase text-sm font-extralight w-xs flex justify-between items-center absolute bottom-1 left-3 cursor-pointer group hover:ml-13'
