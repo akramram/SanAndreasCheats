@@ -99,3 +99,17 @@
     transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.6);
   }
 }
+/* Pricedown font class */
+.pricedown {
+  font-family: 'Pricedown', 'Arial Black', sans-serif;
+  font-weight: normal;
+  letter-spacing: 0.05em;
+}
+
+/* Bank Gothic font class */
+.bank-gothic {
+  font-family: 'Bank Gothic', 'Arial Narrow', sans-serif;
+  font-weight: lighter;
+  transform: scaleX(1.5); /* Adjust the value for desired stretch */
+  letter-spacing: 2px; /* Adjust as needed to manage spacing */
+}

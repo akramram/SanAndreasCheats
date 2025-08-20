@@ -1,0 +1,4543 @@
+{
+  "version": "2.0.0",
+  "platform": "PS2 & PC",
+  "title": "Grand Theft Auto: San Andreas - Cheats",
+  "allowed_buttons": [
+    "✕",
+    "◯",
+    "□",
+    "△",
+    "L1",
+    "R1",
+    "L2",
+    "R2",
+    "▭",
+    "▸",
+    "L3",
+    "R3",
+    "↑",
+    "↓",
+    "←",
+    "→",
+    "PS"
+  ],
+  "recommended_fields": [
+    "id",
+    "name",
+    "description",
+    "category",
+    "psSequence",
+    "notes"
+  ],
+  "cheats": [
+    {
+      "id": "adrenaline-effects",
+      "name": "Adrenaline",
+      "description": "Activates slow-motion adrenaline mode",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "✕",
+        "✕",
+        "□",
+        "R1",
+        "L1",
+        "✕",
+        "↓",
+        "←",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "N",
+          "O",
+          "S",
+          "E",
+          "O",
+          "N",
+          "G",
+          "L",
+          "A",
+          "S",
+          "S"
+        ],
+        [
+          "M",
+          "U",
+          "N",
+          "A",
+          "S",
+          "E",
+          "F"
+        ],
+        [
+          "T",
+          "A",
+          "K",
+          "E",
+          "A",
+          "C",
+          "H",
+          "I",
+          "L",
+          "L",
+          "P",
+          "I",
+          "L",
+          "L"
+        ]
+      ],
+      "notes": "PC: ANOSEONGLASS / MUNASEF / TAKEACHILLPILL"
+    },
+    {
+      "id": "armor-health-and-250000-in-money-also-repairs-vehicles-occupied-by-the-player-and-increases-the-criminal-rating-to-40",
+      "name": "Armor, health and $250,000 in money (also repairs vehicles occupied by the player and increases the criminal rating to 40)",
+      "description": "Restores health, armor, and adds $250,000",
+      "longDescription": "Enabling the \"Health and Armor\" cheat during the bike chase of Just Business and during the drive-by portion of End of the Line will fail the mission, destroying the bike/Feltzer, leading to CJ's eventual death. Furthermore, enabling the cheat during Lure will automatically remove the doors of the Rancher, leading to a more difficult mission completion.",
+      "category": "player-stats",
+      "psSequence": [
+        "R1",
+        "R2",
+        "L1",
+        "✕",
+        "←",
+        "↓",
+        "→",
+        "↑",
+        "←",
+        "↓",
+        "→",
+        "↑"
+      ],
+      "pcSequence": [
+        [
+          "H",
+          "E",
+          "S",
+          "O",
+          "Y",
+          "A",
+          "M"
+        ],
+        [
+          "I",
+          "N",
+          "E",
+          "E",
+          "D",
+          "S",
+          "O",
+          "M",
+          "E",
+          "H",
+          "E",
+          "L",
+          "P"
+        ],
+        [
+          "E",
+          "N",
+          "A",
+          "B",
+          "L",
+          "E",
+          "F",
+          "O",
+          "R",
+          "T",
+          "U",
+          "N",
+          "E",
+          "A",
+          "S",
+          "P",
+          "E",
+          "C",
+          "T",
+          "S"
+        ],
+        [
+          "2",
+          "A",
+          "8",
+          "7",
+          "3",
+          "S",
+          "8",
+          "A"
+        ]
+      ],
+      "notes": "PC: HESOYAM / INEEDSOMEHELP / ENABLEFORTUNEASPECTS / 2A873S8A"
+    },
+    {
+      "id": "cj-jumps-10-times-higher",
+      "name": "jumps 10 times higher",
+      "description": "Enables super high jumping ability",
+      "longDescription": "",
+      "category": "player-stats",
+      "psSequence": [
+        "↑",
+        "↑",
+        "△",
+        "△",
+        "↑",
+        "↑",
+        "←",
+        "→",
+        "□",
+        "R2",
+        "R2"
+      ],
+      "pcSequence": [
+        [
+          "K",
+          "A",
+          "N",
+          "G",
+          "A",
+          "R",
+          "O",
+          "O",
+          "\n",
+          "L",
+          "F",
+          "G",
+          "M",
+          "H",
+          "A",
+          "L"
+        ]
+      ],
+      "notes": "PC: KANGAROO\nLFGMHAL"
+    },
+    {
+      "id": "commit-suicide-instant-death",
+      "name": "Commit suicide / Instant death",
+      "description": "Instantly kills CJ (unless unlimited health active)",
+      "longDescription": "CJ will not die if the unlimited health cheat is activated.",
+      "category": "misc",
+      "psSequence": [
+        "→",
+        "L2",
+        "↓",
+        "R1",
+        "←",
+        "←",
+        "R1",
+        "L1",
+        "L2",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "Z",
+          "C",
+          "M",
+          "A",
+          "W",
+          "O"
+        ],
+        [
+          "G",
+          "O",
+          "O",
+          "D",
+          "B",
+          "Y",
+          "E",
+          "C",
+          "R",
+          "U",
+          "E",
+          "L",
+          "W",
+          "O",
+          "R",
+          "L",
+          "D"
+        ]
+      ],
+      "notes": "PC: SZCMAWO / GOODBYECRUELWORLD"
+    },
+    {
+      "id": "hitman-level-for-all-weapons",
+      "name": "Hitman level for all weapons",
+      "description": "Unlocks maximum weapon proficiency for all guns",
+      "longDescription": "",
+      "category": "weapons",
+      "psSequence": [
+        "↓",
+        "□",
+        "✕",
+        "←",
+        "R1",
+        "R2",
+        "←",
+        "↓",
+        "↓",
+        "L1",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "P",
+          "R",
+          "O",
+          "F",
+          "E",
+          "S",
+          "S",
+          "I",
+          "O",
+          "N",
+          "A",
+          "L",
+          "K",
+          "I",
+          "L",
+          "L",
+          "E",
+          "R"
+        ],
+        [
+          "N",
+          "C",
+          "S",
+          "G",
+          "D",
+          "A",
+          "G"
+        ]
+      ],
+      "notes": "PC: PROFESSIONALKILLER / NCSGDAG"
+    },
+    {
+      "id": "lock-wanted-level-facilitates-exploration-of-islandscities-and-restricted-areas-before-theyre-unlocked",
+      "name": "Lock wanted level",
+      "description": "Prevents wanted level from changing",
+      "longDescription": "Facilitates exploration of islands/cities and restricted areas before they're unlocked",
+      "category": "wanted-level",
+      "psSequence": [
+        "◯",
+        "→",
+        "◯",
+        "→",
+        "←",
+        "□",
+        "△",
+        "↑"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "E",
+          "Z",
+          "A",
+          "K",
+          "M",
+          "I"
+        ],
+        [
+          "I",
+          "F",
+          "I",
+          "R",
+          "S",
+          "T",
+          "D",
+          "O",
+          "Z"
+        ],
+        [
+          "T",
+          "E",
+          "S",
+          "T",
+          "E",
+          "D",
+          "U",
+          "C",
+          "A",
+          "T",
+          "I",
+          "O",
+          "N",
+          "A",
+          "L",
+          "S",
+          "K",
+          "I",
+          "L",
+          "L",
+          "S"
+        ],
+        [
+          "I",
+          "D",
+          "O",
+          "A",
+          "S",
+          "I",
+          "P",
+          "L",
+          "E",
+          "A",
+          "S",
+          "E"
+        ]
+      ],
+      "notes": "PC: AEZAKMI / IFIRSTDOZ / TESTEDUCATIONALSKILLS / IDOASIPLEASE"
+    },
+    {
+      "id": "raise-wanted-level-by-two-stars",
+      "name": "Raise wanted level by two stars",
+      "description": "Increases wanted level by 2 stars",
+      "longDescription": "If the Lock wanted level cheat is on it will not attain. Entering this cheat during \"555 We Tip\" will fail the mission.",
+      "category": "wanted-level",
+      "psSequence": [
+        "R1",
+        "R1",
+        "◯",
+        "R2",
+        "→",
+        "←",
+        "→",
+        "←",
+        "→",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "T",
+          "U",
+          "R",
+          "N",
+          "U",
+          "P",
+          "T",
+          "H",
+          "E",
+          "H",
+          "E",
+          "A",
+          "T"
+        ],
+        [
+          "O",
+          "S",
+          "R",
+          "B",
+          "L",
+          "H",
+          "H"
+        ]
+      ],
+      "notes": "PC: TURNUPTHEHEAT / OSRBLHH"
+    },
+    {
+      "id": "remove-wanted-level",
+      "name": "Remove wanted level",
+      "description": "Clears all wanted stars instantly",
+      "longDescription": "",
+      "category": "wanted-level",
+      "psSequence": [
+        "R1",
+        "R1",
+        "◯",
+        "R2",
+        "↑",
+        "↓",
+        "↑",
+        "↓",
+        "↑",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "T",
+          "U",
+          "R",
+          "N",
+          "D",
+          "O",
+          "W",
+          "N",
+          "T",
+          "H",
+          "E",
+          "H",
+          "E",
+          "A",
+          "T"
+        ],
+        [
+          "A",
+          "S",
+          "N",
+          "A",
+          "E",
+          "B"
+        ],
+        [
+          "S",
+          "O",
+          "M",
+          "E",
+          "O",
+          "N",
+          "E",
+          "S",
+          "O",
+          "M",
+          "E",
+          "T",
+          "I",
+          "M",
+          "E",
+          "A",
+          "L",
+          "A",
+          "N"
+        ]
+      ],
+      "notes": "PC: TURNDOWNTHEHEAT / ASNAEB / SOMEONESOMETIMEALAN"
+    },
+    {
+      "id": "six-star-wanted-level",
+      "name": "Six-star wanted level",
+      "description": "Activates maximum 6-star wanted level",
+      "longDescription": "If the Lock wanted level cheat is on it will not attain. Entering this cheat during \"555 We Tip\" will fail the mission.",
+      "category": "wanted-level",
+      "psSequence": [
+        "◯",
+        "→",
+        "◯",
+        "→",
+        "←",
+        "□",
+        "✕",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "R",
+          "I",
+          "N",
+          "G",
+          "I",
+          "T",
+          "O",
+          "N"
+        ],
+        [
+          "L",
+          "J",
+          "S",
+          "P",
+          "Q",
+          "K"
+        ]
+      ],
+      "notes": "PC: BRINGITON / LJSPQK"
+    },
+    {
+      "id": "maximum-fat",
+      "name": "Maximum fat",
+      "description": "Instantly maximizes CJ's fat stat",
+      "longDescription": "",
+      "category": "player-stats",
+      "psSequence": [
+        "△",
+        "↑",
+        "↑",
+        "←",
+        "→",
+        "□",
+        "◯",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "T",
+          "C",
+          "D",
+          "B",
+          "C",
+          "B"
+        ],
+        [
+          "W",
+          "H",
+          "O",
+          "A",
+          "T",
+          "E",
+          "A",
+          "L",
+          "L",
+          "T",
+          "H",
+          "E",
+          "P",
+          "I",
+          "E",
+          "S"
+        ]
+      ],
+      "notes": "PC: BTCDBCB / WHOATEALLTHEPIES"
+    },
+    {
+      "id": "infinite-lung-capacity",
+      "name": "Infinite Lung capacity",
+      "description": "Allows unlimited underwater breathing",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "↓",
+        "←",
+        "L1",
+        "↓",
+        "↓",
+        "R2",
+        "↓",
+        "L2",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "C",
+          "V",
+          "W",
+          "K",
+          "X",
+          "A",
+          "M"
+        ],
+        [
+          "M",
+          "A",
+          "N",
+          "F",
+          "R",
+          "O",
+          "M",
+          "A",
+          "T",
+          "L",
+          "A",
+          "N",
+          "T",
+          "I",
+          "S"
+        ]
+      ],
+      "notes": "PC: CVWKXAM / MANFROMATLANTIS"
+    },
+    {
+      "id": "maximum-muscle",
+      "name": "Maximum muscle",
+      "description": "Instantly maximizes CJ's muscle stat",
+      "longDescription": "",
+      "category": "player-stats",
+      "psSequence": [
+        "△",
+        "↑",
+        "↑",
+        "←",
+        "→",
+        "□",
+        "◯",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "U",
+          "F",
+          "F",
+          "M",
+          "E",
+          "U",
+          "P"
+        ],
+        [
+          "J",
+          "Y",
+          "S",
+          "D",
+          "S",
+          "O",
+          "D"
+        ]
+      ],
+      "notes": "PC: BUFFMEUP / JYSDSOD"
+    },
+    {
+      "id": "maximum-respect",
+      "name": "Maximum respect",
+      "description": "Instantly maximizes CJ's respect stat",
+      "longDescription": "",
+      "category": "player-stats",
+      "psSequence": [
+        "L1",
+        "R1",
+        "△",
+        "↓",
+        "R2",
+        "✕",
+        "L1",
+        "↑",
+        "L2",
+        "L2",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "W",
+          "O",
+          "R",
+          "S",
+          "H",
+          "I",
+          "P",
+          "M",
+          "E"
+        ],
+        [
+          "O",
+          "G",
+          "X",
+          "S",
+          "D",
+          "A",
+          "G"
+        ]
+      ],
+      "notes": "PC: WORSHIPME / OGXSDAG"
+    },
+    {
+      "id": "maximum-sex-appeal",
+      "name": "Maximum sex appeal",
+      "description": "Instantly maximizes CJ's sex appeal stat",
+      "longDescription": "",
+      "category": "player-stats",
+      "psSequence": [
+        "◯",
+        "△",
+        "△",
+        "↑",
+        "◯",
+        "R1",
+        "L2",
+        "↑",
+        "△",
+        "L1",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "H",
+          "E",
+          "L",
+          "L",
+          "O",
+          "L",
+          "A",
+          "D",
+          "I",
+          "E",
+          "S"
+        ],
+        [
+          "E",
+          "H",
+          "I",
+          "B",
+          "X",
+          "Q",
+          "S"
+        ]
+      ],
+      "notes": "PC: HELLOLADIES / EHIBXQS"
+    },
+    {
+      "id": "maximum-stamina",
+      "name": "Maximum stamina",
+      "description": "Provides unlimited stamina for running",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "↑",
+        "✕",
+        "△",
+        "✕",
+        "△",
+        "✕",
+        "□",
+        "R2",
+        "→"
+      ],
+      "pcSequence": [
+        [
+          "V",
+          "K",
+          "Y",
+          "P",
+          "Q",
+          "C",
+          "F"
+        ],
+        [
+          "I",
+          "C",
+          "A",
+          "N",
+          "G",
+          "O",
+          "A",
+          "L",
+          "L",
+          "N",
+          "I",
+          "G",
+          "H",
+          "T"
+        ]
+      ],
+      "notes": "PC: VKYPQCF / ICANGOALLNIGHT"
+    },
+    {
+      "id": "maximum-vehicle-skills-driving-flying-bike-cycling",
+      "name": "Maximum vehicle skills",
+      "description": "Maximizes all driving and piloting abilities",
+      "longDescription": "",
+      "category": "vehicles",
+      "psSequence": [
+        "□",
+        "L2",
+        "✕",
+        "R1",
+        "L2",
+        "L2",
+        "←",
+        "R1",
+        "→",
+        "L1",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "N",
+          "A",
+          "T",
+          "U",
+          "R",
+          "A",
+          "L",
+          "T",
+          "A",
+          "L",
+          "E",
+          "N",
+          "T"
+        ],
+        [
+          "V",
+          "Q",
+          "I",
+          "M",
+          "A",
+          "H",
+          "A"
+        ]
+      ],
+      "notes": "PC: NATURALTALENT / VQIMAHA"
+    },
+    {
+      "id": "minimum-fat-and-muscle",
+      "name": "Minimum fat",
+      "description": "Minimizes CJ's fat and muscle stats",
+      "longDescription": "",
+      "category": "player-stats",
+      "psSequence": [
+        "△",
+        "↑",
+        "↑",
+        "←",
+        "→",
+        "□",
+        "◯",
+        "→"
+      ],
+      "pcSequence": [
+        [
+          "K",
+          "V",
+          "G",
+          "Y",
+          "Z",
+          "Q",
+          "K"
+        ],
+        [
+          "L",
+          "E",
+          "A",
+          "N",
+          "A",
+          "N",
+          "D",
+          "M",
+          "E",
+          "A",
+          "N"
+        ]
+      ],
+      "notes": "PC: KVGYZQK / LEANANDMEAN"
+    },
+    {
+      "id": "cj-never-gets-hungry",
+      "name": "never gets hungry",
+      "description": "Eliminates hunger requirement permanently",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "□",
+        "L2",
+        "R1",
+        "△",
+        "↑",
+        "□",
+        "L2",
+        "↑",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "E",
+          "D",
+          "U",
+          "W",
+          "N",
+          "V"
+        ],
+        [
+          "I",
+          "A",
+          "M",
+          "N",
+          "E",
+          "V",
+          "E",
+          "R",
+          "H",
+          "U",
+          "N",
+          "G",
+          "R",
+          "Y"
+        ]
+      ],
+      "notes": "PC: AEDUWNV / IAMNEVERHUNGRY"
+    },
+    {
+      "id": "spawn-jetpack",
+      "name": "Jetpack",
+      "description": "Spawns a jetpack for flight",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "←",
+        "→",
+        "L1",
+        "L2",
+        "R1",
+        "R2",
+        "↑",
+        "↓",
+        "←",
+        "→"
+      ],
+      "pcSequence": [
+        [
+          "R",
+          "O",
+          "C",
+          "K",
+          "E",
+          "T",
+          "M",
+          "A",
+          "N"
+        ],
+        [
+          "Y",
+          "E",
+          "C",
+          "G",
+          "A",
+          "A"
+        ]
+      ],
+      "notes": "PC: ROCKETMAN / YECGAA"
+    },
+    {
+      "id": "spawn-parachute",
+      "name": "Parachute",
+      "description": "Spawns a parachute for safe landings",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "←",
+        "→",
+        "L1",
+        "L2",
+        "R1",
+        "R2",
+        "R2",
+        "↑",
+        "↓",
+        "→",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "I",
+          "Y",
+          "P",
+          "W",
+          "Z",
+          "Q",
+          "P"
+        ],
+        [
+          "L",
+          "E",
+          "T",
+          "S",
+          "G",
+          "O",
+          "B",
+          "A",
+          "S",
+          "E",
+          "J",
+          "U",
+          "M",
+          "P",
+          "I",
+          "N",
+          "G"
+        ]
+      ],
+      "notes": "PC: AIYPWZQP / LETSGOBASEJUMPING"
+    },
+    {
+      "id": "super-punches-one-hit-kills",
+      "name": "Super punches (one hit kills)",
+      "description": "Enables one-hit knockout punches",
+      "longDescription": "Pedestrians can also make a super punch attack. If a pedestrian punches CJ, he will be instantly killed. However, if the Unlimited Health cheat is activated, super punches do not affect CJ.",
+      "category": "misc",
+      "psSequence": [
+        "↑",
+        "←",
+        "✕",
+        "△",
+        "R1",
+        "◯",
+        "◯",
+        "◯",
+        "L2"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "T",
+          "I",
+          "N",
+          "G",
+          "L",
+          "I",
+          "K",
+          "E",
+          "A",
+          "B",
+          "E",
+          "E"
+        ],
+        [
+          "I",
+          "A",
+          "V",
+          "E",
+          "N",
+          "J",
+          "Q"
+        ]
+      ],
+      "notes": "PC: STINGLIKEABEE / IAVENJQ"
+    },
+    {
+      "id": "unlimited-ammunition-with-no-reload-for-all-weapons",
+      "name": "Unlimited ammunition with no reload for all weapons",
+      "description": "Provides infinite ammo without reloading",
+      "longDescription": "Using this cheat may glitch the game's sounds. This cheat also affects pedestrians.",
+      "category": "weapons",
+      "psSequence": [
+        "L1",
+        "R1",
+        "□",
+        "R1",
+        "←",
+        "R2",
+        "R1",
+        "←",
+        "□",
+        "↓",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "F",
+          "U",
+          "L",
+          "L",
+          "C",
+          "L",
+          "I",
+          "P"
+        ],
+        [
+          "W",
+          "A",
+          "N",
+          "R",
+          "L",
+          "T",
+          "W"
+        ]
+      ],
+      "notes": "PC: FULLCLIP / WANRLTW"
+    },
+    {
+      "id": "unlimited-health",
+      "name": "Unlimited health",
+      "description": "Provides near-invincibility with some exceptions",
+      "longDescription": "Explosions, drowning, falling, and gunshots from police-controlled helicopters still hurt the player. CJ will also die from being in a vehicle that explodes.",
+      "category": "wanted-level",
+      "psSequence": [
+        "↓",
+        "✕",
+        "→",
+        "←",
+        "→",
+        "R1",
+        "→",
+        "↓",
+        "↑",
+        "△"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "A",
+          "G",
+          "U",
+          "V",
+          "I",
+          "X"
+        ],
+        [
+          "C",
+          "A",
+          "I",
+          "N",
+          "E",
+          "M",
+          "V",
+          "H",
+          "Z",
+          "C"
+        ],
+        [
+          "N",
+          "O",
+          "O",
+          "N",
+          "E",
+          "C",
+          "A",
+          "N",
+          "H",
+          "U",
+          "R",
+          "T",
+          "M",
+          "E"
+        ]
+      ],
+      "notes": "PC: BAGUVIX / CAINEMVHZC / NOONECANHURTME"
+    },
+    {
+      "id": "weapons-tier-1-brass-knuckles-baseball-bat-pistol-shotgun-micro-smg-ak47-rifle-rocket-launcher-molotov-cocktails-spray-paint",
+      "name": "Weapons, tier 1 (Brass Knuckles, Baseball Bat, Pistol, Shotgun, Micro SMG, AK47, Rifle, Rocket Launcher, Molotov Cocktails & Spray Paint)",
+      "description": "Multiple uses give infinite ammo",
+      "longDescription": "Entering this cheat numerous times will give the player infinite ammo.",
+      "category": "weapons",
+      "psSequence": [
+        "R1",
+        "R2",
+        "L1",
+        "R2",
+        "←",
+        "↓",
+        "→",
+        "↑",
+        "←",
+        "↓",
+        "→",
+        "↑"
+      ],
+      "pcSequence": [
+        [
+          "L",
+          "X",
+          "G",
+          "I",
+          "W",
+          "Y",
+          "L"
+        ],
+        [
+          "T",
+          "H",
+          "U",
+          "G",
+          "S",
+          "A",
+          "R",
+          "M",
+          "O",
+          "U",
+          "R",
+          "Y"
+        ]
+      ],
+      "notes": "PC: LXGIWYL / THUGSARMOURY"
+    },
+    {
+      "id": "weapons-tier-2-fist-knife-desert-eagle-sawn-off-shotgun-tec-9-m4-sniper-rifle-flamethrower-fire-extinguisher-grenades",
+      "name": "Weapons, tier 2 (Fist, Knife, Desert Eagle, Sawn-Off Shotgun, TEC 9, M4, Sniper Rifle, Flamethrower, Fire Extinguisher & Grenades)",
+      "description": "Provides tier 2 weapon set including Desert Eagle, M4, and Sniper Rifle",
+      "longDescription": "Entering this cheat during Tagging Up Turf will fail the mission.",
+      "category": "weapons",
+      "psSequence": [
+        "R1",
+        "R2",
+        "L1",
+        "R2",
+        "←",
+        "↓",
+        "→",
+        "↑",
+        "←",
+        "↓",
+        "↓",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "P",
+          "R",
+          "O",
+          "F",
+          "E",
+          "S",
+          "S",
+          "I",
+          "O",
+          "N",
+          "A",
+          "L",
+          "S",
+          "K",
+          "I",
+          "T"
+        ],
+        [
+          "K",
+          "J",
+          "K",
+          "S",
+          "Z",
+          "P",
+          "J"
+        ]
+      ],
+      "notes": "PC: PROFESSIONALSKIT / KJKSZPJ"
+    },
+    {
+      "id": "weapons-tier-3-fist-chainsaw-silenced-9mm-spas-12-smg-m4-heat-seeking-rocket-launcher-satchel-charges-detonator",
+      "name": "Weapons, tier 3 (Fist, Chainsaw, Silenced 9mm, SPAS 12, SMG, M4, Heat-Seeking Rocket Launcher, Satchel Charges & Detonator)",
+      "description": "Multiple uses give infinite ammo",
+      "longDescription": "If the player uses the infinite ammo cheat, the detonator will still appear in the weapon list even when the player doesn't have any satchel charges.",
+      "category": "weapons",
+      "psSequence": [
+        "R1",
+        "R2",
+        "L1",
+        "R2",
+        "←",
+        "↓",
+        "→",
+        "↑",
+        "←",
+        "↓",
+        "↓",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "U",
+          "Z",
+          "U",
+          "M",
+          "Y",
+          "M",
+          "W"
+        ],
+        [
+          "N",
+          "U",
+          "T",
+          "T",
+          "E",
+          "R",
+          "S",
+          "T",
+          "O",
+          "Y",
+          "S"
+        ]
+      ],
+      "notes": "PC: UZUMYMW / NUTTERSTOYS"
+    },
+    {
+      "id": "weapons-tier-4-minigun-vibrator-random-night-vision-goggles-or-thermal-vision-goggles",
+      "name": "Weapons Tier 4",
+      "description": "Weapons, tier 4 (Minigun, Vibrator, Random: Night Vision Goggles or Thermal Vision Goggles)",
+      "longDescription": "",
+      "category": "weapons",
+      "psSequence": [],
+      "pcSequence": [],
+      "notes": "Verified from game data"
+    },
+    {
+      "id": "complete-invulnerability",
+      "name": "Complete invulnerability",
+      "description": "Affects explosion behavior",
+      "longDescription": "No damage from guns, fire, falls, explosions, drowning, gunshots from police helicopters etc.; any vehicle the player enters is permanently invulnerable too.",
+      "category": "wanted-level",
+      "psSequence": [],
+      "pcSequence": [],
+      "notes": "Verified from game data"
+    },
+    {
+      "id": "all-cars-have-nitrous",
+      "name": "All cars have nitrous",
+      "description": "Adds nitrous boost to all vehicles",
+      "longDescription": "When modifying a car, it appears as \"2x Nitro\".",
+      "category": "vehicles",
+      "psSequence": [
+        "←",
+        "△",
+        "R1",
+        "L1",
+        "↑",
+        "□",
+        "△",
+        "↓",
+        "◯",
+        "L2",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "P",
+          "E",
+          "E",
+          "D",
+          "F",
+          "R",
+          "E",
+          "A",
+          "K"
+        ],
+        [
+          "C",
+          "O",
+          "X",
+          "E",
+          "F",
+          "G",
+          "U"
+        ]
+      ],
+      "notes": "PC: SPEEDFREAK / COXEFGU"
+    },
+    {
+      "id": "cars-drive-on-water",
+      "name": "Cars drive on water",
+      "description": "Cars drive on water",
+      "longDescription": "",
+      "category": "vehicles",
+      "psSequence": [
+        "→",
+        "R2",
+        "◯",
+        "R1",
+        "L2",
+        "□",
+        "R1",
+        "R2"
+      ],
+      "pcSequence": [],
+      "notes": "Verified from game data"
+    },
+    {
+      "id": "flying-boats",
+      "name": "Flying boats",
+      "description": "Flying boats",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "R2",
+        "◯",
+        "↑",
+        "L1",
+        "→",
+        "R1",
+        "→",
+        "↑",
+        "□",
+        "△"
+      ],
+      "pcSequence": [
+        [
+          "F",
+          "L",
+          "Y",
+          "I",
+          "N",
+          "G",
+          "F",
+          "I",
+          "S",
+          "H"
+        ],
+        [
+          "A",
+          "F",
+          "S",
+          "N",
+          "M",
+          "S",
+          "M",
+          "W"
+        ]
+      ],
+      "notes": "PC: FLYINGFISH / AFSNMSMW"
+    },
+    {
+      "id": "flying-cars",
+      "name": "Flying cars",
+      "description": "Enables all cars to fly when accelerating",
+      "longDescription": "Cars are controlled like planes, except they have no left and right rudder.",
+      "category": "vehicles",
+      "psSequence": [
+        "□",
+        "↓",
+        "L2",
+        "↑",
+        "L1",
+        "◯",
+        "↑",
+        "✕",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "R",
+          "I",
+          "P",
+          "A",
+          "Z",
+          "H",
+          "A"
+        ],
+        [
+          "C",
+          "H",
+          "I",
+          "T",
+          "T",
+          "Y",
+          "C",
+          "H",
+          "I",
+          "T",
+          "T",
+          "Y",
+          "B",
+          "A",
+          "N",
+          "G",
+          "B",
+          "A",
+          "N",
+          "G"
+        ]
+      ],
+      "notes": "PC: RIPAZHA / CHITTYCHITTYBANGBANG"
+    },
+    {
+      "id": "spawn-sport-cars",
+      "name": "sport cars",
+      "description": "Spawn sport cars",
+      "longDescription": "",
+      "category": "vehicles",
+      "psSequence": [
+        "↑",
+        "L1",
+        "R1",
+        "↑",
+        "→",
+        "↑",
+        "✕",
+        "L2",
+        "✕",
+        "L1"
+      ],
+      "pcSequence": [],
+      "notes": "Verified from game data"
+    },
+    {
+      "id": "improved-suspensions",
+      "name": "Improved suspensions",
+      "description": "Improved suspensions",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "□",
+        "□",
+        "R2",
+        "←",
+        "↑",
+        "□",
+        "R2",
+        "✕",
+        "✕",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "T",
+          "I",
+          "C",
+          "K",
+          "L",
+          "I",
+          "K",
+          "E",
+          "G",
+          "L",
+          "U",
+          "E"
+        ],
+        [
+          "P",
+          "G",
+          "G",
+          "O",
+          "M",
+          "O",
+          "Y"
+        ]
+      ],
+      "notes": "PC: STICKLIKEGLUE / PGGOMOY"
+    },
+    {
+      "id": "full-weapon-aiming-in-vehicles-micro-smg-if-cj-doesnt-have-this-type-of-weapon",
+      "name": "Full weapon aiming in vehicles + Micro SMG",
+      "description": "Full weapon aiming in vehicles + Micro SMG (If CJ doesn't have this type of weapon)",
+      "longDescription": "Micro SMG (If CJ doesn't have this type of weapon)",
+      "category": "weapons",
+      "psSequence": [
+        "↑",
+        "↑",
+        "□",
+        "L2",
+        "→",
+        "✕",
+        "R1",
+        "↓",
+        "R2",
+        "◯"
+      ],
+      "pcSequence": [
+        [
+          "O",
+          "U",
+          "I",
+          "Q",
+          "D",
+          "M",
+          "W"
+        ],
+        [
+          "I",
+          "W",
+          "A",
+          "N",
+          "N",
+          "A",
+          "D",
+          "R",
+          "I",
+          "V",
+          "E",
+          "B",
+          "Y"
+        ]
+      ],
+      "notes": "PC: OUIQDMW / IWANNADRIVEBY"
+    },
+    {
+      "id": "massive-bicycle-bunny-hops-jump-100-feet-in-air",
+      "name": "Massive bicycle bunny hops",
+      "description": "Massive bicycle bunny hops (Jump 100 feet in air)",
+      "longDescription": "",
+      "category": "player-stats",
+      "psSequence": [
+        "△",
+        "□",
+        "◯",
+        "◯",
+        "□",
+        "◯",
+        "◯",
+        "L1",
+        "L2",
+        "L2",
+        "R1",
+        "R2"
+      ],
+      "pcSequence": [
+        [
+          "C",
+          "J",
+          "P",
+          "H",
+          "O",
+          "N",
+          "E",
+          "H",
+          "O",
+          "M",
+          "E"
+        ],
+        [
+          "J",
+          "H",
+          "J",
+          "O",
+          "E",
+          "C",
+          "W"
+        ]
+      ],
+      "notes": "PC: CJPHONEHOME / JHJOECW"
+    },
+    {
+      "id": "perfect-handling",
+      "name": "Perfect handling",
+      "description": "Improves all vehicle handling dramatically",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "△",
+        "R1",
+        "R1",
+        "←",
+        "R1",
+        "L1",
+        "R2",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "T",
+          "I",
+          "C",
+          "K",
+          "L",
+          "I",
+          "K",
+          "E",
+          "G",
+          "L",
+          "U",
+          "E"
+        ],
+        [
+          "P",
+          "G",
+          "G",
+          "O",
+          "M",
+          "O",
+          "Y"
+        ]
+      ],
+      "notes": "PC: STICKLIKEGLUE / PGGOMOY"
+    },
+    {
+      "id": "spawn-bloodring-banger",
+      "name": "Bloodring Banger",
+      "description": "Spawns Bloodring Banger race car",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "↓",
+        "R1",
+        "◯",
+        "L2",
+        "L2",
+        "✕",
+        "R1",
+        "L1",
+        "←",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "O",
+          "L",
+          "D",
+          "S",
+          "P",
+          "E",
+          "E",
+          "D",
+          "D",
+          "E",
+          "M",
+          "O",
+          "N"
+        ],
+        [
+          "C",
+          "Q",
+          "Z",
+          "I",
+          "J",
+          "M",
+          "B"
+        ]
+      ],
+      "notes": "PC: OLDSPEEDDEMON / CQZIJMB"
+    },
+    {
+      "id": "spawn-caddy",
+      "name": "Caddy",
+      "description": "Spawns Caddy golf cart",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "◯",
+        "L1",
+        "↑",
+        "R1",
+        "L2",
+        "✕",
+        "R1",
+        "L1",
+        "◯",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "R",
+          "Z",
+          "H",
+          "S",
+          "U",
+          "E",
+          "W"
+        ],
+        [
+          "1",
+          "8",
+          "H",
+          "O",
+          "L",
+          "E",
+          "S"
+        ]
+      ],
+      "notes": "PC: RZHSUEW / 18HOLES"
+    },
+    {
+      "id": "spawn-dozer",
+      "name": "Dozer",
+      "description": "Spawns Dozer bulldozer",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "R2",
+        "L1",
+        "L1",
+        "→",
+        "→",
+        "↑",
+        "↑",
+        "✕",
+        "L1",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "I",
+          "T",
+          "S",
+          "A",
+          "L",
+          "L",
+          "B",
+          "U",
+          "L",
+          "L"
+        ],
+        [
+          "E",
+          "E",
+          "G",
+          "C",
+          "Y",
+          "X",
+          "T"
+        ]
+      ],
+      "notes": "PC: ITSALLBULL / EEGCYXT"
+    },
+    {
+      "id": "spawn-hunter",
+      "name": "Hunter",
+      "description": "Spawns Hunter military helicopter",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "◯",
+        "✕",
+        "L1",
+        "◯",
+        "◯",
+        "L1",
+        "◯",
+        "R1",
+        "R2",
+        "L2",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "O",
+          "H",
+          "D",
+          "U",
+          "D",
+          "E"
+        ]
+      ],
+      "notes": "PC: OHDUDE"
+    },
+    {
+      "id": "spawn-hydra",
+      "name": "Hydra",
+      "description": "Spawns Hydra VTOL fighter jet",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "△",
+        "△",
+        "□",
+        "◯",
+        "✕",
+        "L1",
+        "L1",
+        "↓",
+        "↑"
+      ],
+      "pcSequence": [
+        [
+          "J",
+          "U",
+          "M",
+          "P",
+          "J",
+          "E",
+          "T"
+        ]
+      ],
+      "notes": "PC: JUMPJET"
+    },
+    {
+      "id": "spawn-monster-truck-second-variant",
+      "name": "Monster Truck 2",
+      "description": "Spawns Monster truck",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "→",
+        "↑",
+        "R1",
+        "R1",
+        "R1",
+        "↓",
+        "△",
+        "△",
+        "✕",
+        "◯",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "M",
+          "O",
+          "N",
+          "S",
+          "T",
+          "E",
+          "R",
+          "M",
+          "A",
+          "S",
+          "H"
+        ],
+        [
+          "A",
+          "G",
+          "B",
+          "D",
+          "L",
+          "C",
+          "I",
+          "D"
+        ]
+      ],
+      "notes": "PC: MONSTERMASH / AGBDLCID"
+    },
+    {
+      "id": "spawn-quad",
+      "name": "Quad",
+      "description": "Spawns Quad ATV",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "←",
+        "←",
+        "↓",
+        "↓",
+        "↑",
+        "↑",
+        "□",
+        "◯",
+        "△",
+        "R1",
+        "R2"
+      ],
+      "pcSequence": [
+        [
+          "F",
+          "O",
+          "U",
+          "R",
+          "W",
+          "H",
+          "E",
+          "E",
+          "L",
+          "F",
+          "U",
+          "N"
+        ],
+        [
+          "A",
+          "K",
+          "J",
+          "J",
+          "Y",
+          "G",
+          "L",
+          "C"
+        ]
+      ],
+      "notes": "PC: FOURWHEELFUN / AKJJYGLC"
+    },
+    {
+      "id": "spawn-hotring-racer-second-variant",
+      "name": "Hotring Racer 2",
+      "description": "Spawns Hotring Racer sports car",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "R1",
+        "◯",
+        "R2",
+        "→",
+        "L1",
+        "L2",
+        "✕",
+        "✕",
+        "□",
+        "R1"
+      ],
+      "pcSequence": [
+        [
+          "V",
+          "R",
+          "O",
+          "C",
+          "K",
+          "P",
+          "O",
+          "K",
+          "E",
+          "Y"
+        ],
+        [
+          "P",
+          "D",
+          "N",
+          "E",
+          "J",
+          "O",
+          "H"
+        ],
+        [
+          "N",
+          "O",
+          "T",
+          "F",
+          "O",
+          "R",
+          "P",
+          "U",
+          "B",
+          "L",
+          "I",
+          "C",
+          "R",
+          "O",
+          "A",
+          "D",
+          "S"
+        ]
+      ],
+      "notes": "PC: VROCKPOKEY / PDNEJOH / NOTFORPUBLICROADS"
+    },
+    {
+      "id": "spawn-hotring-racer-third-variant",
+      "name": "Hotring Racer 3",
+      "description": "Spawns Hotring Racer sports car",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "R2",
+        "L1",
+        "◯",
+        "→",
+        "L1",
+        "R1",
+        "→",
+        "↑",
+        "◯",
+        "R2"
+      ],
+      "pcSequence": [
+        [
+          "V",
+          "P",
+          "J",
+          "T",
+          "Q",
+          "W",
+          "V"
+        ],
+        [
+          "J",
+          "U",
+          "S",
+          "T",
+          "T",
+          "R",
+          "Y",
+          "A",
+          "N",
+          "D",
+          "S",
+          "T",
+          "O",
+          "P",
+          "M",
+          "E"
+        ]
+      ],
+      "notes": "PC: VPJTQWV / JUSTTRYANDSTOPME"
+    },
+    {
+      "id": "spawn-rancher-lure-variant",
+      "name": "Rancher (Lure)",
+      "description": "Spawn Rancher (Lure variant)",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "↑",
+        "→",
+        "→",
+        "L1",
+        "→",
+        "↑",
+        "□",
+        "L2"
+      ],
+      "pcSequence": [
+        [
+          "J",
+          "Q",
+          "N",
+          "T",
+          "D",
+          "M",
+          "H",
+          "\n",
+          "D",
+          "O",
+          "U",
+          "G",
+          "H",
+          "N",
+          "U",
+          "T",
+          "H",
+          "A",
+          "N",
+          "D",
+          "I",
+          "C",
+          "A",
+          "P"
+        ]
+      ],
+      "notes": "PC: JQNTDMH\nDOUGHNUTHANDICAP"
+    },
+    {
+      "id": "spawn-rhino",
+      "name": "Rhino",
+      "description": "Spawns a military tank (Rhino)",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "◯",
+        "◯",
+        "L1",
+        "◯",
+        "◯",
+        "◯",
+        "L1",
+        "L2",
+        "R1",
+        "△",
+        "◯",
+        "△"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "I",
+          "W",
+          "P",
+          "R",
+          "T",
+          "O",
+          "N"
+        ],
+        [
+          "T",
+          "I",
+          "M",
+          "E",
+          "T",
+          "O",
+          "K",
+          "I",
+          "C",
+          "K",
+          "A",
+          "S",
+          "S"
+        ]
+      ],
+      "notes": "PC: AIWPRTON / TIMETOKICKASS"
+    },
+    {
+      "id": "spawn-romero",
+      "name": "Romero",
+      "description": "Spawns Romero hearse",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "↓",
+        "R2",
+        "↓",
+        "R1",
+        "L2",
+        "←",
+        "R1",
+        "L1",
+        "←",
+        "→"
+      ],
+      "pcSequence": [
+        [
+          "W",
+          "H",
+          "E",
+          "R",
+          "E",
+          "S",
+          "T",
+          "H",
+          "E",
+          "F",
+          "U",
+          "N",
+          "E",
+          "R",
+          "A",
+          "L"
+        ],
+        [
+          "A",
+          "Q",
+          "T",
+          "B",
+          "C",
+          "O",
+          "D",
+          "X"
+        ]
+      ],
+      "notes": "PC: WHERESTHEFUNERAL / AQTBCODX"
+    },
+    {
+      "id": "spawn-stretch-limousine",
+      "name": "Limousine",
+      "description": "Spawn Stretch Limousine",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "R2",
+        "↑",
+        "L2",
+        "←",
+        "←",
+        "R1",
+        "L1",
+        "◯",
+        "→"
+      ],
+      "pcSequence": [
+        [
+          "C",
+          "E",
+          "L",
+          "E",
+          "B",
+          "R",
+          "I",
+          "T",
+          "Y",
+          "S",
+          "T",
+          "A",
+          "T",
+          "U",
+          "S"
+        ],
+        [
+          "K",
+          "R",
+          "I",
+          "J",
+          "E",
+          "B",
+          "R"
+        ]
+      ],
+      "notes": "PC: CELEBRITYSTATUS / KRIJEBR"
+    },
+    {
+      "id": "spawn-stunt-plane",
+      "name": "Stunt Plane",
+      "description": "Spawns Stunt Plane aircraft",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "◯",
+        "↑",
+        "L1",
+        "L2",
+        "↓",
+        "R1",
+        "L1",
+        "L1",
+        "←",
+        "←",
+        "✕",
+        "△"
+      ],
+      "pcSequence": [
+        [
+          "F",
+          "L",
+          "Y",
+          "I",
+          "N",
+          "G",
+          "T",
+          "O",
+          "S",
+          "T",
+          "U",
+          "N",
+          "T"
+        ],
+        [
+          "U",
+          "R",
+          "K",
+          "Q",
+          "S",
+          "R",
+          "K"
+        ]
+      ],
+      "notes": "PC: FLYINGTOSTUNT / URKQSRK"
+    },
+    {
+      "id": "spawn-tanker-with-attached-tanker-trailer",
+      "name": "Tanker Truck",
+      "description": "Spawns Tanker truck",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "R1",
+        "↑",
+        "←",
+        "→",
+        "R2",
+        "↑",
+        "→",
+        "□",
+        "→",
+        "L2",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "M",
+          "O",
+          "M",
+          "H",
+          "R",
+          "E",
+          "R"
+        ],
+        [
+          "H",
+          "I",
+          "T",
+          "T",
+          "H",
+          "E",
+          "R",
+          "O",
+          "A",
+          "D",
+          "J",
+          "A",
+          "C",
+          "K"
+        ]
+      ],
+      "notes": "PC: AMOMHRER / HITTHEROADJACK"
+    },
+    {
+      "id": "spawn-trashmaster",
+      "name": "Trashmaster",
+      "description": "Spawns Trashmaster garbage truck",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "◯",
+        "R1",
+        "◯",
+        "R1",
+        "←",
+        "←",
+        "R1",
+        "L1",
+        "◯",
+        "→"
+      ],
+      "pcSequence": [
+        [
+          "T",
+          "R",
+          "U",
+          "E",
+          "G",
+          "R",
+          "I",
+          "M",
+          "E"
+        ],
+        [
+          "U",
+          "B",
+          "H",
+          "Y",
+          "Z",
+          "H",
+          "Q"
+        ]
+      ],
+      "notes": "PC: TRUEGRIME / UBHYZHQ"
+    },
+    {
+      "id": "spawn-vortex",
+      "name": "Vortex",
+      "description": "Spawns Vortex hovercraft",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "△",
+        "△",
+        "□",
+        "◯",
+        "✕",
+        "L1",
+        "L2",
+        "↓",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "K",
+          "G",
+          "G",
+          "G",
+          "D",
+          "K",
+          "P"
+        ],
+        [
+          "I",
+          "W",
+          "A",
+          "N",
+          "T",
+          "T",
+          "O",
+          "H",
+          "O",
+          "V",
+          "E",
+          "R"
+        ]
+      ],
+      "notes": "PC: KGGGDKP / IWANTTOHOVER"
+    },
+    {
+      "id": "taxi-missions-completed",
+      "name": "Taxi missions completed",
+      "description": "Taxi missions completed",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "↑",
+        "✕",
+        "△",
+        "✕",
+        "△",
+        "✕",
+        "□",
+        "R2",
+        "→"
+      ],
+      "pcSequence": [],
+      "notes": "Verified from game data"
+    },
+    {
+      "id": "carls-car-is-invincible-and-can-instantly-destroy-other-vehicles-auto-immune-car",
+      "name": "Carl's car is invincible and can instantly destroy other vehicles (Auto-immune car)",
+      "description": "Makes current vehicle invincible and able to destroy other vehicles on contact",
+      "longDescription": "Invincibility is unreliable and occasionally turns itself off after cutscenes, inside the car when just finishing dates and missions or if Carl's inside the car when the cheat is turned on. The player has to exit and re-enter the car to re-enable the invincibility, or else Carl's car will blow up when blowing up another car. Also if the player disables this cheat while inside the vehicle, it will become all-proof and also not destroyed when using cheats \"Blow up all vehicles\". If the vehicle is stored into the garage, it will immediately lose its' fire and damage-proof qualities, but retain the bullet-proofing and explosion-proofing.",
+      "category": "vehicles",
+      "psSequence": [
+        "L1",
+        "L2",
+        "L2",
+        "↑",
+        "↓",
+        "↓",
+        "↑",
+        "R1",
+        "R2",
+        "R2"
+      ],
+      "pcSequence": [
+        [
+          "J",
+          "C",
+          "N",
+          "R",
+          "U",
+          "A",
+          "D"
+        ],
+        [
+          "T",
+          "O",
+          "U",
+          "C",
+          "H",
+          "M",
+          "Y",
+          "C",
+          "A",
+          "R",
+          "Y",
+          "O",
+          "U",
+          "D",
+          "I",
+          "E"
+        ]
+      ],
+      "notes": "PC: JCNRUAD / TOUCHMYCARYOUDIE"
+    },
+    {
+      "id": "aggressive-drivers",
+      "name": "Aggressive drivers",
+      "description": "Makes all drivers extremely aggressive",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "→",
+        "R2",
+        "↑",
+        "↑",
+        "R2",
+        "◯",
+        "□",
+        "R2",
+        "L1",
+        "→",
+        "↓",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "Y",
+          "L",
+          "T",
+          "E",
+          "I",
+          "C",
+          "Z"
+        ],
+        [
+          "A",
+          "L",
+          "L",
+          "D",
+          "R",
+          "I",
+          "V",
+          "E",
+          "R",
+          "S",
+          "A",
+          "R",
+          "E",
+          "C",
+          "R",
+          "I",
+          "M",
+          "I",
+          "N",
+          "A",
+          "L",
+          "S"
+        ]
+      ],
+      "notes": "PC: YLTEICZ / ALLDRIVERSARECRIMINALS"
+    },
+    {
+      "id": "aggressive-traffic",
+      "name": "Aggressive traffic",
+      "description": "Aggressive traffic",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "R2",
+        "◯",
+        "R1",
+        "L2",
+        "←",
+        "R1",
+        "L1",
+        "R2",
+        "L2"
+      ],
+      "pcSequence": [
+        [
+          "Y",
+          "L",
+          "T",
+          "E",
+          "I",
+          "C",
+          "Z",
+          "\n",
+          "A",
+          "L",
+          "L",
+          "D",
+          "R",
+          "I",
+          "V",
+          "E",
+          "R",
+          "S",
+          "A",
+          "R",
+          "E",
+          "C",
+          "R",
+          "I",
+          "M",
+          "I",
+          "N",
+          "A",
+          "L",
+          "S"
+        ]
+      ],
+      "notes": "PC: YLTEICZ\nALLDRIVERSARECRIMINALS"
+    },
+    {
+      "id": "beach-party-theme-cjs-outfit-is-changed-to-victim-olive-shorts-flip-flops-and-pro-laps-sunglasses-traffic-and-pedestrians-are-replaced-with-those-usually-seen-around-verona-beach-weather-set-to-very-sunny",
+      "name": "Beach party theme",
+      "description": "Spawns beach party with bikini-clad pedestrians",
+      "longDescription": "Enabling the \"Beach party theme\" cheat during the Valet will fail the mission CJ's outfit is changed to Victim olive shorts, flip-flops, and Pro-Laps sunglasses. Traffic and pedestrians are replaced with those usually seen around Verona Beach. Weather set to very sunny.",
+      "category": "world",
+      "psSequence": [
+        "↑",
+        "↑",
+        "↓",
+        "↓",
+        "□",
+        "◯",
+        "L1",
+        "R1",
+        "△",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "L",
+          "I",
+          "F",
+          "E",
+          "S",
+          "A",
+          "B",
+          "E",
+          "A",
+          "C",
+          "H"
+        ],
+        [
+          "C",
+          "I",
+          "K",
+          "G",
+          "C",
+          "G",
+          "X"
+        ]
+      ],
+      "notes": "PC: LIFESABEACH / CIKGCGX"
+    },
+    {
+      "id": "beatercheap-traffic",
+      "name": "Beater/cheap traffic",
+      "description": "Beater/cheap traffic",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "L2",
+        "→",
+        "L1",
+        "↑",
+        "✕",
+        "L1",
+        "L2",
+        "R2",
+        "R1",
+        "L1",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "G",
+          "K",
+          "G",
+          "T",
+          "J",
+          "H"
+        ]
+      ],
+      "notes": "PC: BGKGTJH"
+    },
+    {
+      "id": "black-traffic",
+      "name": "Black traffic",
+      "description": "Black traffic",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "◯",
+        "L2",
+        "↑",
+        "R1",
+        "←",
+        "✕",
+        "R1",
+        "L1",
+        "←",
+        "◯"
+      ],
+      "pcSequence": [
+        [
+          "I",
+          "O",
+          "W",
+          "D",
+          "L",
+          "A",
+          "C"
+        ],
+        [
+          "S",
+          "O",
+          "L",
+          "O",
+          "N",
+          "G",
+          "A",
+          "S",
+          "I",
+          "T",
+          "S",
+          "B",
+          "L",
+          "A",
+          "C",
+          "K"
+        ]
+      ],
+      "notes": "PC: IOWDLAC / SOLONGASITSBLACK"
+    },
+    {
+      "id": "carnivalfunhouse-theme-cjs-outfit-changes-to-a-pink-cesar-haircut-joker-glasses-and-red-heart-boxers-pedestrians-are-replaced-with-fast-food-workers-and-clowns-traffic-consists-of-pizza-boys-bf-injections-hotknifes-tugs-quads-karts-mr-whoopees-and-hotdogs-all-four-wheeled-vehicles-except-emergency-vehicles-are-equipped-with-hydraulics",
+      "name": "Carnival/funhouse theme (CJ's outfit changes to a pink Cesar haircut, joker glasses and red heart boxers. Pedestrians are replaced with fast food workers and clowns. Traffic consists of Pizza Boys, BF Injections, Hotknifes, Tugs, Quads, Karts, Mr. Whoopees, and Hotdogs. All four-wheeled vehicles, except emergency vehicles, are equipped with hydraulics.)",
+      "description": "Activates carnival/funhouse visual effects",
+      "longDescription": "Enabling the \"Carnival/funhouse theme\" cheat during the Valet will fail the mission CJ's outfit changes to a pink Cesar haircut, joker glasses and red heart boxers Pedestrians are replaced with fast food workers and clowns. Traffic consists of Pizza Boys, BF Injections, Hotknifes, Tugs, Quads, Karts, Mr. Whoopees, and Hotdogs. All four-wheeled vehicles, except emergency vehicles, are equipped with hydraulics.",
+      "category": "vehicles",
+      "psSequence": [
+        "△",
+        "△",
+        "L1",
+        "□",
+        "□",
+        "◯",
+        "□",
+        "↓",
+        "◯"
+      ],
+      "pcSequence": [
+        [
+          "C",
+          "R",
+          "A",
+          "Z",
+          "Y",
+          "T",
+          "O",
+          "W",
+          "N"
+        ],
+        [
+          "P",
+          "R",
+          "I",
+          "E",
+          "B",
+          "J"
+        ]
+      ],
+      "notes": "PC: CRAZYTOWN / PRIEBJ"
+    },
+    {
+      "id": "cars-float-away-when-hit",
+      "name": "Cars float away when hit",
+      "description": "Makes vehicles float upward when struck or damaged",
+      "longDescription": "This cheat does not work in missions involving races and car chases.",
+      "category": "vehicles",
+      "psSequence": [
+        "□",
+        "R2",
+        "↓",
+        "↓",
+        "←",
+        "↓",
+        "←",
+        "←",
+        "L2",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "U",
+          "B",
+          "B",
+          "L",
+          "E",
+          "C",
+          "A",
+          "R",
+          "S"
+        ],
+        [
+          "B",
+          "S",
+          "X",
+          "S",
+          "G",
+          "G",
+          "C"
+        ]
+      ],
+      "notes": "PC: BUBBLECARS / BSXSGGC"
+    },
+    {
+      "id": "pedestrians-riot",
+      "name": "Pedestrians riot",
+      "description": "Unlike previous games, this code can be turned on and...",
+      "longDescription": "Unlike previous games, this code can be turned on and off at will. However, keeping it on may cause problems during the storyline. This code brings up data from the Los Santos Riots except on a statewide scale.",
+      "category": "pedestrians",
+      "psSequence": [
+        "L2",
+        "→",
+        "L1",
+        "△",
+        "→",
+        "→",
+        "R1",
+        "L1",
+        "→",
+        "L1",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "T",
+          "A",
+          "T",
+          "E",
+          "O",
+          "F",
+          "E",
+          "M",
+          "E",
+          "R",
+          "G",
+          "E",
+          "N",
+          "C",
+          "Y"
+        ],
+        [
+          "I",
+          "O",
+          "J",
+          "U",
+          "F",
+          "Z",
+          "N"
+        ]
+      ],
+      "notes": "PC: STATEOFEMERGENCY / IOJUFZN"
+    },
+    {
+      "id": "explode-all-vehicles-except-bicycles",
+      "name": "Explode all vehicles (except bicycles)",
+      "description": "Affects vehicle properties",
+      "longDescription": "Vehicles that have been already destroyed will also explode. Any deaths caused by this cheat will be counted in the player's kill count.",
+      "category": "vehicles",
+      "psSequence": [
+        "R2",
+        "L2",
+        "R1",
+        "L1",
+        "L2",
+        "R2",
+        "□",
+        "△",
+        "◯",
+        "△",
+        "L2",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "L",
+          "L",
+          "C",
+          "A",
+          "R",
+          "S",
+          "G",
+          "O",
+          "B",
+          "O",
+          "O",
+          "M"
+        ],
+        [
+          "C",
+          "P",
+          "K",
+          "T",
+          "N",
+          "W",
+          "T"
+        ]
+      ],
+      "notes": "PC: ALLCARSGOBOOM / CPKTNWT"
+    },
+    {
+      "id": "invisible-cars",
+      "name": "Invisible cars",
+      "description": "Makes all vehicles invisible (only wheels visible)",
+      "longDescription": "",
+      "category": "vehicles",
+      "psSequence": [
+        "△",
+        "L1",
+        "△",
+        "R2",
+        "□",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "W",
+          "H",
+          "E",
+          "E",
+          "L",
+          "S",
+          "O",
+          "N",
+          "L",
+          "Y",
+          "P",
+          "L",
+          "E",
+          "A",
+          "S",
+          "E"
+        ],
+        [
+          "X",
+          "I",
+          "C",
+          "W",
+          "M",
+          "D"
+        ]
+      ],
+      "notes": "PC: WHEELSONLYPLEASE / XICWMD"
+    },
+    {
+      "id": "kinky-themepimp-mode-cjs-outfit-changes-to-the-gimp-suit-pedestrians-consist-of-pimps-and-prostitutes-equipped-with-dildos-prostitutes-are-attracted-to-cj-and-follow-him-around",
+      "name": "Kinky theme/pimp mode",
+      "description": "CJ's outfit changes to the gimp suit. Pedestrians consist of pimps and prostitutes equipped with dildos. Prostitutes are attracted to CJ and follow him around.",
+      "longDescription": "Enabling the \"Kinky theme/pimp mode\" cheat during the Valet will fail the mission CJ's outfit changes to the gimp suit. Pedestrians consist of pimps and prostitutes equipped with dildos. Prostitutes are attracted to CJ and follow him around.",
+      "category": "pedestrians",
+      "psSequence": [
+        "□",
+        "→",
+        "□",
+        "□",
+        "L2",
+        "✕",
+        "△",
+        "✕",
+        "△"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "E",
+          "K",
+          "K",
+          "N",
+          "Q",
+          "V"
+        ],
+        [
+          "L",
+          "O",
+          "V",
+          "E",
+          "C",
+          "O",
+          "N",
+          "Q",
+          "U",
+          "E",
+          "R",
+          "S",
+          "A",
+          "L",
+          "L"
+        ]
+      ],
+      "notes": "PC: BEKKNQV / LOVECONQUERSALL"
+    },
+    {
+      "id": "prostitutes-pay-carl-instead-of-taking-carls-money-for-some-unknown-reason-this-cheat-will-alternate-between-giving-the-player-thermal-vision-goggles-and-night-vision-goggles-every-time-this-cheat-is-activated-it-also-gives-him-a-minigun-with-some-ammo-tested-and-confirmed-on-ps3",
+      "name": "Prostitutes pay Carl instead of taking Carl's money",
+      "description": "Prostitutes pay Carl instead of taking Carl's money (For some unknown reason, this cheat will alternate between giving the player Thermal Vision Goggles and Night Vision Goggles every time this cheat is activated. It also gives him a Minigun with some ammo. Tested and confirmed on PS3.)",
+      "longDescription": "For some unknown reason, this cheat will alternate between giving the player Thermal Vision Goggles and Night Vision Goggles every time this cheat is activated. It also gives him a Minigun with some ammo. Tested and confirmed on PS3.",
+      "category": "player-stats",
+      "psSequence": [
+        "→",
+        "L2",
+        "L2",
+        "↓",
+        "L2",
+        "↑",
+        "↑",
+        "L2",
+        "R2"
+      ],
+      "pcSequence": [],
+      "notes": "Verified from game data"
+    },
+    {
+      "id": "no-pedestriansreduced-traffic",
+      "name": "No pedestrians/reduced traffic",
+      "description": "Parked cars still spawn.",
+      "longDescription": "Parked cars still spawn.",
+      "category": "pedestrians",
+      "psSequence": [
+        "✕",
+        "↓",
+        "↑",
+        "R2",
+        "↓",
+        "△",
+        "L1",
+        "△",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "G",
+          "H",
+          "O",
+          "S",
+          "T",
+          "T",
+          "O",
+          "W",
+          "N"
+        ],
+        [
+          "T",
+          "H",
+          "G",
+          "L",
+          "O",
+          "J"
+        ]
+      ],
+      "notes": "PC: GHOSTTOWN / THGLOJ"
+    },
+    {
+      "id": "pedestrians-are-elvis",
+      "name": "Pedestrians are Elvis",
+      "description": "Pedestrians are Elvis",
+      "longDescription": "",
+      "category": "pedestrians",
+      "psSequence": [
+        "L1",
+        "◯",
+        "△",
+        "L1",
+        "L1",
+        "□",
+        "L2",
+        "↑",
+        "↓",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "L",
+          "U",
+          "E",
+          "S",
+          "U",
+          "E",
+          "D",
+          "E",
+          "S",
+          "H",
+          "O",
+          "E",
+          "S",
+          "\n",
+          "A",
+          "S",
+          "B",
+          "H",
+          "G",
+          "R",
+          "B"
+        ]
+      ],
+      "notes": "PC: BLUESUEDESHOES\nASBHGRB"
+    },
+    {
+      "id": "pedestrians-attack-carl",
+      "name": "Pedestrians attack Carl",
+      "description": "Pedestrians attack Carl",
+      "longDescription": "",
+      "category": "vehicles",
+      "psSequence": [
+        "↓",
+        "↑",
+        "↑",
+        "↑",
+        "✕",
+        "R2",
+        "R1",
+        "L2",
+        "L2"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "A",
+          "G",
+          "O",
+          "W",
+          "P",
+          "G"
+        ],
+        [
+          "S",
+          "T",
+          "O",
+          "P",
+          "P",
+          "I",
+          "C",
+          "K",
+          "I",
+          "N",
+          "G",
+          "O",
+          "N",
+          "M",
+          "E"
+        ]
+      ],
+      "notes": "PC: BAGOWPG / STOPPICKINGONME"
+    },
+    {
+      "id": "pedestrians-attack-carl-with-guns",
+      "name": "Pedestrians attack Carl with guns",
+      "description": "Pedestrians attack Carl with guns",
+      "longDescription": "",
+      "category": "vehicles",
+      "psSequence": [
+        "✕",
+        "L1",
+        "↑",
+        "□",
+        "↓",
+        "✕",
+        "L2",
+        "△",
+        "↓",
+        "R1",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "G",
+          "L",
+          "U",
+          "A",
+          "W",
+          "M",
+          "L"
+        ],
+        [
+          "A",
+          "T",
+          "T",
+          "A",
+          "C",
+          "K",
+          "O",
+          "F",
+          "T",
+          "H",
+          "E",
+          "V",
+          "I",
+          "L",
+          "L",
+          "A",
+          "G",
+          "E",
+          "P",
+          "E",
+          "O",
+          "P",
+          "L",
+          "E"
+        ]
+      ],
+      "notes": "PC: BGLUAWML / ATTACKOFTHEVILLAGEPEOPLE"
+    },
+    {
+      "id": "pedestrians-have-weapons-baseball-bat-pistol-shotgun-m4-rocket-launcher",
+      "name": "Pedestrians have weapons",
+      "description": "Arms all pedestrians with various weapons",
+      "longDescription": "",
+      "category": "weapons",
+      "psSequence": [
+        "R2",
+        "R1",
+        "✕",
+        "△",
+        "✕",
+        "△",
+        "↑",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "F",
+          "O",
+          "O",
+          "O",
+          "X",
+          "F",
+          "T"
+        ],
+        [
+          "S",
+          "U",
+          "R",
+          "R",
+          "O",
+          "U",
+          "N",
+          "D",
+          "E",
+          "D",
+          "B",
+          "Y",
+          "N",
+          "U",
+          "T",
+          "T",
+          "E",
+          "R",
+          "S"
+        ]
+      ],
+      "notes": "PC: FOOOXFT / SURROUNDEDBYNUTTERS"
+    },
+    {
+      "id": "pedestrians-riot-with-golf-club",
+      "name": "Pedestrians riot (with golf club)",
+      "description": "Activates pedestrians riot",
+      "longDescription": "This code changes the all ped acquaintances of the male and female ped types to hate, except for the street criminals, prostitutes, and mission ped types. Madd Dogg will instantly jump off the roof once Carl starts his mission.",
+      "category": "pedestrians",
+      "psSequence": [
+        "↓",
+        "←",
+        "↑",
+        "←",
+        "✕",
+        "R2",
+        "R1",
+        "L2",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "J",
+          "L",
+          "O",
+          "J",
+          "Y",
+          "Q",
+          "Y"
+        ],
+        [
+          "R",
+          "O",
+          "U",
+          "G",
+          "H",
+          "N",
+          "E",
+          "I",
+          "G",
+          "H",
+          "B",
+          "O",
+          "U",
+          "R",
+          "H",
+          "O",
+          "O",
+          "D"
+        ]
+      ],
+      "notes": "PC: AJLOJYQY / ROUGHNEIGHBOURHOOD"
+    },
+    {
+      "id": "pink-traffic",
+      "name": "Pink traffic",
+      "description": "Pink traffic",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "◯",
+        "L1",
+        "↓",
+        "L2",
+        "←",
+        "✕",
+        "R1",
+        "L1",
+        "→",
+        "◯"
+      ],
+      "pcSequence": [
+        [
+          "L",
+          "L",
+          "Q",
+          "P",
+          "F",
+          "B",
+          "N"
+        ],
+        [
+          "P",
+          "I",
+          "N",
+          "K",
+          "I",
+          "S",
+          "T",
+          "H",
+          "E",
+          "N",
+          "E",
+          "W",
+          "C",
+          "O",
+          "O",
+          "L"
+        ]
+      ],
+      "notes": "PC: LLQPFBN / PINKISTHENEWCOOL"
+    },
+    {
+      "id": "rural-traffic",
+      "name": "Rural traffic",
+      "description": "Rural traffic",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "L1",
+        "L1",
+        "R1",
+        "R1",
+        "L2",
+        "L1",
+        "R2",
+        "↓",
+        "←",
+        "↑"
+      ],
+      "pcSequence": [
+        [
+          "E",
+          "V",
+          "E",
+          "R",
+          "Y",
+          "O",
+          "N",
+          "E",
+          "I",
+          "S",
+          "P",
+          "O",
+          "O",
+          "R"
+        ],
+        [
+          "K",
+          "K",
+          "Z",
+          "R",
+          "P",
+          "K",
+          "W"
+        ]
+      ],
+      "notes": "PC: EVERYONEISPOOR / KKZRPKW"
+    },
+    {
+      "id": "rural-theme-cjs-outfit-changes-to-a-binco-trucker-cap-and-overalls-traffic-and-pedestrians-are-replaced-with-those-usually-seen-in-red-and-flint-counties",
+      "name": "Rural theme (CJ's outfit changes to a Binco Trucker Cap and overalls. Traffic and pedestrians are replaced with those usually seen in Red and Flint counties.)",
+      "description": "Activates rural theme",
+      "longDescription": "Enabling the \"Rural theme\" cheat during the Valet will fail the mission CJ's outfit changes to a Binco Trucker Cap and overalls. Traffic and pedestrians are replaced with those usually seen in Red and Flint counties.",
+      "category": "pedestrians",
+      "psSequence": [
+        "△",
+        "←",
+        "□",
+        "R2",
+        "↑",
+        "L2",
+        "↓",
+        "L1",
+        "✕",
+        "L1",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "F",
+          "V",
+          "T",
+          "M",
+          "N",
+          "B",
+          "Z"
+        ],
+        [
+          "H",
+          "I",
+          "C",
+          "K",
+          "S",
+          "V",
+          "I",
+          "L",
+          "L",
+          "E"
+        ]
+      ],
+      "notes": "PC: FVTMNBZ / HICKSVILLE"
+    },
+    {
+      "id": "sports-car-traffic-traffic-consists-of-buffalos-cheetahs-uranuses-euroses-bullets-infernuses-zr-350s-stratums-elegies-flashes-jesters-sultans-clubs-phoenixes-hotknives-super-gts-banshees-comets-and-turismosnote-random-vehicle-spawn-points-also-spawn-sports-cars-the-cheat-does-not-tend-to-spawn-alphas-however",
+      "name": "Sports car traffic (Traffic consists of Buffalos, Cheetahs, Uranuses, Euroses, Bullets, Infernuses, ZR-350s, Stratums, Elegies, Flashes, Jesters, Sultans, Clubs, Phoenixes, Hotknives, Super GTs, Banshees, Comets",
+      "description": "Sports car traffic (Traffic consists of Buffalos, Cheetahs, Uranuses, Euroses, Bullets, Infernuses, ZR-350s, Stratums, Elegies, Flashes, Jesters, Sultans, Clubs, Phoenixes, Hotknives, Super GTs, Banshees, Comets and Turismos.)Note: Random vehicle spawn points also spawn sports cars. The cheat does not tend to spawn Alphas, however.",
+      "longDescription": "Traffic consists of Buffalos, Cheetahs, Uranuses, Euroses, Bullets, Infernuses, ZR-350s, Stratums, Elegies, Flashes, Jesters, Sultans, Clubs, Phoenixes, Hotknives, Super GTs, Banshees, Comets and Turismos.",
+      "category": "vehicles",
+      "psSequence": [
+        "↑",
+        "L1",
+        "R1",
+        "↑",
+        "→",
+        "↑",
+        "✕",
+        "L2",
+        "✕",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "E",
+          "V",
+          "E",
+          "R",
+          "Y",
+          "O",
+          "N",
+          "E",
+          "I",
+          "S",
+          "R",
+          "I",
+          "C",
+          "H"
+        ],
+        [
+          "G",
+          "U",
+          "S",
+          "N",
+          "H",
+          "D",
+          "E"
+        ]
+      ],
+      "notes": "PC: EVERYONEISRICH / GUSNHDE"
+    },
+    {
+      "id": "traffic-lights-always-green",
+      "name": "Green lights",
+      "description": "Traffic lights always green",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "→",
+        "R1",
+        "↑",
+        "L2",
+        "L2",
+        "←",
+        "R1",
+        "L1",
+        "R1",
+        "R1"
+      ],
+      "pcSequence": [
+        [
+          "Z",
+          "E",
+          "I",
+          "I",
+          "V",
+          "G"
+        ],
+        [
+          "D",
+          "O",
+          "N",
+          "T",
+          "T",
+          "R",
+          "Y",
+          "A",
+          "N",
+          "D",
+          "S",
+          "T",
+          "O",
+          "P",
+          "M",
+          "E"
+        ]
+      ],
+      "notes": "PC: ZEIIVG / DONTTRYANDSTOPME"
+    },
+    {
+      "id": "triad-theme-cj-is-equipped-with-a-katana-and-all-pedestrians-are-replaced-with-groups-of-triads-traffic-mostly-consists-of-pcj-600s-fcr-900s-and-bf-400s-all-vehicles-spawn-in-all-black-behaving-identically-to-the-black-traffic-cheat",
+      "name": "Triad theme",
+      "description": "Triad theme (CJ is equipped with a katana and all pedestrians are replaced with groups of Triads. Traffic mostly consists of PCJ 600s, FCR-900s, and BF-400s. All vehicles spawn in all black, behaving identically to the black traffic cheat.)",
+      "longDescription": "CJ is equipped with a katana and all pedestrians are replaced with groups of Triads. Traffic mostly consists of PCJ 600s, FCR-900s, and BF-400s. All vehicles spawn in all black, behaving identically to the black traffic cheat.",
+      "category": "vehicles",
+      "psSequence": [
+        "✕",
+        "✕",
+        "↓",
+        "R2",
+        "L2",
+        "◯",
+        "R1",
+        "◯",
+        "□"
+      ],
+      "pcSequence": [
+        [
+          "N",
+          "I",
+          "N",
+          "J",
+          "A",
+          "T",
+          "O",
+          "W",
+          "N"
+        ],
+        [
+          "A",
+          "F",
+          "P",
+          "H",
+          "U",
+          "L",
+          "T",
+          "L"
+        ]
+      ],
+      "notes": "PC: NINJATOWN / AFPHULTL"
+    },
+    {
+      "id": "gang-members-spawn-much-faster",
+      "name": "Gang members spawn much faster",
+      "description": "Spawns a Gang Members Much Faster vehicle",
+      "longDescription": "",
+      "category": "pedestrians",
+      "psSequence": [
+        "←",
+        "→",
+        "→",
+        "→",
+        "←",
+        "✕",
+        "↓",
+        "↑",
+        "□",
+        "→"
+      ],
+      "pcSequence": [
+        [
+          "M",
+          "R",
+          "O",
+          "E",
+          "M",
+          "Z",
+          "H"
+        ]
+      ],
+      "notes": "PC: MROEMZH"
+    },
+    {
+      "id": "gang-wars-break-out-all-over-san-andreas-can-be-deactivated",
+      "name": "Gang wars break out all over San Andreas (can be deactivated)",
+      "description": "Affects gang behavior",
+      "longDescription": "Gangs will turn hostile and attack CJ and his gang.",
+      "category": "pedestrians",
+      "psSequence": [
+        "L1",
+        "↑",
+        "R1",
+        "R1",
+        "←",
+        "R1",
+        "R1",
+        "R2",
+        "→",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "O",
+          "N",
+          "L",
+          "Y",
+          "H",
+          "O",
+          "M",
+          "I",
+          "E",
+          "S",
+          "A",
+          "L",
+          "L",
+          "O",
+          "W",
+          "E",
+          "D"
+        ]
+      ],
+      "notes": "PC: ONLYHOMIESALLOWED"
+    },
+    {
+      "id": "gangs-and-workers",
+      "name": "Gangs & Workers",
+      "description": "Gangs and workers",
+      "longDescription": "",
+      "category": "pedestrians",
+      "psSequence": [
+        "←",
+        "→",
+        "→",
+        "→",
+        "←",
+        "✕",
+        "↓",
+        "↑",
+        "□",
+        "→"
+      ],
+      "pcSequence": [
+        [
+          "M",
+          "R",
+          "O",
+          "E",
+          "M",
+          "Z",
+          "H"
+        ]
+      ],
+      "notes": "PC: MROEMZH"
+    },
+    {
+      "id": "no-citizens-or-cops-only-gang-members-having-gunfights-can-be-deactivated",
+      "name": "No citizens or cops, only gang members having gunfights (can be deactivated)",
+      "description": "Affects gang behavior",
+      "longDescription": "Gangs will turn hostile and attack CJ and his gang.",
+      "category": "pedestrians",
+      "psSequence": [
+        "L2",
+        "↑",
+        "R1",
+        "R1",
+        "←",
+        "R1",
+        "R1",
+        "R2",
+        "→",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "B",
+          "I",
+          "F",
+          "B",
+          "U",
+          "Z",
+          "Z"
+        ],
+        [
+          "B",
+          "E",
+          "T",
+          "T",
+          "E",
+          "R",
+          "S",
+          "T",
+          "A",
+          "Y",
+          "I",
+          "N",
+          "D",
+          "O",
+          "O",
+          "R",
+          "S"
+        ]
+      ],
+      "notes": "PC: BIFBUZZ / BETTERSTAYINDOORS"
+    },
+    {
+      "id": "recruit-anyone-into-gang-with-pistols",
+      "name": "Recruit anyone into gang with Pistols",
+      "description": "Allows recruiting any pedestrian as gang member",
+      "longDescription": "If the player recruits a Ballas and/or Vagos gang member and starts a gang war, the recruited Ballas and/or Vagos will immediately attack the player.",
+      "category": "pedestrians",
+      "psSequence": [
+        "↓",
+        "□",
+        "↑",
+        "R2",
+        "R2",
+        "↑",
+        "→",
+        "→",
+        "↑"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "J",
+          "M",
+          "A",
+          "H",
+          "P",
+          "E"
+        ],
+        [
+          "W",
+          "A",
+          "N",
+          "N",
+          "A",
+          "B",
+          "E",
+          "I",
+          "N",
+          "M",
+          "Y",
+          "G",
+          "A",
+          "N",
+          "G"
+        ]
+      ],
+      "notes": "PC: SJMAHPE / WANNABEINMYGANG"
+    },
+    {
+      "id": "recruit-anyone-into-gang-with-rocket-launchers",
+      "name": "Recruit anyone into gang with rocket launchers",
+      "description": "Allows recruiting any pedestrian as gang member",
+      "longDescription": "If the player recruits a Ballas and/or Vagos gang member and starts a gang war, the recruited Ballas and/or Vagos will immediately attack the player.",
+      "category": "pedestrians",
+      "psSequence": [
+        "R2",
+        "R2",
+        "R2",
+        "✕",
+        "L2",
+        "L1",
+        "R2",
+        "L1",
+        "↓",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "R",
+          "O",
+          "C",
+          "K",
+          "E",
+          "T",
+          "M",
+          "A",
+          "Y",
+          "H",
+          "E",
+          "M"
+        ],
+        [
+          "Z",
+          "S",
+          "O",
+          "X",
+          "F",
+          "S",
+          "Q"
+        ]
+      ],
+      "notes": "PC: ROCKETMAYHEM / ZSOXFSQ"
+    },
+    {
+      "id": "recruit-anyone-into-gang-with-ak47s",
+      "name": "Recruit anyone into gang with AK47s",
+      "description": "Allows recruiting any pedestrian as gang member",
+      "longDescription": "If the player recruits a Ballas and/or Vagos gang member and starts a gang war, the recruited Ballas and/or Vagos will immediately attack the player.",
+      "category": "pedestrians",
+      "psSequence": [],
+      "pcSequence": [
+        [
+          "B",
+          "M",
+          "T",
+          "P",
+          "W",
+          "H",
+          "R"
+        ],
+        [
+          "N",
+          "O",
+          "O",
+          "N",
+          "E",
+          "C",
+          "A",
+          "N",
+          "S",
+          "T",
+          "O",
+          "P",
+          "U",
+          "S"
+        ]
+      ],
+      "notes": "PC: BMTPWHR / NOONECANSTOPUS"
+    },
+    {
+      "id": "always-midnight-0000",
+      "name": "Always midnight (00:00)",
+      "description": "Locks time to midnight (00:00)",
+      "longDescription": "Odd sudden weather changes. If Carl is wasted, the time reverts to 12:00. When disabled the time that passed is added to the current time. Only locks the timecycle (sky colour). Sun still rises/sets and map brightens/darkens as usual even with this cheat activated.",
+      "category": "misc",
+      "psSequence": [
+        "□",
+        "L1",
+        "R1",
+        "→",
+        "✕",
+        "↑",
+        "L1",
+        "←",
+        "←"
+      ],
+      "pcSequence": [
+        [
+          "N",
+          "I",
+          "G",
+          "H",
+          "T",
+          "P",
+          "R",
+          "O",
+          "W",
+          "L",
+          "E",
+          "R"
+        ],
+        [
+          "X",
+          "J",
+          "V",
+          "S",
+          "N",
+          "A",
+          "J"
+        ]
+      ],
+      "notes": "PC: NIGHTPROWLER / XJVSNAJ"
+    },
+    {
+      "id": "always-2100-with-orange-sky",
+      "name": "Always 21:00 with orange sky",
+      "description": "Locks time to 9:00 PM",
+      "longDescription": "When disabled the time that passed is added to the current time.",
+      "category": "misc",
+      "psSequence": [
+        "←",
+        "←",
+        "L2",
+        "R1",
+        "→",
+        "□",
+        "□",
+        "L1",
+        "L2",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "O",
+          "F",
+          "V",
+          "I",
+          "A",
+          "C"
+        ],
+        [
+          "D",
+          "O",
+          "N",
+          "T",
+          "B",
+          "R",
+          "I",
+          "N",
+          "G",
+          "O",
+          "N",
+          "T",
+          "H",
+          "E",
+          "N",
+          "I",
+          "G",
+          "H",
+          "T"
+        ]
+      ],
+      "notes": "PC: OFVIAC / DONTBRINGONTHENIGHT"
+    },
+    {
+      "id": "cloudy-weather",
+      "name": "Cloudy weather",
+      "description": "Cloudy weather",
+      "longDescription": "",
+      "category": "world",
+      "psSequence": [
+        "L2",
+        "↓",
+        "↓",
+        "←",
+        "□",
+        "←",
+        "R2",
+        "□",
+        "✕",
+        "R1",
+        "L1",
+        "L1"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "L",
+          "N",
+          "S",
+          "F",
+          "M",
+          "Z",
+          "O"
+        ],
+        [
+          "D",
+          "U",
+          "L",
+          "L",
+          "D",
+          "U",
+          "L",
+          "L",
+          "D",
+          "A",
+          "Y"
+        ]
+      ],
+      "notes": "PC: ALNSFMZO / DULLDULLDAY"
+    },
+    {
+      "id": "fast-gameplay",
+      "name": "Fast gameplay",
+      "description": "Fast gameplay",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "△",
+        "↑",
+        "→",
+        "↓",
+        "L2",
+        "L1",
+        "□"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "P",
+          "E",
+          "E",
+          "D",
+          "I",
+          "T",
+          "U",
+          "P"
+        ],
+        [
+          "P",
+          "P",
+          "G",
+          "W",
+          "J",
+          "H",
+          "T"
+        ]
+      ],
+      "notes": "PC: SPEEDITUP / PPGWJHT"
+    },
+    {
+      "id": "slow-gameplay",
+      "name": "Slow gameplay",
+      "description": "Slow gameplay",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "△",
+        "↑",
+        "→",
+        "↓",
+        "□",
+        "R2",
+        "R1"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "L",
+          "O",
+          "W",
+          "I",
+          "T",
+          "D",
+          "O",
+          "W",
+          "N"
+        ],
+        [
+          "L",
+          "I",
+          "Y",
+          "O",
+          "A",
+          "A",
+          "Y"
+        ]
+      ],
+      "notes": "PC: SLOWITDOWN / LIYOAAY"
+    },
+    {
+      "id": "speed-up-time",
+      "name": "Speed up time",
+      "description": "Enter the same code again to deactivate.",
+      "longDescription": "Enter the same code again to deactivate.",
+      "category": "world",
+      "psSequence": [
+        "◯",
+        "◯",
+        "L1",
+        "□",
+        "L1",
+        "□",
+        "□",
+        "□",
+        "L1",
+        "△",
+        "◯",
+        "△"
+      ],
+      "pcSequence": [
+        [
+          "Y",
+          "S",
+          "O",
+          "H",
+          "N",
+          "U",
+          "L"
+        ],
+        [
+          "T",
+          "I",
+          "M",
+          "E",
+          "J",
+          "U",
+          "S",
+          "T",
+          "F",
+          "L",
+          "I",
+          "E",
+          "S",
+          "B",
+          "Y"
+        ]
+      ],
+      "notes": "PC: YSOHNUL / TIMEJUSTFLIESBY"
+    },
+    {
+      "id": "foggy-weather",
+      "name": "Foggy weather",
+      "description": "Forces heavy fog conditions",
+      "longDescription": "",
+      "category": "world",
+      "psSequence": [
+        "R2",
+        "✕",
+        "L1",
+        "L1",
+        "L2",
+        "L2",
+        "L2",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "C",
+          "F",
+          "V",
+          "F",
+          "G",
+          "M",
+          "J"
+        ],
+        [
+          "C",
+          "A",
+          "N",
+          "T",
+          "S",
+          "E",
+          "E",
+          "W",
+          "H",
+          "E",
+          "R",
+          "E",
+          "I",
+          "M",
+          "G",
+          "O",
+          "I",
+          "N",
+          "G"
+        ]
+      ],
+      "notes": "PC: CFVFGMJ / CANTSEEWHEREIMGOING"
+    },
+    {
+      "id": "overcast-weather",
+      "name": "Overcast weather",
+      "description": "Forces overcast sky conditions",
+      "longDescription": "",
+      "category": "world",
+      "psSequence": [
+        "R2",
+        "✕",
+        "L1",
+        "L1",
+        "L2",
+        "L2",
+        "L2",
+        "□"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "L",
+          "N",
+          "S",
+          "F",
+          "M",
+          "Z",
+          "O"
+        ],
+        [
+          "D",
+          "U",
+          "L",
+          "L",
+          "D",
+          "U",
+          "L",
+          "L",
+          "D",
+          "A",
+          "Y"
+        ]
+      ],
+      "notes": "PC: ALNSFMZO / DULLDULLDAY"
+    },
+    {
+      "id": "sandstorm",
+      "name": "Sandstorm",
+      "description": "Sandstorm",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [
+        "↑",
+        "↓",
+        "L1",
+        "L1",
+        "L2",
+        "L2",
+        "L1",
+        "L2",
+        "R1",
+        "R2"
+      ],
+      "pcSequence": [
+        [
+          "C",
+          "W",
+          "J",
+          "X",
+          "U",
+          "O",
+          "C"
+        ],
+        [
+          "S",
+          "A",
+          "N",
+          "D",
+          "I",
+          "N",
+          "M",
+          "Y",
+          "E",
+          "A",
+          "R",
+          "S"
+        ]
+      ],
+      "notes": "PC: CWJXUOC / SANDINMYEARS"
+    },
+    {
+      "id": "rainy-weather",
+      "name": "Rainy weather",
+      "description": "Forces rainy weather conditions",
+      "longDescription": "",
+      "category": "world",
+      "psSequence": [
+        "R2",
+        "✕",
+        "L1",
+        "L1",
+        "L2",
+        "L2",
+        "L2",
+        "✕"
+      ],
+      "pcSequence": [
+        [
+          "A",
+          "U",
+          "I",
+          "F",
+          "R",
+          "V",
+          "Q",
+          "S"
+        ],
+        [
+          "S",
+          "T",
+          "A",
+          "Y",
+          "I",
+          "N",
+          "A",
+          "N",
+          "D",
+          "W",
+          "A",
+          "T",
+          "C",
+          "H",
+          "T",
+          "V"
+        ]
+      ],
+      "notes": "PC: AUIFRVQS / STAYINANDWATCHTV"
+    },
+    {
+      "id": "stormy-weather",
+      "name": "Stormy weather",
+      "description": "Forces thunderstorm conditions",
+      "longDescription": "",
+      "category": "world",
+      "psSequence": [
+        "R2",
+        "✕",
+        "L1",
+        "L1",
+        "L2",
+        "L2",
+        "L2",
+        "◯"
+      ],
+      "pcSequence": [
+        [
+          "S",
+          "C",
+          "O",
+          "T",
+          "T",
+          "I",
+          "S",
+          "H",
+          "S",
+          "U",
+          "M",
+          "M",
+          "E",
+          "R"
+        ],
+        [
+          "M",
+          "G",
+          "H",
+          "X",
+          "Y",
+          "R",
+          "M"
+        ]
+      ],
+      "notes": "PC: SCOTTISHSUMMER / MGHXYRM"
+    },
+    {
+      "id": "sunny-weather",
+      "name": "Sunny weather",
+      "description": "Forces sunny weather conditions",
+      "longDescription": "",
+      "category": "world",
+      "psSequence": [
+        "R2",
+        "✕",
+        "L1",
+        "L1",
+        "L2",
+        "L2",
+        "L2",
+        "△"
+      ],
+      "pcSequence": [
+        [
+          "P",
+          "L",
+          "E",
+          "A",
+          "S",
+          "A",
+          "N",
+          "T",
+          "L",
+          "Y",
+          "W",
+          "A",
+          "R",
+          "M"
+        ],
+        [
+          "A",
+          "F",
+          "Z",
+          "L",
+          "L",
+          "Q",
+          "L",
+          "L"
+        ]
+      ],
+      "notes": "PC: PLEASANTLYWARM / AFZLLQLL"
+    },
+    {
+      "id": "very-sunny-weather",
+      "name": "Sunny Weather",
+      "description": "Forces sunny weather conditions",
+      "longDescription": "",
+      "category": "world",
+      "psSequence": [
+        "R2",
+        "✕",
+        "L1",
+        "L1",
+        "L2",
+        "L2",
+        "L2",
+        "↓"
+      ],
+      "pcSequence": [
+        [
+          "T",
+          "O",
+          "O",
+          "D",
+          "A",
+          "M",
+          "N",
+          "H",
+          "O",
+          "T"
+        ],
+        [
+          "I",
+          "C",
+          "I",
+          "K",
+          "P",
+          "Y",
+          "H"
+        ]
+      ],
+      "notes": "PC: TOODAMNHOT / ICIKPYH"
+    },
+    {
+      "id": "advance-4-hours",
+      "name": "+4 Hours",
+      "description": "Advance 4 hours",
+      "longDescription": "",
+      "category": "misc",
+      "psSequence": [],
+      "pcSequence": [],
+      "notes": "Verified from game data"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import cheatsData from '../assets/cheats.json'
+import cheatsData from '../assets/cheats_v2.json'
 
 export default function Home() {
   const [inputs, setInputs] = useState([])
@@ -11,6 +11,7 @@ export default function Home() {
   const clearTimerRef = useRef(null)
   const audioRef = useRef(null)
   const base = new URL(document.baseURI).pathname
+  const [showLongDescription, setShowLongDescription] = useState(true)
 
   const buttonSymbols = useMemo(
     () => [
@@ -49,7 +50,7 @@ export default function Home() {
       let best = null
       for (const cheat of cheatsData.cheats) {
         // Check gamepad sequence
-        const seq = cheat.sequence || []
+        const seq = cheat.psSequence || []
         const n = seq.length
         if (n > 0 && n <= arr.length) {
           let ok = true
@@ -57,7 +58,7 @@ export default function Home() {
             if (arr[arr.length - n + i] !== seq[i]) { ok = false; break }
           }
           if (ok) {
-            if (!best || (seq.length > (best.sequence?.length || 0))) best = cheat
+            if (!best || (seq.length > (best.psSequence?.length || 0))) best = cheat
           }
         }
         
@@ -76,7 +77,7 @@ export default function Home() {
             if (ok) {
               const currentBestLength = best?.pcSequence ? 
                 (Array.isArray(best.pcSequence[0]) ? Math.max(...best.pcSequence.map(seq => seq.length)) : best.pcSequence.length) :
-                (best?.sequence?.length || 0)
+                (best?.psSequence?.length || 0)
               if (!best || (pcSeq.length > currentBestLength)) {
                 best = cheat
                 break // Found a match, no need to check other sequences for this cheat
@@ -247,10 +248,13 @@ export default function Home() {
         <img src={`${base}cj.svg`} alt="Sup mf" className="w-16 h-16 object-contain" />
       </div>
       {matchedCheat && (
-        <div key={matchedCheat.id} className="text-center cheat-pop fireworks">
+        <div key={matchedCheat.id} className="text-center cheat-pop fireworks max-w-2xl mx-auto flex flex-col gap-3">
           <div className="text-lg font-medium">{matchedCheat.name}</div>
           {matchedCheat.description && (
             <div className="text-sm opacity-90">{matchedCheat.description}</div>
+          )}
+          {showLongDescription && matchedCheat.longDescription && (
+            <div className="text-sm opacity-80 italic">{matchedCheat.longDescription}</div>
           )}
           <div className="particles">
             {particles.map(p => (
@@ -282,8 +286,20 @@ export default function Home() {
               return pcSeqs.join('')
             }
           })() : 
-          matchedCheat?.sequence?.join(' ')
+          matchedCheat?.psSequence?.join(' ')
         }
+      </div>
+
+      <div 
+        className='uppercase text-sm font-extralight w-xs flex justify-between items-center absolute bottom-1 left-3 cursor-pointer group hover:ml-13'
+        onClick={() => setShowLongDescription(!showLongDescription)}
+      >
+        <span className="block group-hover:hidden"> ⚙ </span>
+        <span className="hidden group-hover:block bank-gothic">Show Long Description</span>
+
+        <span className="hidden group-hover:block bank-gothic">
+          {showLongDescription ? 'ON' : 'OFF'}
+        </span>
       </div>
     </main>
   )

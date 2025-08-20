@@ -352,8 +352,11 @@
       "description": "Rain showers",
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "◯"],
-      "pcSequence": ["C", "F", "V", "F", "G", "M", "J"],
-      "notes": "Verified from IGN | PC: CFVFGMJ"
+      "pcSequence": [
+        ["C", "F", "V", "F", "G", "M", "J"],
+        ["C", "A", "N", "T", "S", "E", "E", "W", "H", "E", "R", "E", "I", "M", "G", "O", "I", "N", "G"]
+      ],
+      "notes": "Verified from HTML reference | PC: CFVFGMJ / CANTSEEWHEREIMGOING"
     },
     {
       "id": "foggy-weather",
@@ -361,8 +364,11 @@
       "description": "Fog covers the area",
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "✕"],
-      "pcSequence": ["C", "F", "V", "F", "G", "M", "J"],
-      "notes": "Verified from IGN | PC: CFVFGMJ"
+      "pcSequence": [
+        ["C", "F", "V", "F", "G", "M", "J"],
+        ["C", "A", "N", "T", "S", "E", "E", "W", "H", "E", "R", "E", "I", "M", "G", "O", "I", "N", "G"]
+      ],
+      "notes": "Verified from HTML reference | PC: CFVFGMJ / CANTSEEWHEREIMGOING"
     },
     {
       "id": "stormy-weather",
@@ -371,10 +377,10 @@
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "◯"],
       "pcSequence": [
-        ["M", "G", "H", "X", "Y", "Q", "J"],
-        ["S", "C", "O", "T", "T", "I", "S", "H"]
+        ["S", "C", "O", "T", "T", "I", "S", "H", "S", "U", "M", "M", "E", "R"],
+        ["M", "G", "H", "X", "Y", "R", "M"]
       ],
-      "notes": "Verified from IGN | PC: MGHXYQJ / SCOTTISH"
+      "notes": "Verified from HTML reference | PC: SCOTTISHSUMMER / MGHXYRM"
     },
     {
       "id": "very-sunny-weather",
@@ -382,8 +388,11 @@
       "description": "Very sunny skies",
       "category": "weather",
       "sequence": ["R2", "✕", "L1", "L1", "L2", "L2", "L2", "↓"],
-      "pcSequence": ["T", "O", "O", "H", "O", "T"],
-      "notes": "Verified from IGN | PC: TOOHOT"
+      "pcSequence": [
+        ["T", "O", "O", "D", "A", "M", "N", "H", "O", "T"],
+        ["I", "C", "I", "K", "P", "Y", "H"]
+      ],
+      "notes": "Verified from HTML reference | PC: TOODAMNHOT / ICIKPYH"
     },
     {
       "id": "sandstorm",
@@ -391,8 +400,11 @@
       "description": "Creates a sandstorm",
       "category": "weather",
       "sequence": ["↑", "↓", "L1", "L1", "L2", "L2", "L1", "L2", "R1", "R2"],
-      "pcSequence": ["C", "W", "J", "X", "Q", "Z", "V"],
-      "notes": "Verified from IGN | PC: CWJXQZV"
+      "pcSequence": [
+        ["C", "W", "J", "X", "U", "O", "C"],
+        ["S", "A", "N", "D", "I", "N", "M", "Y", "E", "A", "R", "S"]
+      ],
+      "notes": "Verified from HTML reference | PC: CWJXUOC / SANDINMYEARS"
     },
 
     {
@@ -401,8 +413,11 @@
       "description": "Time locked to midnight",
       "category": "time",
       "sequence": ["□", "L1", "R1", "→", "✕", "↑", "L1", "←", "←"],
-      "pcSequence": ["N", "I", "G", "H", "T", "P", "R", "O", "W", "L", "E", "R"],
-      "notes": "Verified from IGN | PC: NIGHTPROWLER"
+      "pcSequence": [
+        ["N", "I", "G", "H", "T", "P", "R", "O", "W", "L", "E", "R"],
+        ["X", "J", "V", "S", "N", "A", "J"]
+      ],
+      "notes": "Verified from HTML reference | PC: NIGHTPROWLER / XJVSNAJ"
     },
     {
       "id": "always-2100",
@@ -410,8 +425,11 @@
       "description": "Time locked to 21:00",
       "category": "time",
       "sequence": ["←", "←", "L2", "R1", "→", "□", "□", "L1", "L2", "✕"],
-      "pcSequence": ["O", "F", "V", "I", "S"],
-      "notes": "Verified from IGN | PC: OFVIS"
+      "pcSequence": [
+        ["O", "F", "V", "I", "A", "C"],
+        ["D", "O", "N", "T", "B", "R", "I", "N", "G", "O", "N", "T", "H", "E", "N", "I", "G", "H", "T"]
+      ],
+      "notes": "Verified from HTML reference | PC: OFVIAC / DONTBRINGONTHENIGHT"
     },
     {
       "id": "slow-motion",
@@ -419,8 +437,11 @@
       "description": "Everything moves in slow motion",
       "category": "time",
       "sequence": ["△", "↑", "→", "↓", "□", "R2", "R1"],
-      "pcSequence": ["L", "I", "Y", "O", "A", "A", "Y"],
-      "notes": "Verified from IGN | PC: LIYOAAY"
+      "pcSequence": [
+        ["S", "L", "O", "W", "I", "T", "D", "O", "W", "N"],
+        ["L", "I", "Y", "O", "A", "A", "Y"]
+      ],
+      "notes": "Verified from HTML reference | PC: SLOWITDOWN / LIYOAAY"
     },
     {
       "id": "fast-motion",
@@ -428,8 +449,11 @@
       "description": "Everything moves faster",
       "category": "time",
       "sequence": ["△", "↑", "→", "↓", "L2", "L1", "□"],
-      "pcSequence": ["S", "P", "E", "E", "D", "I", "T", "U", "P"],
-      "notes": "Verified from IGN | PC: SPEEDITUP"
+      "pcSequence": [
+        ["S", "P", "E", "E", "D", "I", "T", "U", "P"],
+        ["P", "P", "G", "W", "J", "H", "T"]
+      ],
+      "notes": "Verified from HTML reference | PC: SPEEDITUP / PPGWJHT"
     },
     {
       "id": "faster-clock",
@@ -437,8 +461,11 @@
       "description": "Time moves faster",
       "category": "time",
       "sequence": ["◯", "◯", "L1", "□", "L1", "□", "□", "□", "L1", "△", "◯", "△"],
-      "pcSequence": ["Y", "S", "O", "N", "N", "U", "T", "S"],
-      "notes": "Verified from IGN | PC: YSONNUTS"
+      "pcSequence": [
+        ["Y", "S", "O", "H", "N", "U", "L"],
+        ["T", "I", "M", "E", "J", "U", "S", "T", "F", "L", "I", "E", "S", "B", "Y"]
+      ],
+      "notes": "Verified from HTML reference | PC: YSOHNUL / TIMEJUSTFLIESBY"
     },
 
     {
@@ -566,8 +593,11 @@
       "description": "All lights remain green",
       "category": "traffic",
       "sequence": ["→", "R1", "↑", "L2", "L2", "←", "R1", "L1", "R1", "R1"],
-      "pcSequence": ["D", "O", "N", "T", "B", "R", "I", "N", "G", "O", "N"],
-      "notes": "Verified from IGN | PC: DONTBRINGON"
+      "pcSequence": [
+        ["O", "F", "V", "I", "A", "C"],
+        ["D", "O", "N", "T", "B", "R", "I", "N", "G", "O", "N", "T", "H", "E", "N", "I", "G", "H", "T"]
+      ],
+      "notes": "Verified from HTML reference | PC: OFVIAC / DONTBRINGONTHENIGHT"
     },
     {
       "id": "aggressive-traffic",
@@ -849,16 +879,6 @@
       "pcSequence": ["N", "C", "S", "G", "D", "A", "G"],
       "notes": "Verified from IGN | PC: NCSGDAG"
     },
-
-    {
-      "id": "gang-members-mode",
-      "name": "Gang Members Mode",
-      "description": "All pedestrians become gang members",
-      "category": "gang",
-      "sequence": ["←", "→", "→", "→", "←", "✕", "↓", "↑", "□", "→", "↓"],
-      "pcSequence": ["L", "I", "F", "E", "S", "A", "B", "E", "A", "C", "H"],
-      "notes": "Verified from IGN | PC: LIFESABEACH"
-    },
     {
       "id": "gang-control",
       "name": "Gang Control",
@@ -901,8 +921,10 @@
       "description": "Beach party pedestrians and vehicles",
       "category": "world",
       "sequence": ["↑", "↑", "↓", "↓", "□", "◯", "L1", "R1", "△", "↓"],
-      "pcSequence": ["C", "I", "K", "G", "C", "G", "X"],
-      "notes": "Verified from GTA Wiki | PC: CIKGCGX (Permanent effect)"
+      "pcSequence": [
+        ["L", "I","F","E","S","A","B","E","A","C","H"]
+      ],
+      "notes": "Verified from HTML reference | PC: LIFESABEACH"
     },
     {
       "id": "funhouse-theme",
@@ -910,8 +932,8 @@
       "description": "Funhouse pedestrians and vehicles",
       "category": "world",
       "sequence": ["△", "△", "L1", "□", "□", "◯", "□", "↓", "◯"],
-      "pcSequence": ["P", "R", "I", "E", "B", "O", "H", "Y", "A", "H", "O", "O"],
-      "notes": "Verified from GTA Wiki | PC: PRIEBOHYAHOO (Permanent effect)"
+      "pcSequence": ["P", "R", "I", "E", "B", "J"],
+      "notes": "Verified from HTML reference | PC: PRIEBJ (Permanent effect)"
     },
     {
       "id": "ninja-theme",
