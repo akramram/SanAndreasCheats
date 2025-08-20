@@ -6,6 +6,8 @@ export default function Home() {
   const [matchedCheat, setMatchedCheat] = useState(null)
   const [particles, setParticles] = useState([])
   const [isKeyboardInput, setIsKeyboardInput] = useState(false)
+  const [startTime, setStartTime] = useState(null)
+  const [elapsedTime, setElapsedTime] = useState(null)
   const MAX_INPUTS = 40
   const prevStateRef = useRef(new Map())
   const clearTimerRef = useRef(null)
@@ -41,6 +43,8 @@ export default function Home() {
   useEffect(() => {
     if (matchedCheat) {
       setInputs([])
+      // Reset timer when cheat is matched and inputs are cleared
+      setStartTime(null)
     }
   }, [matchedCheat])
 
@@ -96,6 +100,8 @@ export default function Home() {
       clearTimerRef.current = setTimeout(() => {
         setInputs([])
         setMatchedCheat(null)
+        setStartTime(null)
+        setElapsedTime(null)
         clearTimerRef.current = null
       }, 2000)
     }
@@ -145,10 +151,26 @@ export default function Home() {
         // If a cheat was already matched, reset buffer so user can try a new one immediately
         const base = matchedCheat ? [] : prev
         const next = [...base, nextItem]
+        
+        // Timer logic: start timer on first input or reset if starting fresh
+        let currentStartTime = startTime
+        if (base.length === 0) {
+          currentStartTime = Date.now()
+          setStartTime(currentStartTime)
+          setElapsedTime(null)
+        }
+        
         while (next.length > MAX_INPUTS) next.shift()
         const found = findMatch(next)
         const wasDifferent = (!matchedCheat || matchedCheat.id !== found?.id) && !!found
         setMatchedCheat(found)
+        
+        // Calculate elapsed time when cheat is found
+        if (wasDifferent && currentStartTime) {
+          const elapsed = Date.now() - currentStartTime
+          setElapsedTime(elapsed)
+        }
+        
         if (wasDifferent) {
           // Play sound immediately and trigger fireworks shortly after
           playNotif()
@@ -259,7 +281,7 @@ export default function Home() {
       // clear pending timeout message timer
       if (timeoutMessageRef.current) clearTimeout(timeoutMessageRef.current)
     }
-  }, [buttonSymbols, matchedCheat])
+  }, [buttonSymbols, matchedCheat, startTime])
 
   return (
     <main className="h-screen flex flex-col items-center justify-center gap-3 bg-black text-amber-200 px-4">
@@ -268,6 +290,11 @@ export default function Home() {
       </div>
       {matchedCheat && (
         <div key={matchedCheat.id} className="text-center cheat-pop fireworks max-w-2xl mx-auto flex flex-col gap-3">
+          {elapsedTime !== null && (
+            <div className="text-xl font-bold text-green-400 mb-2">
+              Time: {(elapsedTime / 1000).toFixed(2)}s
+            </div>
+          )}
           <div className="text-lg font-medium">{matchedCheat.name}</div>
           {matchedCheat.description && (
             <div className="text-sm opacity-90">{matchedCheat.description}</div>
