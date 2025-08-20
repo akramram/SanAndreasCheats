@@ -311,7 +311,7 @@ export default function Home() {
 
       {showTimeoutMessage && !matchedCheat && (
         <div className="text-center text-lg font-medium text-amber-300 animate-pulse mt-4">
-          Press any key on keyboard or press any button on gamepad
+          Enter cheat code using keyboard or gamepad
         </div>
       )}
 
