@@ -92,8 +92,8 @@
     },
     {
       "id": "armor-health-and-250000-in-money-also-repairs-vehicles-occupied-by-the-player-and-increases-the-criminal-rating-to-40",
-      "name": "Armor, health and $250,000 in money (also repairs vehicles occupied by the player and increases the criminal rating to 40)",
-      "description": "Restores health, armor, and adds $250,000",
+      "name": "Armor, health and $250,000 in money",
+      "description": "Restores health, armor, and adds $250,000, also repairs vehicles occupied by the player and increases the criminal rating to 40",
       "longDescription": "Enabling the \"Health and Armor\" cheat during the bike chase of Just Business and during the drive-by portion of End of the Line will fail the mission, destroying the bike/Feltzer, leading to CJ's eventual death. Furthermore, enabling the cheat during Lure will automatically remove the doors of the Rancher, leading to a more difficult mission completion.",
       "category": "player-stats",
       "psSequence": [

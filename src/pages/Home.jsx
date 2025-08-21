@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import cheatsData from '../assets/cheats_v2.json'
 
 export default function Home() {
@@ -8,14 +8,50 @@ export default function Home() {
   const [isKeyboardInput, setIsKeyboardInput] = useState(false)
   const [startTime, setStartTime] = useState(null)
   const [elapsedTime, setElapsedTime] = useState(null)
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
+  const [cheatHistory, setCheatHistory] = useState([])
   const MAX_INPUTS = 40
   const prevStateRef = useRef(new Map())
   const clearTimerRef = useRef(null)
   const audioRef = useRef(null)
+  const inactivityTimeoutRef = useRef(null)
   const base = new URL(document.baseURI).pathname
   const [showLongDescription, setShowLongDescription] = useState(true)
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(true)
   const timeoutMessageRef = useRef(null)
+
+  // Function to save cheat to history
+  const saveCheatToHistory = useCallback((cheat, timestamp, elapsedMs, inputDevice) => {
+    const newEntry = {
+      id: `${cheat.id}-${timestamp}`,
+      name: cheat.name,
+      timestamp: timestamp,
+      date: new Date(timestamp).toLocaleString(),
+      elapsedTime: elapsedMs,
+      inputDevice: inputDevice
+    }
+    
+    const updatedHistory = [newEntry, ...cheatHistory].slice(0, 50) // Keep only last 50 entries
+    setCheatHistory(updatedHistory)
+    localStorage.setItem('cheatHistory', JSON.stringify(updatedHistory))
+  }, [cheatHistory])
+
+  // Modal management functions
+  const openHistoryModal = () => setIsHistoryModalOpen(true)
+  const closeHistoryModal = () => setIsHistoryModalOpen(false)
+
+  // Function to reset input and counter on inactivity
+  const resetOnInactivity = () => {
+    setInputs([])
+    setMatchedCheat(null)
+    setElapsedTime(null)
+    setStartTime(null)
+    prevStateRef.current = new Map()
+    if (clearTimerRef.current) {
+      clearTimeout(clearTimerRef.current)
+      clearTimerRef.current = null
+    }
+  }
 
   const buttonSymbols = useMemo(
     () => [
@@ -39,6 +75,18 @@ export default function Home() {
     ],
     []
   )
+
+  // Load cheat history from localStorage on component mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('cheatHistory')
+    if (savedHistory) {
+      try {
+        setCheatHistory(JSON.parse(savedHistory))
+      } catch (e) {
+        console.error('Failed to parse cheat history:', e)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (matchedCheat) {
@@ -169,6 +217,8 @@ export default function Home() {
         if (wasDifferent && currentStartTime) {
           const elapsed = Date.now() - currentStartTime
           setElapsedTime(elapsed)
+          // Save cheat to history
+          saveCheatToHistory(found, Date.now(), elapsed, isKeyboardInput ? 'keyboard' : 'gamepad')
         }
         
         if (wasDifferent) {
@@ -281,10 +331,44 @@ export default function Home() {
       // clear pending timeout message timer
       if (timeoutMessageRef.current) clearTimeout(timeoutMessageRef.current)
     }
-  }, [buttonSymbols, matchedCheat, startTime])
+  }, [buttonSymbols, isKeyboardInput, matchedCheat, saveCheatToHistory, startTime])
+
+  // Inactivity timeout - reset after 3.5 seconds of no input
+  useEffect(() => {
+    // Clear existing timeout
+    if (inactivityTimeoutRef.current) {
+      clearTimeout(inactivityTimeoutRef.current)
+    }
+    
+    // Only set timeout if there are inputs
+    if (inputs.length > 0) {
+      inactivityTimeoutRef.current = setTimeout(() => {
+        resetOnInactivity()
+      }, 3500)
+    }
+    
+    // Cleanup function
+    return () => {
+      if (inactivityTimeoutRef.current) {
+        clearTimeout(inactivityTimeoutRef.current)
+        inactivityTimeoutRef.current = null
+      }
+    }
+  }, [inputs])
 
   return (
-    <main className="h-screen flex flex-col items-center justify-center gap-3 bg-black text-amber-200 px-4">
+    <main className="h-screen flex flex-col items-center justify-center gap-3 bg-black text-amber-200 px-4 relative">
+      {/* History Button */}
+      <button
+        onClick={openHistoryModal}
+        className="absolute top-4 right-4 text-amber-200 hover:text-amber-400 transition-colors duration-200 cursor-pointer"
+        aria-label="View History"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </button>
+
       <div className="text-2xl font-semibold tracking-tight text-center">
         <img src={`${base}cj.svg`} alt="Sup mf" className="w-16 h-16 object-contain" />
       </div>
@@ -353,6 +437,54 @@ export default function Home() {
           {showLongDescription ? 'ON' : 'OFF'}
         </span>
       </div>
+
+      {/* History Modal */}
+      {isHistoryModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-lg max-w-2xl w-full max-h-[80vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex justify-between items-center p-6 border-b border-gray-700">
+              <h2 className="text-2xl font-bold text-amber-200">Cheat History</h2>
+              <button
+                onClick={closeHistoryModal}
+                className="text-gray-400 hover:text-white text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            
+            {/* Modal Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {cheatHistory.length === 0 ? (
+                <p className="text-gray-400 text-center py-8">No cheats activated yet. Start entering cheat codes!</p>
+              ) : (
+                <div className="space-y-3">
+                  {cheatHistory.map((entry) => (
+                     <div key={entry.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-lg">
+                                {entry.inputDevice === 'keyboard' ? '⌨️' : '🎮'}
+                              </span>
+                              <h3 className="text-amber-200 font-semibold text-lg">{entry.name}</h3>
+                            </div>
+                            <p className="text-gray-400 text-sm mt-1">{entry.date}</p>
+                            {entry.elapsedTime && (
+                              <p className="text-green-400 text-sm mt-1 font-medium">
+                                Time: {(entry.elapsedTime / 1000).toFixed(2)}s
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                   ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
