@@ -18,6 +18,7 @@ export default function Home() {
   const base = new URL(document.baseURI).pathname
   const [showLongDescription, setShowLongDescription] = useState(true)
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(true)
+  const [shakeActive, setShakeActive] = useState(false)
   const timeoutMessageRef = useRef(null)
 
   // Function to save cheat to history
@@ -224,6 +225,9 @@ export default function Home() {
         if (wasDifferent) {
           // Play sound immediately and trigger fireworks shortly after
           playNotif()
+          // Trigger screen shake
+          setShakeActive(true)
+          setTimeout(() => setShakeActive(false), 400)
           setTimeout(triggerFireworks, 300)
         }
         return next
@@ -357,11 +361,28 @@ export default function Home() {
   }, [inputs])
 
   return (
-    <main className="h-screen flex flex-col items-center justify-center gap-3 bg-black text-amber-200 px-4 relative">
+    <main className="h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines">
+      {/* Background layers */}
+      <div className="pixel-stars" />
+      <div className="vignette" />
+
+      {/* Floating ambient cheat text */}
+      <span className="float-text" style={{ '--left': '5%', '--delay': '0s', '--duration': '22s' }}>ASPIRINE</span>
+      <span className="float-text" style={{ '--left': '20%', '--delay': '4s', '--duration': '25s' }}>HESOYAM</span>
+      <span className="float-text" style={{ '--left': '40%', '--delay': '8s', '--duration': '20s' }}>BAGUVIX</span>
+      <span className="float-text" style={{ '--left': '60%', '--delay': '2s', '--duration': '23s' }}>AEZAKMI</span>
+      <span className="float-text" style={{ '--left': '80%', '--delay': '6s', '--duration': '26s' }}>KANGAROO</span>
+      <span className="float-text" style={{ '--left': '92%', '--delay': '12s', '--duration': '21s' }}>ROCKETMAN</span>
+
+      {/* Screen flash on cheat match */}
+      {matchedCheat && (
+        <div className="fixed inset-0 bg-amber-400 screen-flash pointer-events-none z-50" />
+      )}
+
       {/* History Button */}
       <button
         onClick={openHistoryModal}
-        className="absolute top-4 right-4 text-amber-200 hover:text-amber-400 transition-colors duration-200 cursor-pointer"
+        className="absolute top-4 right-4 text-amber-200 hover:text-amber-400 transition-colors duration-200 cursor-pointer z-10"
         aria-label="View History"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -369,22 +390,25 @@ export default function Home() {
         </svg>
       </button>
 
-      <div className="text-2xl font-semibold tracking-tight text-center">
-        <img src={`${base}cj.svg`} alt="Sup mf" className="w-16 h-16 object-contain" />
+      {/* CJ Avatar with idle bobbing */}
+      <div className="text-2xl font-semibold tracking-tight text-center relative z-10">
+        <img src={`${base}cj.svg`} alt="CJ" className="w-20 h-20 object-contain cj-bob drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]" />
       </div>
+
+      {/* Cheat match display */}
       {matchedCheat && (
-        <div key={matchedCheat.id} className="text-center cheat-pop fireworks max-w-2xl mx-auto flex flex-col gap-3">
+        <div key={matchedCheat.id} className={`text-center cheat-pop fireworks max-w-2xl mx-auto flex flex-col gap-3 relative z-10 px-6 py-4 pixel-border ${shakeActive ? 'screen-shake' : ''}`}>
           {elapsedTime !== null && (
-            <div className="text-xl font-bold text-green-400 mb-2">
-              Time: {(elapsedTime / 1000).toFixed(2)}s
+            <div className="font-pixel text-sm font-bold text-green-400 mb-2 time-flash">
+              TIME: {(elapsedTime / 1000).toFixed(2)}s
             </div>
           )}
-          <div className="text-lg font-medium">{matchedCheat.name}</div>
+          <div className="font-pixel text-base font-medium text-amber-200 match-glow">{matchedCheat.name}</div>
           {matchedCheat.description && (
-            <div className="text-sm opacity-90">{matchedCheat.description}</div>
+            <div className="font-vt text-xl opacity-90">{matchedCheat.description}</div>
           )}
           {showLongDescription && matchedCheat.longDescription && (
-            <div className="text-sm opacity-80 italic">{matchedCheat.longDescription}</div>
+            <div className="font-vt text-lg opacity-80 italic text-amber-300">{matchedCheat.longDescription}</div>
           )}
           <div className="particles">
             {particles.map(p => (
@@ -402,84 +426,99 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="text-center text-base leading-6 max-w-3xl break-words">
-        {inputs.join(' ')}
 
-        {isKeyboardInput && matchedCheat?.pcSequence ? 
-          (() => {
-            const pcSeqs = matchedCheat.pcSequence
-            if (Array.isArray(pcSeqs[0])) {
-              // Multiple sequences - show all alternatives
-              return pcSeqs.map(seq => seq.join('')).join(' / ')
-            } else {
-              // Single sequence
-              return pcSeqs.join('')
-            }
-          })() : 
-          matchedCheat?.psSequence?.join(' ')
-        }
+      {/* Input display with pixel border and glow */}
+      <div className="relative z-10">
+        <div className={`pixel-border px-6 py-3 min-w-[200px] min-h-[52px] text-center ${inputs.length > 0 ? 'input-glow' : ''}`}>
+          <div className="font-vt text-2xl leading-7 max-w-3xl break-words tracking-wider">
+            {inputs.length > 0 ? (
+              inputs.map((inp, i) => (
+                <span key={i} className="char-appear" style={{ animationDelay: `${i * 30}ms` }}>
+                  {inp}
+                </span>
+              ))
+            ) : (
+              <span className="opacity-30 font-vt text-2xl">_</span>
+            )}
+            {inputs.length > 0 && <span className="pixel-cursor" />}
+          </div>
+          {matchedCheat && (
+            <div className="font-pixel text-[9px] text-amber-400/60 mt-2 tracking-widest">
+              {isKeyboardInput && matchedCheat?.pcSequence ?
+                (() => {
+                  const pcSeqs = matchedCheat.pcSequence
+                  if (Array.isArray(pcSeqs[0])) {
+                    return pcSeqs.map(seq => seq.join('')).join(' / ')
+                  } else {
+                    return pcSeqs.join('')
+                  }
+                })() :
+                matchedCheat?.psSequence?.join(' ')
+              }
+            </div>
+          )}
+        </div>
       </div>
 
+      {/* Prompt text */}
       {showTimeoutMessage && !matchedCheat && (
-        <div className="text-center text-lg font-medium text-amber-300 animate-pulse mt-4">
-          Enter cheat code using keyboard or gamepad
+        <div className="text-center font-pixel text-[10px] font-medium text-amber-300/70 animate-pulse mt-4 relative z-10 tracking-wide">
+          ENTER CHEAT CODE
+          <br />
+          <span className="font-vt text-base text-amber-400/50">keyboard or gamepad</span>
         </div>
       )}
 
-      <div 
-        className='uppercase text-sm font-extralight w-xs flex justify-between items-center absolute bottom-1 left-3 cursor-pointer group hover:ml-13'
+      {/* Settings toggle */}
+      <div
+        className='uppercase text-sm font-extralight w-xs flex justify-between items-center absolute bottom-1 left-3 cursor-pointer group hover:ml-13 z-10'
         onClick={() => setShowLongDescription(!showLongDescription)}
       >
-        <span className="block group-hover:hidden"> ⚙ </span>
-        <span className="hidden group-hover:block bank-gothic">Show Long Description</span>
-
-        <span className="hidden group-hover:block bank-gothic">
+        <span className="block group-hover:hidden text-amber-500"> ⚙ </span>
+        <span className="hidden group-hover:block bank-gothic text-amber-400">Show Long Description</span>
+        <span className="hidden group-hover:block bank-gothic text-amber-400">
           {showLongDescription ? 'ON' : 'OFF'}
         </span>
       </div>
 
-      {/* History Modal */}
+      {/* History Modal — pixel styled */}
       {isHistoryModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-lg max-w-2xl w-full max-h-[80vh] flex flex-col">
+        <div className="fixed inset-0 pixel-modal-backdrop flex items-center justify-center z-[200] p-4">
+          <div className="pixel-modal max-w-2xl w-full max-h-[80vh] flex flex-col">
             {/* Modal Header */}
-            <div className="flex justify-between items-center p-6 border-b border-gray-700">
-              <h2 className="text-2xl font-bold text-amber-200">Cheat History</h2>
+            <div className="pixel-modal-header flex justify-between items-center p-5">
+              <h2 className="font-pixel text-sm text-amber-200 tracking-wider">CHEAT HISTORY</h2>
               <button
                 onClick={closeHistoryModal}
-                className="text-gray-400 hover:text-white text-2xl font-bold"
+                className="font-pixel text-sm text-amber-400 hover:text-amber-200 cursor-pointer"
               >
-                ×
+                [X]
               </button>
             </div>
-            
+
             {/* Modal Content */}
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-5 space-y-2">
               {cheatHistory.length === 0 ? (
-                <p className="text-gray-400 text-center py-8">No cheats activated yet. Start entering cheat codes!</p>
+                <p className="font-vt text-xl text-amber-400/50 text-center py-8">No cheats activated yet.</p>
               ) : (
-                <div className="space-y-3">
-                  {cheatHistory.map((entry) => (
-                     <div key={entry.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-lg">
-                                {entry.inputDevice === 'keyboard' ? '⌨️' : '🎮'}
-                              </span>
-                              <h3 className="text-amber-200 font-semibold text-lg">{entry.name}</h3>
-                            </div>
-                            <p className="text-gray-400 text-sm mt-1">{entry.date}</p>
-                            {entry.elapsedTime && (
-                              <p className="text-green-400 text-sm mt-1 font-medium">
-                                Time: {(entry.elapsedTime / 1000).toFixed(2)}s
-                              </p>
-                            )}
-                          </div>
-                        </div>
+                cheatHistory.map((entry) => (
+                  <div key={entry.id} className="pixel-history-item p-3">
+                    <div className="flex items-center gap-3">
+                      <span className="font-vt text-xl">
+                        {entry.inputDevice === 'keyboard' ? '⌨️' : '🎮'}
+                      </span>
+                      <div className="flex-1">
+                        <h3 className="font-pixel text-[10px] text-amber-200">{entry.name}</h3>
+                        <p className="font-vt text-base text-amber-400/50 mt-1">{entry.date}</p>
+                        {entry.elapsedTime && (
+                          <p className="font-pixel text-[9px] text-green-400 mt-1">
+                            TIME: {(entry.elapsedTime / 1000).toFixed(2)}s
+                          </p>
+                        )}
                       </div>
-                   ))}
-                </div>
+                    </div>
+                  </div>
+                ))
               )}
             </div>
           </div>
