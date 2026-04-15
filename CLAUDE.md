@@ -53,18 +53,50 @@ A React + Vite web app where users input GTA San Andreas cheat codes via keyboar
 3. Pick ONE or TWO visual improvements to focus on (don't try to do everything at once)
 4. Plan the changes before coding
 
+### GitHub Issue Creation (MANDATORY — before coding)
+Every iteration MUST have a GitHub issue created BEFORE any code changes are made.
+
+1. Determine the next iteration number by reading ITERATION_LOG.md
+2. Create a GitHub issue using the API:
+   ```
+   curl -s -X POST \
+     -H "Authorization: token $GITHUB_TOKEN" \
+     -H "Content-Type: application/json" \
+     https://api.github.com/repos/akramram/SanAndreasCheats/issues \
+     -d '{
+       "title": "🎨 Visual Iteration N: [brief title]",
+       "body": "## Planned Changes\n- [item 1]\n- [item 2]\n\n## Files to modify\n- `src/pages/Home.jsx`\n- `src/App.css`\n\n## Success Criteria\n- [ ] Build passes (`npm run build`)\n- [ ] Lint passes (`npm run lint`)\n- [ ] No game logic changes\n- [ ] Visual improvement is noticeable\n\n---\n*This iteration is part of the daily visual improvement cycle.*",
+       "labels": ["visual-iteration"]
+     }'
+   ```
+3. Note the issue number — it will be referenced in the commit message
+4. After the issue is created, proceed with coding
+
 ### After Completing Each Iteration
 1. Run `npm run build` to verify no errors
 2. Run `npm run lint` to check for linting issues
 3. Update ITERATION_LOG.md with:
    - Iteration number and date
+   - GitHub issue number link
    - What was planned
    - What was actually changed (files modified)
    - What was improved
    - What's still broken or needs fixing
    - What's planned for next iteration
-4. Commit with message like: `feat(visual): iteration N - [brief description]`
+4. Commit with message like: `feat(visual): iteration N - [brief description] (#N)`
 5. Push to the `visual-iterations` branch
+6. Merge `visual-iterations` into `main` and push main (for GitHub Pages deployment)
+7. Close the GitHub issue with a completion comment:
+   ```
+   curl -s -X PATCH \
+     -H "Authorization: token $GITHUB_TOKEN" \
+     -H "Content-Type: application/json" \
+     https://api.github.com/repos/akramram/SanAndreasCheats/issues/N \
+     -d '{
+       "state": "closed",
+       "body": "## ✅ Completed\n\n### What changed\n- [details]\n\n### What improved\n- [details]\n\n### Any issues\n- [details if any]\n\n### Next iteration\n- [brief plan]\n\n---\n*Commit: abc1234*"
+     }'
+   ```
 
 ## Current Visual State
 - Basic amber text on black background
