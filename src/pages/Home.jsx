@@ -5,6 +5,8 @@ export default function Home() {
   const [inputs, setInputs] = useState([])
   const [matchedCheat, setMatchedCheat] = useState(null)
   const [particles, setParticles] = useState([])
+  const [confettiPieces, setConfettiPieces] = useState([])
+  const [bannerKey, setBannerKey] = useState(0)
   const [isKeyboardInput, setIsKeyboardInput] = useState(false)
   const [startTime, setStartTime] = useState(null)
   const [elapsedTime, setElapsedTime] = useState(null)
@@ -168,19 +170,38 @@ export default function Home() {
     }
 
     const triggerFireworks = () => {
-      const colors = ['#f59e0b', '#fbbf24', '#fde68a', '#f87171', '#60a5fa', '#34d399']
-      const COUNT = 28
+      const colors = ['#f59e0b', '#fbbf24', '#fde68a', '#f87171', '#60a5fa', '#34d399', '#a78bfa', '#fb923c']
+      const sizes = ['particle-sm', 'particle-md', 'particle-md', 'particle-lg']
+      const COUNT = 40
       const parts = Array.from({ length: COUNT }, (_, i) => {
-        const angle = (Math.PI * 2 * i) / COUNT
-        const dist = 80 + Math.random() * 60
+        const angle = (Math.PI * 2 * i) / COUNT + (Math.random() - 0.5) * 0.3
+        const dist = 80 + Math.random() * 80
         const tx = Math.cos(angle) * dist
         const ty = Math.sin(angle) * dist
         const color = colors[i % colors.length]
-        return { id: `${Date.now()}-${i}`, tx, ty, color }
+        const sizeClass = sizes[i % sizes.length]
+        return { id: `${Date.now()}-${i}`, tx, ty, color, sizeClass }
       })
       setParticles(parts)
-      // auto clear after animation ends
-      setTimeout(() => setParticles([]), 1000)
+      setTimeout(() => setParticles([]), 1200)
+
+      // Spawn pixel confetti
+      const confettiColors = ['#f59e0b', '#fbbf24', '#34d399', '#60a5fa', '#f87171', '#a78bfa', '#fb923c', '#e879f9']
+      const confetti = Array.from({ length: 30 }, (_, i) => ({
+        id: `conf-${Date.now()}-${i}`,
+        color: confettiColors[i % confettiColors.length],
+        left: `${5 + Math.random() * 90}%`,
+        delay: `${Math.random() * 0.4}s`,
+        fallDuration: `${1.5 + Math.random() * 1.5}s`,
+        rot: `${360 + Math.random() * 720}deg`,
+        w: `${4 + Math.random() * 6}px`,
+        h: `${4 + Math.random() * 6}px`,
+      }))
+      setConfettiPieces(confetti)
+      setTimeout(() => setConfettiPieces([]), 3500)
+
+      // Show banner
+      setBannerKey(k => k + 1)
     }
 
     const playNotif = () => {
@@ -379,6 +400,30 @@ export default function Home() {
         <div className="fixed inset-0 bg-amber-400 screen-flash pointer-events-none z-50" />
       )}
 
+      {/* "CHEAT ACTIVATED" banner */}
+      {matchedCheat && (
+        <div key={`banner-${bannerKey}`} className="cheat-banner">
+          ★ CHEAT ACTIVATED ★
+        </div>
+      )}
+
+      {/* Pixel confetti rain */}
+      {confettiPieces.map(c => (
+        <div
+          key={c.id}
+          className="confetti-piece"
+          style={{
+            '--color': c.color,
+            '--confetti-left': c.left,
+            '--confetti-delay': c.delay,
+            '--fall-duration': c.fallDuration,
+            '--rot': c.rot,
+            '--w': c.w,
+            '--h': c.h,
+          }}
+        />
+      ))}
+
       {/* History Button */}
       <button
         onClick={openHistoryModal}
@@ -414,7 +459,7 @@ export default function Home() {
             {particles.map(p => (
               <span
                 key={p.id}
-                className="particle"
+                className={`particle ${p.sizeClass || 'particle-md'}`}
                 style={{
                   color: p.color,
                   backgroundColor: p.color,
