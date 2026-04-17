@@ -281,3 +281,70 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 ### Next Iteration
 - **Iteration 6:** Smooth transitions between states (idle → typing → matched → idle)
 - **Iteration 7:** CRT boot sequence / retro start screen
+
+---
+
+## Iteration 6 — CRT Boot Screen & Smooth State Transitions
+**Date:** 2026-04-17
+**Branch:** visual-iterations
+**GitHub Issue:** #8 — [🎨 Visual Iteration 6: CRT Boot Screen & Smooth State Transitions](https://github.com/akramram/SanAndreasCheats/issues/8)
+
+### Planned
+- Add a retro CRT boot/start screen that plays on page load (GTA SA style — green terminal text, scanlines intensify, then "boot" into main UI)
+- Smooth CSS transitions between UI states (idle → typing → matched → idle) with opacity, transform, and filter changes
+- Input border transitions from dim to glowing amber when typing starts
+- Match display gets a smoother entrance/exit transition
+- HUD bar slides in after boot sequence completes
+
+### What Changed (Files Modified)
+- **src/App.css** — Added:
+  - `crt-flicker` keyframe: subtle CRT power-on flicker effect
+  - `boot-text-typewriter`, `boot-cursor-blink` keyframes: terminal-style cursor and typewriter effects
+  - `boot-screen-zoom` keyframe: dramatic zoom-out + brightness flash transition from boot to main UI
+  - `boot-logo-glow` keyframe: pulsing green glow on boot logo
+  - `boot-line-appear` keyframe: staggered line fade-in for boot text
+  - `.boot-screen`: full-screen CRT boot overlay with scanline `::after`, z-index 500
+  - `.boot-screen.booting-out`: zoom+fade transition that reveals main UI underneath
+  - `.boot-logo`: green "SA CHEATS" logo with glow and scale-in transition
+  - `.boot-subtitle`: "GRAND THEFT AUTO: SAN ANDREAS" subtitle with fade transition
+  - `.boot-lines`, `.boot-line`: terminal-style boot messages with staggered animation
+  - `.boot-prefix`, `.boot-value`, `.boot-ok`, `.boot-warn`: color-coded terminal text
+  - `.boot-ready`: "PRESS ANY KEY TO START" prompt with blinking cursor bar
+  - `.boot-cursor-bar`: pixel blinking cursor
+  - `.boot-power-line`: horizontal CRT power-on line effect
+  - `.boot-noise`: SVG noise texture for authentic CRT static
+  - `main-ui-reveal` keyframe: fade-in with brightness transition after boot
+  - `.main-ui-booted`: class applied to main UI after boot completes
+  - `.pixel-border.input-glow-active`: enhanced amber glow border when user is typing (smooth transition)
+  - `.cj-avatar-wrapper`: smooth filter transition on CJ
+  - `hud-slide-in` keyframe: HUD bar slides down from top with bounce
+  - `.hud-bar.hud-enter`: class for HUD entrance after boot
+  - `combo-slide-in` keyframe: smooth combo counter entrance
+  - `match-enter` keyframe: enhanced match display entrance with overshoot
+  - `prompt-entrance` keyframe: prompt text fade-in from below
+- **src/pages/Home.jsx** — Added/updated:
+  - `BOOT_LINES` constant: array of 8 terminal-style boot messages (cheat database, gamepad API, keyboard input, CJ avatar, cityscape, scanlines, Grove Street)
+  - `BootScreen` component: stateful boot sequence with 5 phases (power-on → logo → subtitle → lines → ready → zoom-out), auto-advances through timed phases, renders green terminal text with staggered line reveals, CRT flicker animation, power-on line, and noise overlay
+  - `booted` state: tracks whether boot sequence has completed
+  - Main container: conditionally renders `BootScreen` when not booted, hides main UI content during boot (opacity: 0), adds `main-ui-booted` class after boot
+  - HUD bar: adds `hud-enter` class after boot for slide-in animation
+  - Input border: adds `input-glow-active` class for smooth border glow transition
+  - Prompt text: adds `prompt-enter` class for smooth entrance after boot
+
+### What Improved
+- First-time users now see a dramatic CRT boot sequence that sets the retro gaming tone immediately
+- Boot screen features: CRT power-on flicker, horizontal scan line, SVG noise static, green terminal text with staggered line reveals, "SA CHEATS" glowing logo, "GRAND THEFT AUTO: SAN ANDREAS" subtitle, and "PRESS ANY KEY TO START" with blinking cursor
+- Boot-to-main transition is cinematic: screen zooms out with brightness flash, then main UI fades in smoothly
+- HUD bar now slides in from the top with a bounce easing after boot completes
+- Input border smoothly transitions to a brighter amber glow when typing (not just text glow — the whole border lights up)
+- Prompt text has a smooth entrance animation instead of just appearing
+- Overall first impression is dramatically better — the boot screen sells the retro GTA SA aesthetic before gameplay even starts
+
+### Issues
+- Lint: 2 pre-existing warnings (no new warnings introduced)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+- Boot sequence takes ~3.6 seconds total (configurable via timer constants)
+
+### Next Iteration
+- **Iteration 7:** Enhanced history modal with retro game stats, mini leaderboard, and visual flair
+- **Iteration 8:** Animated background improvements — more dynamic starfield, occasional police helicopter spotlight effect

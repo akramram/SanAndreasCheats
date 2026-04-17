@@ -1,6 +1,79 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import cheatsData from '../assets/cheats_v2.json'
 
+/* ── CRT Boot Screen Component ── */
+const BOOT_LINES = [
+  { prefix: '>', text: 'SAN_ANDREAS_CHEATS v2.0' },
+  { prefix: '>', text: 'LOADING CHEAT DATABASE', value: 'OK', ok: true },
+  { prefix: '>', text: 'INITIALIZING GAMEPAD API', value: 'OK', ok: true },
+  { prefix: '>', text: 'CHECKING KEYBOARD INPUT', value: 'OK', ok: true },
+  { prefix: '>', text: 'LOADING CJ_AVATAR.SVG', value: 'OK', ok: true },
+  { prefix: '>', text: 'RENDERING PIXEL_CITYSCAPE', value: 'OK', ok: true },
+  { prefix: '>', text: 'ENABLING CRT_SCANLINES', value: 'OK', ok: true },
+  { prefix: '>', text: 'GROVE STREET FAMILIES READY', warn: true },
+]
+
+function BootScreen({ onBooted }) {
+  const [phase, setPhase] = useState('power-on') // power-on → logo → lines → ready → out
+  const [bootOut, setBootOut] = useState(false)
+  const [visibleLines, setVisibleLines] = useState(0)
+
+  const stableOnBooted = useCallback(onBooted, [onBooted])
+
+  useEffect(() => {
+    // Power-on line: 0ms
+    // Logo reveal: 400ms
+    const t1 = setTimeout(() => setPhase('logo'), 400)
+    // Subtitle: 900ms
+    const t2 = setTimeout(() => setPhase('subtitle'), 900)
+    // Start showing lines: 1400ms, each line 150ms apart
+    const lineTimers = BOOT_LINES.map((_, i) =>
+      setTimeout(() => setVisibleLines(i + 1), 1400 + i * 150)
+    )
+    // Ready prompt: 1400 + bootLines.length * 150 + 300
+    const readyTime = 1400 + BOOT_LINES.length * 150 + 300
+    const t3 = setTimeout(() => setPhase('ready'), readyTime)
+    // Boot out (zoom to reveal main UI): readyTime + 800
+    const t4 = setTimeout(() => setBootOut(true), readyTime + 800)
+    // Signal booted: readyTime + 1600
+    const t5 = setTimeout(() => stableOnBooted(), readyTime + 1600)
+
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
+      clearTimeout(t4)
+      clearTimeout(t5)
+      lineTimers.forEach(clearTimeout)
+    }
+  }, [stableOnBooted])
+
+  return (
+    <div className={`boot-screen ${bootOut ? 'booting-out' : ''}`}>
+      <div className="boot-noise" />
+      {phase === 'power-on' && <div className="boot-power-line" />}
+      <div className={`boot-logo ${phase !== 'power-on' ? 'visible' : ''}`}>
+        SA CHEATS
+      </div>
+      <div className={`boot-subtitle ${phase === 'subtitle' || phase === 'lines' || phase === 'ready' ? 'visible' : ''}`}>
+        GRAND THEFT AUTO: SAN ANDREAS
+      </div>
+      <div className="boot-lines">
+        {BOOT_LINES.slice(0, visibleLines).map((line, i) => (
+          <div key={i} className="boot-line" style={{ animationDelay: `${i * 0.05}s` }}>
+            <span className="boot-prefix">{line.prefix}</span>
+            <span>{line.text}</span>
+            {line.value && <span className={line.ok ? 'boot-ok' : ''}> {line.value}</span>}
+          </div>
+        ))}
+      </div>
+      <div className={`boot-ready ${phase === 'ready' && !bootOut ? 'visible' : ''}`}>
+        PRESS ANY KEY TO START<span className="boot-cursor-bar" />
+      </div>
+    </div>
+  )
+}
+
 export default function Home() {
   const [inputs, setInputs] = useState([])
   const [matchedCheat, setMatchedCheat] = useState(null)
@@ -38,6 +111,7 @@ export default function Home() {
   const [totalCheats, setTotalCheats] = useState(0)
   const [comboAnim, setComboAnim] = useState(null) // null | 'enter' | 'bump'
   const [hadInputSinceMatch, setHadInputSinceMatch] = useState(false)
+  const [booted, setBooted] = useState(false)
 
   // Function to save cheat to history
   const saveCheatToHistory = useCallback((cheat, timestamp, elapsedMs, inputDevice) => {
@@ -467,7 +541,9 @@ export default function Home() {
   }, [inputs])
 
   return (
-    <main className="h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines">
+    <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
+      {/* CRT Boot Screen */}
+      {!booted && <BootScreen onBooted={() => setBooted(true)} />}
       {/* Background layers */}
       <div className="pixel-stars" />
 
@@ -497,7 +573,7 @@ export default function Home() {
       <div className="vignette" />
 
       {/* Retro HUD Bar */}
-      <div className="hud-bar">
+      <div className={`hud-bar ${booted ? 'hud-enter' : ''}`}>
         <div className="hud-stat">
           <span className="hud-label">CHEATS</span>
           <span className="hud-value">{totalCheats}</span>
@@ -635,7 +711,7 @@ export default function Home() {
 
       {/* Input display with pixel border and glow */}
       <div className="relative z-10">
-        <div className={`pixel-border px-6 py-3 min-w-[200px] min-h-[52px] text-center ${inputs.length > 0 ? 'input-glow' : ''}`}>
+        <div className={`pixel-border px-6 py-3 min-w-[200px] min-h-[52px] text-center ${inputs.length > 0 ? 'input-glow input-glow-active' : ''}`}>
           <div className="font-vt text-2xl leading-7 max-w-3xl break-words tracking-wider">
             {inputs.length > 0 ? (
               inputs.map((inp, i) => (
@@ -668,7 +744,7 @@ export default function Home() {
 
       {/* Prompt text */}
       {showTimeoutMessage && !matchedCheat && (
-        <div className="text-center font-pixel text-[10px] font-medium text-amber-300/70 animate-pulse mt-4 relative z-10 tracking-wide">
+        <div className={`text-center font-pixel text-[10px] font-medium text-amber-300/70 animate-pulse mt-4 relative z-10 tracking-wide ${booted ? 'prompt-enter' : ''}`}>
           ENTER CHEAT CODE
           <br />
           <span className="font-vt text-base text-amber-400/50">keyboard or gamepad</span>
