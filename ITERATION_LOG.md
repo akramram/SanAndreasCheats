@@ -222,3 +222,62 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 ### Next Iteration
 - **Iteration 5:** Retro-styled HUD elements — streak counter, total score display with pixel font
 - **Iteration 6:** Transitions between states (start → play → result)
+
+---
+
+## Iteration 5 — Combo System, Retro HUD & Fail Feedback
+**Date:** 2026-04-17
+**Branch:** visual-iterations
+**GitHub Issue:** #7 — [🎨 Visual Iteration 5: Combo System, Retro HUD & Fail Feedback](https://github.com/akramram/SanAndreasCheats/issues/7)
+
+### Planned
+- Combo/streak system with escalating visual intensity
+- Retro HUD bar with live stats
+- Fail feedback (WASTED-style) when input times out without match
+- Combo escalation (more particles, bigger celebration at higher combos)
+- Session stats persistence in localStorage
+
+### What Changed (Files Modified)
+- **src/App.css** — Added:
+  - `.hud-bar`: Fixed top bar with gradient fade background, flex layout for stats
+  - `.hud-stat`, `.hud-label`, `.hud-value`: Pixel font stat display with amber glow
+  - `.hud-value.streak-hot`: Red text for streaks ≥ 3
+  - `.combo-counter`: Fixed right-side combo display
+  - `combo-pop` keyframe: Dramatic scale+slide entrance for first combo
+  - `combo-bump` keyframe: Quick scale pulse for subsequent combos
+  - `.combo-counter.combo-2` through `.combo-5`: Color escalation (green → blue → purple → red) with increasing font size and glow intensity
+  - `.fail-overlay`: Red radial gradient flash overlay
+  - `fail-flash` keyframe: Quick red flash
+  - `.wasted-text`: "MISSED" text with dramatic scale-in + red glow
+  - `wasted-text` keyframe: Letter-spacing animation, scale from 2.5x to 0.95x
+  - `.cj-disappoint`: CJ tilts sideways with grayscale + red glow
+  - `cj-disappoint` keyframe: Rotation + grayscale filter + red shadow
+- **src/pages/Home.jsx** — Added/updated:
+  - New state: `currentStreak`, `bestStreak` (from localStorage), `bestTime` (from localStorage), `totalCheats`, `comboAnim` ('enter'|'bump'|null), `hadInputSinceMatch`, `showFail`
+  - `resetOnInactivity()`: Detects fails (had input, no match, timed out) — triggers fail overlay, CJ disappointment, streak reset
+  - `clampAndSet()`: Sets `hadInputSinceMatch` on input
+  - Cheat match block: Increments streak, updates best streak/time in localStorage, triggers combo animation, escalates fireworks with combo multiplier
+  - `triggerFireworks(comboMultiplier)`: Particle count scales 40→80, spread distance increases 15% per combo level, confetti count scales 30→70
+  - Combo-tiered speech phrases: solo (YEAH!), double (DOUBLE!), triple+ (HOT STREAK!), 5+ (UNSTOPPABLE!)
+  - HUD bar JSX: Total cheats, current streak (red at 3+), best streak, best time
+  - Combo counter JSX: Right-side display with intensity-based styling
+  - Fail overlay JSX: Red flash + "MISSED" text
+  - CJ avatar: Added 'disappoint' mood class
+
+### What Improved
+- Added actual gameplay depth — streak tracking gives players a reason to keep going
+- Combo counter with 5 intensity levels creates escalating visual reward
+- Retro HUD bar provides at-a-glance stats without cluttering the main UI
+- Fail feedback (red "MISSED" flash) makes missed inputs feel impactful without being annoying
+- CJ disappointment animation adds personality to failure state
+- Fireworks and confetti scale up with combo — a 5x combo is visually dramatically different from 1x
+- Stats persist across page reloads via localStorage
+- Different speech bubble tiers add variety and reward escalation
+
+### Issues
+- Lint warnings (pre-existing, no new errors)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+
+### Next Iteration
+- **Iteration 6:** Smooth transitions between states (idle → typing → matched → idle)
+- **Iteration 7:** CRT boot sequence / retro start screen

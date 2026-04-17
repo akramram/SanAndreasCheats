@@ -472,6 +472,174 @@
   z-index: 1;
 }
 
+/* ════════════════════════════════════════════
+   ITERATION 5 — Combo System, Retro HUD & Fail Feedback
+   ════════════════════════════════════════════ */
+
+/* ── Retro HUD Bar (top) ── */
+.hud-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 40px);
+  padding: 10px 20px;
+  font-family: 'Press Start 2P', monospace;
+  background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 80%, transparent 100%);
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+.hud-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.hud-label {
+  font-size: 7px;
+  color: rgba(251, 191, 36, 0.5);
+  letter-spacing: 0.1em;
+}
+.hud-value {
+  font-size: clamp(10px, 2vw, 14px);
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+  transition: all 0.2s ease;
+}
+.hud-value.streak-hot {
+  color: #f87171;
+  text-shadow: 0 0 12px rgba(248, 113, 113, 0.6);
+}
+
+/* ── Combo Counter ── */
+@keyframes combo-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.3);
+    text-shadow: 0 0 0 transparent;
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1.3);
+  }
+  50% {
+    transform: translate(-50%, -5px) scale(0.95);
+  }
+  70% {
+    transform: translate(-50%, -8px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -6px) scale(1);
+  }
+}
+@keyframes combo-bump {
+  0% { transform: translate(-50%, -6px) scale(1); }
+  50% { transform: translate(-50%, -8px) scale(1.15); }
+  100% { transform: translate(-50%, -6px) scale(1); }
+}
+.combo-counter {
+  position: fixed;
+  top: 50%;
+  right: clamp(16px, 4vw, 48px);
+  transform: translate(-50%, -6px);
+  z-index: 95;
+  font-family: 'Press Start 2P', monospace;
+  pointer-events: none;
+  text-align: center;
+  image-rendering: pixelated;
+}
+.combo-number {
+  font-size: clamp(20px, 5vw, 36px);
+  font-weight: bold;
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+  line-height: 1;
+}
+.combo-label {
+  font-size: clamp(6px, 1.5vw, 9px);
+  color: rgba(251, 191, 36, 0.6);
+  letter-spacing: 0.15em;
+  margin-top: 4px;
+}
+.combo-counter.enter {
+  animation: combo-pop 0.4s ease-out forwards;
+}
+.combo-counter.bump {
+  animation: combo-bump 0.25s ease-out;
+}
+/* Combo intensity levels */
+.combo-counter.combo-2 .combo-number { color: #34d399; text-shadow: 0 0 14px rgba(52, 211, 153, 0.7); }
+.combo-counter.combo-3 .combo-number { color: #60a5fa; text-shadow: 0 0 16px rgba(96, 165, 250, 0.8); font-size: clamp(24px, 6vw, 42px); }
+.combo-counter.combo-4 .combo-number { color: #a78bfa; text-shadow: 0 0 20px rgba(167, 139, 250, 0.9); font-size: clamp(28px, 7vw, 48px); }
+.combo-counter.combo-5 .combo-number { color: #f87171; text-shadow: 0 0 24px rgba(248, 113, 113, 1), 0 0 48px rgba(248, 113, 113, 0.4); font-size: clamp(32px, 8vw, 54px); }
+
+/* ── Fail flash (WASTED style) ── */
+@keyframes fail-flash {
+  0% { opacity: 0; }
+  20% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+.fail-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(248,113,113,0.15) 0%, rgba(139,0,0,0.3) 100%);
+  pointer-events: none;
+  z-index: 145;
+  animation: fail-flash 0.8s ease-out forwards;
+}
+@keyframes wasted-text {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.5);
+    letter-spacing: 0.5em;
+    text-shadow: 0 0 0 transparent;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 20px rgba(248, 113, 113, 0.8), 0 0 40px rgba(139, 0, 0, 0.4);
+  }
+  70% {
+    opacity: 0.8;
+    text-shadow: 0 0 12px rgba(248, 113, 113, 0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+    letter-spacing: 0.25em;
+    text-shadow: 0 0 6px rgba(248, 113, 113, 0);
+  }
+}
+.wasted-text {
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 155;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(20px, 6vw, 40px);
+  color: #f87171;
+  pointer-events: none;
+  animation: wasted-text 1.2s ease-out forwards;
+  image-rendering: pixelated;
+}
+
+/* ── CJ disappointment ── */
+@keyframes cj-disappoint {
+  0% { transform: translateY(-6px) rotate(0deg); filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.4)); }
+  20% { transform: translateY(0) rotate(-5deg); filter: drop-shadow(0 0 8px rgba(248, 113, 113, 0.5)) grayscale(0.3); }
+  60% { transform: translateY(0) rotate(3deg); filter: drop-shadow(0 0 8px rgba(248, 113, 113, 0.3)) grayscale(0.2); }
+  100% { transform: translateY(-6px) rotate(0deg); filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.4)) grayscale(0); }
+}
+.cj-disappoint {
+  animation: cj-disappoint 0.8s ease-out;
+}
+
 /* ── Ambient floating dust/pollen particles ── */
 @keyframes dust-float {
   0% {

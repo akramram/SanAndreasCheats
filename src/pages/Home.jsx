@@ -24,7 +24,20 @@ export default function Home() {
   const [cjMood, setCjMood] = useState('idle') // idle | typing | celebrating
   const [cjSpeech, setCjSpeech] = useState(null)
   const [speechFading, setSpeechFading] = useState(false)
+  const [showFail, setShowFail] = useState(false)
   const timeoutMessageRef = useRef(null)
+  // Combo/streak system
+  const [currentStreak, setCurrentStreak] = useState(0)
+  const [bestStreak, setBestStreak] = useState(() => {
+    return parseInt(localStorage.getItem('bestStreak') || '0', 10)
+  })
+  const [bestTime, setBestTime] = useState(() => {
+    const saved = localStorage.getItem('bestTime')
+    return saved ? parseFloat(saved) : null
+  })
+  const [totalCheats, setTotalCheats] = useState(0)
+  const [comboAnim, setComboAnim] = useState(null) // null | 'enter' | 'bump'
+  const [hadInputSinceMatch, setHadInputSinceMatch] = useState(false)
 
   // Function to save cheat to history
   const saveCheatToHistory = useCallback((cheat, timestamp, elapsedMs, inputDevice) => {
@@ -48,13 +61,22 @@ export default function Home() {
 
   // Function to reset input and counter on inactivity
   const resetOnInactivity = () => {
+    // If there was input but no match — that's a fail
+    if (inputs.length > 0 && !matchedCheat && hadInputSinceMatch) {
+      setShowFail(true)
+      setCjMood('disappoint')
+      setCurrentStreak(0)
+      setComboAnim(null)
+      setTimeout(() => setShowFail(false), 1200)
+      setTimeout(() => setCjMood('idle'), 800)
+    }
     setInputs([])
     setMatchedCheat(null)
     setElapsedTime(null)
     setStartTime(null)
-    setCjMood('idle')
     setCjSpeech(null)
     setSpeechFading(false)
+    setHadInputSinceMatch(false)
     prevStateRef.current = new Map()
     if (clearTimerRef.current) {
       clearTimeout(clearTimerRef.current)
@@ -175,13 +197,13 @@ export default function Home() {
       }, 3500)
     }
 
-    const triggerFireworks = () => {
+    const triggerFireworks = (comboMultiplier = 1) => {
       const colors = ['#f59e0b', '#fbbf24', '#fde68a', '#f87171', '#60a5fa', '#34d399', '#a78bfa', '#fb923c']
       const sizes = ['particle-sm', 'particle-md', 'particle-md', 'particle-lg']
-      const COUNT = 40
+      const COUNT = 40 + (comboMultiplier - 1) * 10 // 40-80 particles based on combo
       const parts = Array.from({ length: COUNT }, (_, i) => {
         const angle = (Math.PI * 2 * i) / COUNT + (Math.random() - 0.5) * 0.3
-        const dist = 80 + Math.random() * 80
+        const dist = (80 + Math.random() * 80) * (1 + comboMultiplier * 0.15) // further spread at higher combos
         const tx = Math.cos(angle) * dist
         const ty = Math.sin(angle) * dist
         const color = colors[i % colors.length]
@@ -191,9 +213,10 @@ export default function Home() {
       setParticles(parts)
       setTimeout(() => setParticles([]), 1200)
 
-      // Spawn pixel confetti
+      // Spawn pixel confetti — more at higher combos
       const confettiColors = ['#f59e0b', '#fbbf24', '#34d399', '#60a5fa', '#f87171', '#a78bfa', '#fb923c', '#e879f9']
-      const confetti = Array.from({ length: 30 }, (_, i) => ({
+      const confettiCount = 30 + (comboMultiplier - 1) * 10
+      const confetti = Array.from({ length: confettiCount }, (_, i) => ({
         id: `conf-${Date.now()}-${i}`,
         color: confettiColors[i % confettiColors.length],
         left: `${5 + Math.random() * 90}%`,
@@ -225,6 +248,7 @@ export default function Home() {
       setIsKeyboardInput(fromKeyboard)
       // Set CJ to attention mode when typing
       setCjMood('typing')
+      setHadInputSinceMatch(true)
       setInputs((prev) => {
         // If a cheat was already matched, reset buffer so user can try a new one immediately
         const base = matchedCheat ? [] : prev
@@ -257,11 +281,52 @@ export default function Home() {
           // Trigger screen shake
           setShakeActive(true)
           setTimeout(() => setShakeActive(false), 400)
-          setTimeout(triggerFireworks, 300)
+
+          // Update streak & combo
+          const newStreak = currentStreak + 1
+          setCurrentStreak(newStreak)
+          setTotalCheats(t => t + 1)
+          setHadInputSinceMatch(false)
+          if (newStreak > bestStreak) {
+            const newBest = newStreak
+            setBestStreak(newBest)
+            localStorage.setItem('bestStreak', String(newBest))
+          }
+          // Update best time
+          if (currentStartTime) {
+            const elapsed = Date.now() - currentStartTime
+            if (bestTime === null || elapsed < bestTime) {
+              setBestTime(elapsed)
+              localStorage.setItem('bestTime', String(elapsed))
+            }
+          }
+
+          // Combo animation
+          if (newStreak === 1) {
+            setComboAnim('enter')
+            setTimeout(() => setComboAnim(null), 400)
+          } else {
+            setComboAnim('bump')
+            setTimeout(() => setComboAnim(null), 250)
+          }
+
+          // Escalate fireworks based on combo
+          const comboMultiplier = Math.min(newStreak, 5)
+          setTimeout(() => triggerFireworks(comboMultiplier), 300)
+
           // CJ celebration!
           setCjMood('celebrating')
-          // Show speech bubble with random phrase
-          const phrases = ['YEAH!', 'AWW YEAH!', 'GROVE ST!', 'NICE ONE!', 'HELL YEAH!', 'SWEET!', 'OOH YEAH!']
+          // Show speech bubble — different phrases based on combo level
+          let phrases
+          if (newStreak >= 5) {
+            phrases = ['UNSTOPPABLE!', 'ON FIRE!', 'GODLIKE!', 'LEGENDARY!']
+          } else if (newStreak >= 3) {
+            phrases = ['HOT STREAK!', 'TRIPLE!', 'COMBO x' + newStreak + '!', 'INSANE!']
+          } else if (newStreak >= 2) {
+            phrases = ['DOUBLE!', 'NICE ONE!', 'AWW YEAH!', 'KEEP GOING!']
+          } else {
+            phrases = ['YEAH!', 'AWW YEAH!', 'GROVE ST!', 'NICE ONE!', 'HELL YEAH!', 'SWEET!', 'OOH YEAH!']
+          }
           setCjSpeech(phrases[Math.floor(Math.random() * phrases.length)])
           setSpeechFading(false)
           // Fade speech bubble after 1.5s
@@ -431,6 +496,44 @@ export default function Home() {
 
       <div className="vignette" />
 
+      {/* Retro HUD Bar */}
+      <div className="hud-bar">
+        <div className="hud-stat">
+          <span className="hud-label">CHEATS</span>
+          <span className="hud-value">{totalCheats}</span>
+        </div>
+        <div className="hud-stat">
+          <span className="hud-label">STREAK</span>
+          <span className={`hud-value ${currentStreak >= 3 ? 'streak-hot' : ''}`}>{currentStreak}</span>
+        </div>
+        <div className="hud-stat">
+          <span className="hud-label">BEST</span>
+          <span className="hud-value">{bestStreak}</span>
+        </div>
+        {bestTime !== null && (
+          <div className="hud-stat">
+            <span className="hud-label">BEST TIME</span>
+            <span className="hud-value">{(bestTime / 1000).toFixed(2)}s</span>
+          </div>
+        )}
+      </div>
+
+      {/* Combo Counter (right side) */}
+      {currentStreak > 0 && (
+        <div className={`combo-counter ${comboAnim || ''} combo-${Math.min(currentStreak, 5)}`}>
+          <div className="combo-number">x{currentStreak}</div>
+          <div className="combo-label">COMBO</div>
+        </div>
+      )}
+
+      {/* Fail overlay (WASTED style) */}
+      {showFail && (
+        <>
+          <div className="fail-overlay" />
+          <div className="wasted-text">MISSED</div>
+        </>
+      )}
+
       {/* Floating ambient cheat text */}
       <span className="float-text" style={{ '--left': '5%', '--delay': '0s', '--duration': '22s' }}>ASPIRINE</span>
       <span className="float-text" style={{ '--left': '20%', '--delay': '4s', '--duration': '25s' }}>HESOYAM</span>
@@ -491,6 +594,7 @@ export default function Home() {
           alt="CJ"
           className={`w-20 h-20 object-contain drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] ${
             cjMood === 'celebrating' ? 'cj-celebrate' :
+            cjMood === 'disappoint' ? 'cj-disappoint' :
             cjMood === 'typing' ? 'cj-attention' :
             'cj-bob'
           }`}
