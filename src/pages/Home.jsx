@@ -21,6 +21,9 @@ export default function Home() {
   const [showLongDescription, setShowLongDescription] = useState(true)
   const [showTimeoutMessage, setShowTimeoutMessage] = useState(true)
   const [shakeActive, setShakeActive] = useState(false)
+  const [cjMood, setCjMood] = useState('idle') // idle | typing | celebrating
+  const [cjSpeech, setCjSpeech] = useState(null)
+  const [speechFading, setSpeechFading] = useState(false)
   const timeoutMessageRef = useRef(null)
 
   // Function to save cheat to history
@@ -49,6 +52,9 @@ export default function Home() {
     setMatchedCheat(null)
     setElapsedTime(null)
     setStartTime(null)
+    setCjMood('idle')
+    setCjSpeech(null)
+    setSpeechFading(false)
     prevStateRef.current = new Map()
     if (clearTimerRef.current) {
       clearTimeout(clearTimerRef.current)
@@ -217,6 +223,8 @@ export default function Home() {
 
     const clampAndSet = (nextItem, fromKeyboard = false) => {
       setIsKeyboardInput(fromKeyboard)
+      // Set CJ to attention mode when typing
+      setCjMood('typing')
       setInputs((prev) => {
         // If a cheat was already matched, reset buffer so user can try a new one immediately
         const base = matchedCheat ? [] : prev
@@ -250,6 +258,18 @@ export default function Home() {
           setShakeActive(true)
           setTimeout(() => setShakeActive(false), 400)
           setTimeout(triggerFireworks, 300)
+          // CJ celebration!
+          setCjMood('celebrating')
+          // Show speech bubble with random phrase
+          const phrases = ['YEAH!', 'AWW YEAH!', 'GROVE ST!', 'NICE ONE!', 'HELL YEAH!', 'SWEET!', 'OOH YEAH!']
+          setCjSpeech(phrases[Math.floor(Math.random() * phrases.length)])
+          setSpeechFading(false)
+          // Fade speech bubble after 1.5s
+          setTimeout(() => setSpeechFading(true), 1500)
+          // Clear speech after fade
+          setTimeout(() => setCjSpeech(null), 2000)
+          // Return CJ to typing mode after celebration
+          setTimeout(() => setCjMood('typing'), 1200)
         }
         return next
       })
@@ -385,6 +405,30 @@ export default function Home() {
     <main className="h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines">
       {/* Background layers */}
       <div className="pixel-stars" />
+
+      {/* Shooting stars */}
+      <div className="shooting-star" style={{ '--shoot-left': '15%', '--shoot-top': '12%', '--shoot-duration': '6s', '--shoot-delay': '0s' }} />
+      <div className="shooting-star" style={{ '--shoot-left': '60%', '--shoot-top': '8%', '--shoot-duration': '8s', '--shoot-delay': '3s' }} />
+      <div className="shooting-star" style={{ '--shoot-left': '80%', '--shoot-top': '20%', '--shoot-duration': '7s', '--shoot-delay': '7s' }} />
+
+      {/* Scrolling pixel cityscape */}
+      <div className="pixel-cityscape" />
+      <div className="pixel-cityscape-lights" />
+
+      {/* Horizon glow & fog */}
+      <div className="horizon-glow" />
+      <div className="cityscape-fog" />
+
+      {/* Ambient dust particles */}
+      <div className="ambient-dust" style={{ left: '10%', bottom: '30%', '--dust-duration': '14s', '--dust-delay': '0s', '--dust-drift-x': '30px', '--dust-drift-y': '-50px', '--dust-end-x': '60px', '--dust-end-y': '-100px', '--dust-opacity': '0.12' }} />
+      <div className="ambient-dust" style={{ left: '25%', bottom: '40%', '--dust-duration': '11s', '--dust-delay': '2s', '--dust-drift-x': '-20px', '--dust-drift-y': '-35px', '--dust-end-x': '-40px', '--dust-end-y': '-70px', '--dust-opacity': '0.1' }} />
+      <div className="ambient-dust" style={{ left: '45%', bottom: '35%', '--dust-duration': '16s', '--dust-delay': '4s', '--dust-drift-x': '25px', '--dust-drift-y': '-45px', '--dust-end-x': '50px', '--dust-end-y': '-90px', '--dust-opacity': '0.08' }} />
+      <div className="ambient-dust" style={{ left: '65%', bottom: '45%', '--dust-duration': '13s', '--dust-delay': '1s', '--dust-drift-x': '-15px', '--dust-drift-y': '-55px', '--dust-end-x': '-30px', '--dust-end-y': '-110px', '--dust-opacity': '0.14' }} />
+      <div className="ambient-dust" style={{ left: '80%', bottom: '38%', '--dust-duration': '15s', '--dust-delay': '5s', '--dust-drift-x': '20px', '--dust-drift-y': '-40px', '--dust-end-x': '45px', '--dust-end-y': '-80px', '--dust-opacity': '0.1' }} />
+      <div className="ambient-dust" style={{ left: '92%', bottom: '42%', '--dust-duration': '12s', '--dust-delay': '3s', '--dust-drift-x': '-25px', '--dust-drift-y': '-30px', '--dust-end-x': '-50px', '--dust-end-y': '-60px', '--dust-opacity': '0.12' }} />
+      <div className="ambient-dust" style={{ left: '5%', bottom: '50%', '--dust-duration': '18s', '--dust-delay': '6s', '--dust-drift-x': '35px', '--dust-drift-y': '-60px', '--dust-end-x': '70px', '--dust-end-y': '-120px', '--dust-opacity': '0.06' }} />
+      <div className="ambient-dust" style={{ left: '55%', bottom: '55%', '--dust-duration': '10s', '--dust-delay': '8s', '--dust-drift-x': '-10px', '--dust-drift-y': '-25px', '--dust-end-x': '-20px', '--dust-end-y': '-50px', '--dust-opacity': '0.15' }} />
+
       <div className="vignette" />
 
       {/* Floating ambient cheat text */}
@@ -435,9 +479,22 @@ export default function Home() {
         </svg>
       </button>
 
-      {/* CJ Avatar with idle bobbing */}
+      {/* CJ Avatar with reactive animations */}
       <div className="text-2xl font-semibold tracking-tight text-center relative z-10">
-        <img src={`${base}cj.svg`} alt="CJ" className="w-20 h-20 object-contain cj-bob drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]" />
+        {cjSpeech && (
+          <div className={`cj-speech-bubble ${speechFading ? 'fade-out' : ''}`}>
+            {cjSpeech}
+          </div>
+        )}
+        <img
+          src={`${base}cj.svg`}
+          alt="CJ"
+          className={`w-20 h-20 object-contain drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] ${
+            cjMood === 'celebrating' ? 'cj-celebrate' :
+            cjMood === 'typing' ? 'cj-attention' :
+            'cj-bob'
+          }`}
+        />
       </div>
 
       {/* Cheat match display */}

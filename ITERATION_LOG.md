@@ -131,3 +131,94 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next Iteration
 - **Iteration 3:** CJ avatar reactions — reactive animations to correct/wrong input, celebration pose on match, subtle state-driven animations
+
+---
+
+## Iteration 3 — Scrolling Cityscape & Ambient Atmosphere
+**Date:** 2026-04-16
+**Branch:** visual-iterations
+
+### Planned
+- Scrolling pixel-art cityscape silhouette (parallax, 2 layers)
+- Shooting stars in the night sky
+- Ambient floating dust/pollen particles
+- Atmospheric fog layer
+- Amber horizon glow
+
+### What Changed (Files Modified)
+- **src/index.css** — Added:
+  - `.pixel-cityscape` with `::before` (back layer, darker, 60s scroll) and `::after` (front layer, lighter, 40s scroll) using SVG mask for building silhouettes
+  - `.pixel-cityscape-lights` — tiny amber window lights on buildings with flicker animation
+  - `cityscape-scroll-back` and `cityscape-scroll-front` keyframes for parallax scrolling
+  - `lights-flicker` keyframe for window light variation
+  - `.cityscape-fog` — gradient fog layer at the base of buildings
+  - `.horizon-glow` — subtle amber radial glow at the horizon line
+- **src/App.css** — Added:
+  - `dust-float` keyframe and `.ambient-dust` class — floating pixel dust with configurable drift, opacity, and duration via CSS variables
+  - `shooting-star` keyframe and `.shooting-star` class — diagonal streak with configurable position, duration, and delay
+- **src/pages/Home.jsx** — Added:
+  - 3 shooting star elements with varied positions and timings
+  - Cityscape container and cityscape-lights overlay
+  - Horizon glow and cityscape fog layers
+  - 8 ambient dust particles with varied parameters
+
+### What Improved
+- Background transformed from simple starfield to a rich Los Santos-inspired nightscape
+- Parallax cityscape with 2 depth layers scrolling at different speeds creates depth
+- Tiny window lights on buildings flicker realistically
+- Shooting stars streak across the sky periodically
+- Floating dust particles add atmospheric warmth
+- Fog and horizon glow ground the scene and create cinematic depth
+
+### Issues
+- None. Build and lint pass cleanly.
+- All existing game logic (input handling, cheat matching, gamepad API) untouched.
+
+### Next Iteration
+- **Iteration 4:** CJ avatar reactions — reactive animations to typing, celebration pose on match, speech bubble
+
+---
+
+## Iteration 4 — CJ Avatar Reactions & Speech Bubble
+**Date:** 2026-04-17
+**Branch:** visual-iterations
+**GitHub Issue:** #6 — [🎨 Visual Iteration 4: CJ Avatar Reactions](https://github.com/akramram/SanAndreasCheats/issues/6)
+
+### Planned
+- CJ reacts to user typing (subtle lean/attention animation)
+- CJ celebration pose on cheat match (jump, glow, scale up)
+- CJ idle state returns smoothly after match fades
+- Speech bubble appears near CJ on match
+
+### What Changed (Files Modified)
+- **src/App.css** — Added:
+  - `cj-attention` keyframe: subtle rocking motion with slight rotation and scale (0.6s loop) when user is typing
+  - `.cj-attention` class: applies the attention animation with enhanced amber glow
+  - `cj-celebrate` keyframe: multi-bounce jump (1.2s) with scale pulses and green glow transition — bounces up to 30px, scales to 1.2x, shifts glow from amber to green
+  - `.cj-celebrate` class: one-shot celebration animation
+  - `speech-pop` keyframe: bubble pops in from below with overshoot bounce
+  - `speech-fade` keyframe: bubble fades upward and shrinks
+  - `.cj-speech-bubble`: pixel-art styled speech bubble with Press Start 2P font, amber border, dark background, triangular pointer (CSS triangles via ::before and ::after)
+  - `.cj-speech-bubble.fade-out`: triggers the fade animation
+- **src/pages/Home.jsx** — Added/updated:
+  - New state: `cjMood` ('idle' | 'typing' | 'celebrating'), `cjSpeech` (string or null), `speechFading` (boolean)
+  - `clampAndSet()`: sets `cjMood` to 'typing' on any input
+  - Cheat match block: sets `cjMood` to 'celebrating', picks random phrase from ['YEAH!', 'AWW YEAH!', 'GROVE ST!', 'NICE ONE!', 'HELL YEAH!', 'SWEET!', 'OOH YEAH!'], triggers speech bubble fade at 1.5s, clears at 2s, returns CJ to 'typing' at 1.2s
+  - `resetOnInactivity()`: resets `cjMood` to 'idle', clears speech state
+  - CJ avatar JSX: dynamic class switching between `cj-bob` (idle), `cj-attention` (typing), `cj-celebrate` (matched)
+  - Speech bubble element: renders above CJ when `cjSpeech` is set, with `fade-out` class for exit
+
+### What Improved
+- CJ now has 3 reactive states: idle bobbing → attentive rocking when typing → celebration bounce on cheat match
+- Speech bubble with GTA-themed phrases ("GROVE ST!", "HELL YEAH!") pops in on match
+- Green glow on CJ during celebration matches the cheat match color scheme
+- Smooth state transitions: idle → typing (immediate), celebrating → typing (after 1.2s), typing → idle (on inactivity reset)
+- Speech bubble has pixel-art styling with pointed triangle, matching the overall aesthetic
+
+### Issues
+- None. Build and lint pass cleanly.
+- All existing game logic (input handling, cheat matching, gamepad API) untouched.
+
+### Next Iteration
+- **Iteration 5:** Retro-styled HUD elements — streak counter, total score display with pixel font
+- **Iteration 6:** Transitions between states (start → play → result)

@@ -341,6 +341,206 @@
   image-rendering: pixelated;
 }
 
+/* ════════════════════════════════════════════
+   ITERATION 3 — Scrolling Cityscape & Ambient Atmosphere
+   ════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════
+   ITERATION 4 — CJ Avatar Reactions & Speech Bubble
+   ════════════════════════════════════════════ */
+
+/* ── CJ attention state (user is typing) ── */
+@keyframes cj-attention {
+  0%, 100% { transform: translateY(-6px) rotate(0deg) scale(1); }
+  25% { transform: translateY(-8px) rotate(-2deg) scale(1.02); }
+  75% { transform: translateY(-8px) rotate(2deg) scale(1.02); }
+}
+.cj-attention {
+  animation: cj-attention 0.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.5));
+}
+
+/* ── CJ celebration (cheat matched!) ── */
+@keyframes cj-celebrate {
+  0% {
+    transform: translateY(-6px) scale(1);
+    filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.4));
+  }
+  15% {
+    transform: translateY(-30px) scale(1.2);
+    filter: drop-shadow(0 0 25px rgba(74, 222, 128, 0.8));
+  }
+  30% {
+    transform: translateY(-10px) scale(1.1);
+    filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.6));
+  }
+  45% {
+    transform: translateY(-22px) scale(1.15);
+    filter: drop-shadow(0 0 22px rgba(74, 222, 128, 0.7));
+  }
+  60% {
+    transform: translateY(-6px) scale(1.05);
+    filter: drop-shadow(0 0 15px rgba(74, 222, 128, 0.4));
+  }
+  80% {
+    transform: translateY(-12px) scale(1.08);
+    filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.5));
+  }
+  100% {
+    transform: translateY(-6px) scale(1);
+    filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.4));
+  }
+}
+.cj-celebrate {
+  animation: cj-celebrate 1.2s ease-out;
+}
+
+/* ── Speech bubble popup ── */
+@keyframes speech-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 10px) scale(0.5);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -2px) scale(1.08);
+  }
+  60% {
+    transform: translate(-50%, -4px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -4px) scale(1);
+  }
+}
+@keyframes speech-fade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -4px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -20px) scale(0.9);
+  }
+}
+.cj-speech-bubble {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translate(-50%, -4px);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #fbbf24;
+  background: rgba(10, 10, 10, 0.9);
+  border: 2px solid #f59e0b;
+  padding: 6px 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  image-rendering: pixelated;
+  z-index: 20;
+  box-shadow:
+    0 0 0 1px #0a0a0a,
+    0 0 12px rgba(245, 158, 11, 0.3);
+  animation: speech-pop 0.3s ease-out forwards;
+}
+.cj-speech-bubble.fade-out {
+  animation: speech-fade 0.5s ease-in forwards;
+}
+.cj-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #f59e0b;
+}
+.cj-speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid rgba(10, 10, 10, 0.9);
+  z-index: 1;
+}
+
+/* ── Ambient floating dust/pollen particles ── */
+@keyframes dust-float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  15% {
+    opacity: var(--dust-opacity, 0.15);
+  }
+  50% {
+    transform: translate(var(--dust-drift-x, 20px), var(--dust-drift-y, -40px));
+    opacity: var(--dust-opacity, 0.15);
+  }
+  85% {
+    opacity: var(--dust-opacity, 0.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dust-end-x, 40px), var(--dust-end-y, -80px));
+  }
+}
+
+.ambient-dust {
+  position: fixed;
+  pointer-events: none;
+  z-index: 4;
+  width: 2px;
+  height: 2px;
+  background: rgba(251, 191, 36, 0.6);
+  border-radius: 0;
+  image-rendering: pixelated;
+  animation: dust-float var(--dust-duration, 12s) ease-in-out infinite;
+  animation-delay: var(--dust-delay, 0s);
+}
+
+/* ── Shooting star (occasional) ── */
+@keyframes shooting-star {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scaleX(1);
+  }
+  5% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(200px, 100px) scaleX(3);
+  }
+}
+
+.shooting-star {
+  position: fixed;
+  width: 3px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  pointer-events: none;
+  z-index: 1;
+  image-rendering: pixelated;
+  animation: shooting-star var(--shoot-duration, 4s) linear infinite;
+  animation-delay: var(--shoot-delay, 0s);
+  left: var(--shoot-left, 20%);
+  top: var(--shoot-top, 15%);
+  transform-origin: left center;
+  opacity: 0;
+}
+
 /* ── Pixel confetti rain ── */
 @keyframes confetti-fall {
   0% {

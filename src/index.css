@@ -66,3 +66,153 @@ html, body, #root {
   50% { opacity: 1; }
   100% { opacity: 0.7; }
 }
+
+/* ── Starfield parallax drift ── */
+@keyframes stars-drift {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0, -40px 0; }
+}
+
+/* ── Scrolling Pixel Cityscape Silhouette ── */
+.pixel-cityscape {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.pixel-cityscape::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 300%;
+  height: 100%;
+  background:
+    /* Building row 1 (back, darker) */
+    linear-gradient(0deg, #0d0d12 0%, transparent 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 8px,
+      #0d0d12 8px,
+      #0d0d12 12px
+    );
+  background-size: 100% 60px, 300px 60px;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 60'%3E%3Crect x='0' y='40' width='8' height='20'/%3E%3Crect x='10' y='20' width='6' height='40'/%3E%3Crect x='18' y='35' width='10' height='25'/%3E%3Crect x='30' y='10' width='7' height='50'/%3E%3Crect x='39' y='30' width='12' height='30'/%3E%3Crect x='53' y='5' width='8' height='55'/%3E%3Crect x='63' y='25' width='10' height='35'/%3E%3Crect x='75' y='15' width='6' height='45'/%3E%3Crect x='83' y='32' width='14' height='28'/%3E%3Crect x='99' y='8' width='8' height='52'/%3E%3Crect x='109' y='28' width='10' height='32'/%3E%3Crect x='121' y='18' width='7' height='42'/%3E%3Crect x='130' y='38' width='12' height='22'/%3E%3Crect x='144' y='12' width='8' height='48'/%3E%3Crect x='154' y='30' width='6' height='30'/%3E%3Crect x='162' y='22' width='11' height='38'/%3E%3Crect x='175' y='6' width='9' height='54'/%3E%3Crect x='186' y='35' width='8' height='25'/%3E%3Crect x='196' y='18' width='10' height='42'/%3E%3Crect x='208' y='40' width='7' height='20'/%3E%3Crect x='217' y='14' width='12' height='46'/%3E%3Crect x='231' y='28' width='8' height='32'/%3E%3Crect x='241' y='8' width='9' height='52'/%3E%3Crect x='252' y='36' width='10' height='24'/%3E%3Crect x='264' y='20' width='8' height='40'/%3E%3Crect x='274' y='42' width='7' height='18'/%3E%3Crect x='283' y='12' width='10' height='48'/%3E%3Crect x='295' y='30' width='5' height='30'/%3E%3C/svg%3E");
+  mask-size: 300px 60px;
+  mask-repeat: repeat-x;
+  mask-position: bottom;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 60'%3E%3Crect x='0' y='40' width='8' height='20'/%3E%3Crect x='10' y='20' width='6' height='40'/%3E%3Crect x='18' y='35' width='10' height='25'/%3E%3Crect x='30' y='10' width='7' height='50'/%3E%3Crect x='39' y='30' width='12' height='30'/%3E%3Crect x='53' y='5' width='8' height='55'/%3E%3Crect x='63' y='25' width='10' height='35'/%3E%3Crect x='75' y='15' width='6' height='45'/%3E%3Crect x='83' y='32' width='14' height='28'/%3E%3Crect x='99' y='8' width='8' height='52'/%3E%3Crect x='109' y='28' width='10' height='32'/%3E%3Crect x='121' y='18' width='7' height='42'/%3E%3Crect x='130' y='38' width='12' height='22'/%3E%3Crect x='144' y='12' width='8' height='48'/%3E%3Crect x='154' y='30' width='6' height='30'/%3E%3Crect x='162' y='22' width='11' height='38'/%3E%3Crect x='175' y='6' width='9' height='54'/%3E%3Crect x='186' y='35' width='8' height='25'/%3E%3Crect x='196' y='18' width='10' height='42'/%3E%3Crect x='208' y='40' width='7' height='20'/%3E%3Crect x='217' y='14' width='12' height='46'/%3E%3Crect x='231' y='28' width='8' height='32'/%3E%3Crect x='241' y='8' width='9' height='52'/%3E%3Crect x='252' y='36' width='10' height='24'/%3E%3Crect x='264' y='20' width='8' height='40'/%3E%3Crect x='274' y='42' width='7' height='18'/%3E%3Crect x='283' y='12' width='10' height='48'/%3E%3Crect x='295' y='30' width='5' height='30'/%3E%3C/svg%3E");
+  -webkit-mask-size: 300px 60px;
+  -webkit-mask-repeat: repeat-x;
+  -webkit-mask-position: bottom;
+  opacity: 0.7;
+  animation: cityscape-scroll-back 60s linear infinite;
+  image-rendering: pixelated;
+}
+
+.pixel-cityscape::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 300%;
+  height: 100%;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 70'%3E%3Crect x='0' y='45' width='12' height='25'/%3E%3Crect x='14' y='25' width='8' height='45'/%3E%3Crect x='24' y='38' width='14' height='32'/%3E%3Crect x='40' y='15' width='10' height='55'/%3E%3Crect x='52' y='32' width='16' height='38'/%3E%3Crect x='70' y='8' width='8' height='62'/%3E%3Crect x='80' y='28' width='12' height='42'/%3E%3Crect x='94' y='18' width='9' height='52'/%3E%3Crect x='105' y='40' width='14' height='30'/%3E%3Crect x='121' y='10' width='8' height='60'/%3E%3Crect x='131' y='30' width='11' height='40'/%3E%3Crect x='144' y='22' width='10' height='48'/%3E%3Crect x='156' y='42' width='8' height='28'/%3E%3Crect x='166' y='12' width='12' height='58'/%3E%3Crect x='180' y='35' width='10' height='35'/%3E%3Crect x='192' y='20' width='8' height='50'/%3E%3Crect x='202' y='38' width='14' height='32'/%3E%3Crect x='218' y='5' width='9' height='65'/%3E%3Crect x='229' y='28' width='10' height='42'/%3E%3Crect x='241' y='35' width='8' height='35'/%3E%3Crect x='251' y='15' width='12' height='55'/%3E%3Crect x='265' y='40' width='10' height='30'/%3E%3Crect x='277' y='22' width='8' height='48'/%3E%3Crect x='287' y='8' width='13' height='62'/%3E%3C/svg%3E");
+  mask-size: 300px 70px;
+  mask-repeat: repeat-x;
+  mask-position: bottom;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 70'%3E%3Crect x='0' y='45' width='12' height='25'/%3E%3Crect x='14' y='25' width='8' height='45'/%3E%3Crect x='24' y='38' width='14' height='32'/%3E%3Crect x='40' y='15' width='10' height='55'/%3E%3Crect x='52' y='32' width='16' height='38'/%3E%3Crect x='70' y='8' width='8' height='62'/%3E%3Crect x='80' y='28' width='12' height='42'/%3E%3Crect x='94' y='18' width='9' height='52'/%3E%3Crect x='105' y='40' width='14' height='30'/%3E%3Crect x='121' y='10' width='8' height='60'/%3E%3Crect x='131' y='30' width='11' height='40'/%3E%3Crect x='144' y='22' width='10' height='48'/%3E%3Crect x='156' y='42' width='8' height='28'/%3E%3Crect x='166' y='12' width='12' height='58'/%3E%3Crect x='180' y='35' width='10' height='35'/%3E%3Crect x='192' y='20' width='8' height='50'/%3E%3Crect x='202' y='38' width='14' height='32'/%3E%3Crect x='218' y='5' width='9' height='65'/%3E%3Crect x='229' y='28' width='10' height='42'/%3E%3Crect x='241' y='35' width='8' height='35'/%3E%3Crect x='251' y='15' width='12' height='55'/%3E%3Crect x='265' y='40' width='10' height='30'/%3E%3Crect x='277' y='22' width='8' height='48'/%3E%3Crect x='287' y='8' width='13' height='62'/%3E%3C/svg%3E");
+  -webkit-mask-size: 300px 70px;
+  -webkit-mask-repeat: repeat-x;
+  -webkit-mask-position: bottom;
+  background: linear-gradient(0deg, #111118 0%, #15151f 100%);
+  animation: cityscape-scroll-front 40s linear infinite;
+  image-rendering: pixelated;
+}
+
+/* Cityscape window lights (tiny amber dots on buildings) */
+.pixel-cityscape-lights {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  pointer-events: none;
+  z-index: 2;
+  background-image:
+    radial-gradient(1px 1px at 42px 32px, rgba(251,191,36,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 77px 18px, rgba(251,191,36,0.2) 50%, transparent 50%),
+    radial-gradient(1px 1px at 104px 42px, rgba(251,191,36,0.25) 50%, transparent 50%),
+    radial-gradient(1px 1px at 148px 24px, rgba(251,191,36,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 179px 38px, rgba(251,191,36,0.2) 50%, transparent 50%),
+    radial-gradient(1px 1px at 224px 20px, rgba(251,191,36,0.35) 50%, transparent 50%),
+    radial-gradient(1px 1px at 255px 44px, rgba(251,191,36,0.2) 50%, transparent 50%),
+    radial-gradient(1px 1px at 60px 50px, rgba(251,191,36,0.15) 50%, transparent 50%),
+    radial-gradient(1px 1px at 135px 55px, rgba(251,191,36,0.2) 50%, transparent 50%),
+    radial-gradient(1px 1px at 200px 58px, rgba(251,191,36,0.15) 50%, transparent 50%),
+    radial-gradient(1px 1px at 45px 15px, rgba(255,255,200,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 175px 12px, rgba(255,255,200,0.25) 50%, transparent 50%),
+    radial-gradient(1px 1px at 290px 16px, rgba(255,255,200,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 110px 10px, rgba(255,255,200,0.2) 50%, transparent 50%),
+    radial-gradient(1px 1px at 250px 48px, rgba(251,191,36,0.25) 50%, transparent 50%);
+  animation: cityscape-scroll-front 40s linear infinite, lights-flicker 3s ease-in-out infinite alternate;
+  image-rendering: pixelated;
+}
+
+@keyframes cityscape-scroll-back {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+@keyframes cityscape-scroll-front {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+@keyframes lights-flicker {
+  0% { opacity: 0.6; }
+  30% { opacity: 0.8; }
+  50% { opacity: 0.5; }
+  70% { opacity: 0.9; }
+  100% { opacity: 0.7; }
+}
+
+/* ── Atmospheric fog layer ── */
+.cityscape-fog {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  pointer-events: none;
+  z-index: 3;
+  background: linear-gradient(
+    to top,
+    rgba(8, 8, 8, 0.9) 0%,
+    rgba(15, 15, 25, 0.4) 40%,
+    transparent 100%
+  );
+}
+
+/* ── Amber horizon glow ── */
+.horizon-glow {
+  position: fixed;
+  bottom: 140px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    ellipse 80% 100% at 50% 100%,
+    rgba(245, 158, 11, 0.06) 0%,
+    rgba(245, 158, 11, 0.03) 40%,
+    transparent 100%
+  );
+}
