@@ -113,6 +113,100 @@ export default function Home() {
   const [hadInputSinceMatch, setHadInputSinceMatch] = useState(false)
   const [booted, setBooted] = useState(false)
 
+  // Visual-only: compute partial match progress for input characters
+  const inputCharStates = useMemo(() => {
+    if (inputs.length === 0 || matchedCheat) return []
+    const chars = inputs.map(() => 'neutral') // 'matched' | 'miss' | 'neutral'
+
+    // Check if the current input buffer matches the prefix of any cheat
+    for (const cheat of (cheatsData?.cheats || [])) {
+      // Check PC sequences
+      const pcSeqs = cheat.pcSequence || []
+      const sequences = Array.isArray(pcSeqs[0]) ? pcSeqs : [pcSeqs]
+      for (const seq of sequences) {
+        if (seq.length < inputs.length) continue
+        let allMatch = true
+        for (let i = 0; i < inputs.length; i++) {
+          if (inputs[i] !== seq[i]) { allMatch = false; break }
+        }
+        if (allMatch) {
+          // All chars match this cheat prefix
+          return chars.map(() => 'matched')
+        }
+        // Check partial — mark matched up to the divergence point
+        let matchCount = 0
+        for (let i = 0; i < inputs.length && i < seq.length; i++) {
+          if (inputs[i] === seq[i]) matchCount++
+          else break
+        }
+        // Update chars: first matchCount are 'matched', rest stay as-is
+        for (let i = 0; i < matchCount; i++) {
+          if (chars[i] === 'neutral') chars[i] = 'matched'
+        }
+      }
+      // Check PS sequence
+      const psSeq = cheat.psSequence || []
+      if (psSeq.length >= inputs.length) {
+        let allMatch = true
+        for (let i = 0; i < inputs.length; i++) {
+          if (inputs[i] !== psSeq[i]) { allMatch = false; break }
+        }
+        if (allMatch) {
+          return chars.map(() => 'matched')
+        }
+        let matchCount = 0
+        for (let i = 0; i < inputs.length && i < psSeq.length; i++) {
+          if (inputs[i] === psSeq[i]) matchCount++
+          else break
+        }
+        for (let i = 0; i < matchCount; i++) {
+          if (chars[i] === 'neutral') chars[i] = 'matched'
+        }
+      }
+    }
+
+    // Any char that isn't 'matched' in a non-empty buffer is a potential 'miss'
+    // But we only show miss on the last char if nothing matched at all
+    const hasMatch = chars.some(c => c === 'matched')
+    if (!hasMatch && inputs.length > 0) {
+      // Mark last char as miss (user typed something wrong)
+      chars[inputs.length - 1] = 'miss'
+    }
+
+    return chars
+  }, [inputs, matchedCheat])
+
+  // Best match ratio for progress bar
+  const matchProgress = useMemo(() => {
+    if (inputs.length === 0 || matchedCheat) return 0
+    let bestRatio = 0
+    for (const cheat of (cheatsData?.cheats || [])) {
+      const pcSeqs = cheat.pcSequence || []
+      const sequences = Array.isArray(pcSeqs[0]) ? pcSeqs : [pcSeqs]
+      for (const seq of sequences) {
+        if (seq.length === 0) continue
+        let matchCount = 0
+        for (let i = 0; i < inputs.length && i < seq.length; i++) {
+          if (inputs[i] === seq[i]) matchCount++
+          else break
+        }
+        const ratio = matchCount / seq.length
+        if (ratio > bestRatio) bestRatio = ratio
+      }
+      const psSeq = cheat.psSequence || []
+      if (psSeq.length > 0) {
+        let matchCount = 0
+        for (let i = 0; i < inputs.length && i < psSeq.length; i++) {
+          if (inputs[i] === psSeq[i]) matchCount++
+          else break
+        }
+        const ratio = matchCount / psSeq.length
+        if (ratio > bestRatio) bestRatio = ratio
+      }
+    }
+    return bestRatio
+  }, [inputs, matchedCheat])
+
   // Function to save cheat to history
   const saveCheatToHistory = useCallback((cheat, timestamp, elapsedMs, inputDevice) => {
     const newEntry = {
@@ -560,6 +654,11 @@ export default function Home() {
       <div className="horizon-glow" />
       <div className="cityscape-fog" />
 
+      {/* Police helicopter spotlights */}
+      <div className="police-spotlight" />
+      <div className="police-spotlight-2" />
+      <div className="spotlight-ground-glow" />
+
       {/* Ambient dust particles */}
       <div className="ambient-dust" style={{ left: '10%', bottom: '30%', '--dust-duration': '14s', '--dust-delay': '0s', '--dust-drift-x': '30px', '--dust-drift-y': '-50px', '--dust-end-x': '60px', '--dust-end-y': '-100px', '--dust-opacity': '0.12' }} />
       <div className="ambient-dust" style={{ left: '25%', bottom: '40%', '--dust-duration': '11s', '--dust-delay': '2s', '--dust-drift-x': '-20px', '--dust-drift-y': '-35px', '--dust-end-x': '-40px', '--dust-end-y': '-70px', '--dust-opacity': '0.1' }} />
@@ -715,7 +814,7 @@ export default function Home() {
           <div className="font-vt text-2xl leading-7 max-w-3xl break-words tracking-wider">
             {inputs.length > 0 ? (
               inputs.map((inp, i) => (
-                <span key={i} className="char-appear" style={{ animationDelay: `${i * 30}ms` }}>
+                <span key={i} className={`char-appear ${inputCharStates[i] === 'matched' ? 'char-matched' : inputCharStates[i] === 'miss' ? 'char-miss' : ''}`} style={{ animationDelay: `${i * 30}ms` }}>
                   {inp}
                 </span>
               ))
@@ -724,6 +823,12 @@ export default function Home() {
             )}
             {inputs.length > 0 && <span className="pixel-cursor" />}
           </div>
+          {/* Match progress bar */}
+          {inputs.length > 0 && matchProgress > 0 && (
+            <div className="mt-2 w-full" style={{ '--progress': matchProgress }}>
+              <div className="match-progress-bar w-full" style={{ '--progress': matchProgress }} />
+            </div>
+          )}
           {matchedCheat && (
             <div className="font-pixel text-[9px] text-amber-400/60 mt-2 tracking-widest">
               {isKeyboardInput && matchedCheat?.pcSequence ?

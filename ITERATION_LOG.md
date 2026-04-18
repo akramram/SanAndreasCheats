@@ -284,6 +284,51 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ---
 
+## Iteration 7 — Police Spotlight & Typing Match Progress Indicator
+**Date:** 2026-04-18
+**Branch:** visual-iterations
+**GitHub Issue:** #9 — [🎨 Visual Iteration 7: Police Spotlight & Typing Match Progress Indicator](https://github.com/akramram/SanAndreasCheats/issues/9)
+
+### Planned
+- Police helicopter spotlight effect sweeping across the cityscape
+- Typing match progress indicator — real-time visual feedback on partial cheat matches
+- Ground reflection when spotlight passes
+
+### What Changed (Files Modified)
+- **src/App.css** — Added:
+  - `spotlight-sweep` keyframe: sweeping left-to-right with opacity variation and skewX(-25deg) for angled cone shape, 14s cycle
+  - `.police-spotlight`: main spotlight cone — 45vw wide, 280px tall, blue-white gradient with `clip-path: polygon()` for trapezoid cone shape, subtle opacity flicker during sweep
+  - `.police-spotlight-2`: secondary smaller spotlight — 35vw wide, 240px tall, slightly dimmer, different timing (18s cycle, no delay) for visual variety and depth
+  - `ground-glow-sweep` keyframe and `.spotlight-ground-glow`: radial gradient at the base of the spotlight that follows the sweep, creating a ground reflection effect
+  - `.char-matched`: green color (#4ade80) with green glow text-shadow for correctly typed characters
+  - `.char-miss`: red color (#f87171) with red glow and reduced opacity for wrong characters
+  - `.char-neutral`: amber color for unmatched characters
+  - `.match-progress-bar`: thin 2px gradient bar (green-to-amber) under the input box showing best match ratio via CSS `--progress` variable with smooth transition
+- **src/pages/Home.jsx** — Added/updated:
+  - `inputCharStates` useMemo: Computes per-character match state by checking current input buffer against all cheat prefixes (both PC and PS sequences). Characters matching a cheat prefix get 'matched', last character gets 'miss' if nothing matches, rest are 'neutral'. Purely visual — no effect on game logic.
+  - `matchProgress` useMemo: Computes best match ratio (matched chars / total cheat length) across all cheats for the progress bar
+  - Spotlight JSX elements: `.police-spotlight`, `.police-spotlight-2`, `.spotlight-ground-glow` rendered as background layers between fog and dust particles
+  - Input character rendering: each `<span>` now receives dynamic class based on `inputCharStates[i]` ('char-matched', 'char-miss', or empty for neutral)
+  - Match progress bar JSX: renders below input text when `matchProgress > 0`, showing a green-to-amber gradient bar that fills proportionally
+
+### What Improved
+- Cityscape now has dynamic police helicopter searchlights sweeping across the scene, adding life and atmosphere — very GTA SA
+- Two spotlights at different speeds/heights create a parallax depth effect
+- Subtle ground reflection follows the spotlight, grounding the effect
+- Typing now gives real-time visual feedback: matching characters turn green with glow, wrong characters turn red — helps players know they're on the right track
+- Thin progress bar under input shows how close you are to completing any cheat code
+- No game logic was touched — matching, input handling, and gamepad API are completely untouched
+
+### Issues
+- Lint: 2 pre-existing warnings (no new warnings introduced)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+
+### Next Iteration
+- **Iteration 8:** Enhanced history modal with retro game stats, mini leaderboard, and visual flair
+- **Iteration 9:** More dynamic atmospheric effects — pulsing neon signs on buildings, car headlight trails
+
+---
+
 ## Iteration 6 — CRT Boot Screen & Smooth State Transitions
 **Date:** 2026-04-17
 **Branch:** visual-iterations
