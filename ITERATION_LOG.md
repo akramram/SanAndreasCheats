@@ -393,3 +393,60 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 ### Next Iteration
 - **Iteration 7:** Enhanced history modal with retro game stats, mini leaderboard, and visual flair
 - **Iteration 8:** Animated background improvements — more dynamic starfield, occasional police helicopter spotlight effect
+
+---
+
+## Iteration 8 — Neon Signs & Car Headlight Trails
+**Date:** 2026-04-19
+**Branch:** visual-iterations
+**GitHub Issue:** #10 — [🎨 Visual Iteration 8: Neon Signs & Car Headlight Trails](https://github.com/akramram/SanAndreasCheats/issues/10)
+
+### Planned
+- Add pulsing neon sign lights on the cityscape buildings (GTA SA-style neon signs in various colors — pink, blue, green, amber, red)
+- Add animated car headlight trails at the bottom of the scene (horizontal streaks of light traveling left/right, like traffic in Los Santos at night)
+- Neon signs flicker and glow with varied timing
+- Headlight trails are subtle but add motion to the cityscape
+
+### What Changed (Files Modified)
+- **src/App.css** — Added:
+  - 5 `neon-pulse-*` keyframes (pink, blue, green, amber, red) — smooth glow box-shadow pulsing at varied intensities
+  - `neon-flicker` keyframe — occasional rapid blink for authentic flickering neon sign effect
+  - `.neon-sign` — fixed position container with configurable color, size, and animation via CSS variables
+  - `.neon-sign-inner` — the visible neon bar with pixelated rendering
+  - `.neon-sign.flicker` — dual animation combining pulse + flicker for unreliable neon effect
+  - `headlight-travel-right` and `headlight-travel-left` keyframes — horizontal movement with fade-in/out at edges
+  - `.car-headlight` — fixed position element traveling across screen at configurable speed, height, and delay
+  - `.car-headlight-beam` — the visible light trail with gradient from transparent to bright white
+  - `.car-headlight-dot` — bright point at the leading edge of the headlight with glow box-shadow
+  - `.car-headlight.going-right/left` — directional dot positioning (leading edge on right for rightward travel, etc.)
+  - `.car-taillight-beam` — dimmer red trail for oncoming/away traffic
+  - `.car-taillight-dot` — small red dot with glow
+- **src/pages/Home.jsx** — Added:
+  - 10 neon sign elements placed along the building line at various heights (128-162px from bottom):
+    - 2 pink signs (flickering) on left building cluster
+    - 2 blue signs (steady) on mid building
+    - 1 green sign (flickering) on right cluster
+    - 1 amber sign (steady) on far right
+    - 1 red sign (flickering) on far right (like a bar's "OPEN" sign)
+    - 2 more signs in second row on taller buildings (pink steady, blue flickering)
+    - 1 amber sign high up on a tall building
+  - 7 car headlight/taillight elements at street level (22-48px from bottom):
+    - 5 white/warm headlight trails with varied speeds (5-15s), directions, and lengths (45-80px)
+    - 2 red taillight trails for opposite-direction traffic
+
+### What Improved
+- Cityscape now has authentic neon signs pulsing on building facades in 5 colors — very GTA SA Las Venturas / Los Santos vibe
+- 4 of 10 signs have a flickering effect that occasionally blinks rapidly, mimicking old broken neon signage
+- Neon signs are placed at varied heights on the buildings, creating a layered vertical distribution
+- Car headlight and taillight trails stream across the bottom of the scene at different speeds and heights, simulating nighttime traffic on a city street
+- Different trail lengths and brightness levels create depth — faster cars have longer trails, slower ones shorter
+- Red taillight trails add realism to the traffic flow
+- All animations are GPU-accelerated (transform + opacity only) for smooth 60fps performance
+
+### Issues
+- Lint: 2 pre-existing warnings (no new warnings introduced)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+
+### Next Iteration
+- **Iteration 9:** Enhanced history modal with retro game stats, mini leaderboard, and visual flair
+- **Iteration 10:** More atmospheric effects — occasional plane with blinking lights flying across sky

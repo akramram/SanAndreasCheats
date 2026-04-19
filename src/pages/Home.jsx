@@ -654,6 +654,87 @@ export default function Home() {
       <div className="horizon-glow" />
       <div className="cityscape-fog" />
 
+      {/* Neon signs on buildings */}
+      {/* Pink sign - top of building cluster left */}
+      <div className="neon-sign flicker" style={{ left: '12%', bottom: '148px', '--neon-w': '10px', '--neon-h': '3px', '--neon-color': 'rgba(244, 114, 182, 0.8)', '--neon-anim': 'neon-pulse-pink', '--neon-duration': '2.8s', '--neon-delay': '0s', '--flicker-delay': '1.5s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      <div className="neon-sign flicker" style={{ left: '14%', bottom: '152px', '--neon-w': '6px', '--neon-h': '3px', '--neon-color': 'rgba(244, 114, 182, 0.7)', '--neon-anim': 'neon-pulse-pink', '--neon-duration': '3.2s', '--neon-delay': '0.3s', '--flicker-delay': '3s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      {/* Blue sign - mid building */}
+      <div className="neon-sign" style={{ left: '28%', bottom: '135px', '--neon-w': '14px', '--neon-h': '3px', '--neon-color': 'rgba(96, 165, 250, 0.8)', '--neon-anim': 'neon-pulse-blue', '--neon-duration': '3.5s', '--neon-delay': '1s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      <div className="neon-sign" style={{ left: '30%', bottom: '128px', '--neon-w': '8px', '--neon-h': '2px', '--neon-color': 'rgba(96, 165, 250, 0.6)', '--neon-anim': 'neon-pulse-blue', '--neon-duration': '4s', '--neon-delay': '0.5s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      {/* Green sign - right cluster */}
+      <div className="neon-sign flicker" style={{ left: '55%', bottom: '142px', '--neon-w': '12px', '--neon-h': '3px', '--neon-color': 'rgba(52, 211, 153, 0.8)', '--neon-anim': 'neon-pulse-green', '--neon-duration': '3s', '--neon-delay': '0.7s', '--flicker-delay': '2s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      {/* Amber sign - far right */}
+      <div className="neon-sign" style={{ left: '72%', bottom: '150px', '--neon-w': '10px', '--neon-h': '3px', '--neon-color': 'rgba(251, 191, 36, 0.7)', '--neon-anim': 'neon-pulse-amber', '--neon-duration': '2.6s', '--neon-delay': '1.2s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      {/* Red "OPEN" style sign */}
+      <div className="neon-sign flicker" style={{ left: '85%', bottom: '138px', '--neon-w': '16px', '--neon-h': '3px', '--neon-color': 'rgba(248, 113, 113, 0.8)', '--neon-anim': 'neon-pulse-red', '--neon-duration': '2.4s', '--neon-delay': '0.4s', '--flicker-delay': '1s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      {/* Second row of neon signs (taller buildings) */}
+      <div className="neon-sign" style={{ left: '40%', bottom: '158px', '--neon-w': '8px', '--neon-h': '2px', '--neon-color': 'rgba(244, 114, 182, 0.6)', '--neon-anim': 'neon-pulse-pink', '--neon-duration': '3.8s', '--neon-delay': '2s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      <div className="neon-sign flicker" style={{ left: '65%', bottom: '160px', '--neon-w': '10px', '--neon-h': '2px', '--neon-color': 'rgba(96, 165, 250, 0.7)', '--neon-anim': 'neon-pulse-blue', '--neon-duration': '3.1s', '--neon-delay': '0.8s', '--flicker-delay': '4s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+      <div className="neon-sign" style={{ left: '20%', bottom: '162px', '--neon-w': '6px', '--neon-h': '2px', '--neon-color': 'rgba(251, 191, 36, 0.6)', '--neon-anim': 'neon-pulse-amber', '--neon-duration': '4.2s', '--neon-delay': '1.5s' }}>
+        <div className="neon-sign-inner" />
+      </div>
+
+      {/* Car headlight trails (traffic at street level) */}
+      {/* Slow car going right - warm white */}
+      <div className="car-headlight going-right" style={{ '--car-bottom': '28px', '--car-anim': 'headlight-travel-right', '--car-duration': '12s', '--car-delay': '0s', '--beam-length': '55px' }}>
+        <div className="car-headlight-beam" style={{ position: 'relative' }}>
+          <div className="car-headlight-dot" />
+        </div>
+      </div>
+      {/* Fast car going left - cool white */}
+      <div className="car-headlight going-left" style={{ '--car-bottom': '35px', '--car-anim': 'headlight-travel-left', '--car-duration': '7s', '--car-delay': '3s', '--beam-length': '70px' }}>
+        <div className="car-headlight-beam" style={{ position: 'relative' }}>
+          <div className="car-headlight-dot" />
+        </div>
+      </div>
+      {/* Medium car going right - yellowish */}
+      <div className="car-headlight going-right" style={{ '--car-bottom': '42px', '--car-anim': 'headlight-travel-right', '--car-duration': '9s', '--car-delay': '6s', '--beam-length': '50px', '--beam-color': 'rgba(255, 235, 170, 0.5)', '--beam-color-bright': 'rgba(255, 240, 190, 0.8)' }}>
+        <div className="car-headlight-beam" style={{ position: 'relative' }}>
+          <div className="car-headlight-dot" />
+        </div>
+      </div>
+      {/* Slow car going left - warm */}
+      <div className="car-headlight going-left" style={{ '--car-bottom': '22px', '--car-anim': 'headlight-travel-left', '--car-duration': '15s', '--car-delay': '1s', '--beam-length': '45px', '--beam-color': 'rgba(255, 240, 200, 0.5)', '--beam-color-bright': 'rgba(255, 245, 220, 0.8)' }}>
+        <div className="car-headlight-beam" style={{ position: 'relative' }}>
+          <div className="car-headlight-dot" />
+        </div>
+      </div>
+      {/* Very fast car going right */}
+      <div className="car-headlight going-right" style={{ '--car-bottom': '48px', '--car-anim': 'headlight-travel-right', '--car-duration': '5s', '--car-delay': '8s', '--beam-length': '80px' }}>
+        <div className="car-headlight-beam" style={{ position: 'relative' }}>
+          <div className="car-headlight-dot" />
+        </div>
+      </div>
+      {/* Taillight trails (red, going with the traffic opposite) */}
+      <div className="car-headlight going-left" style={{ '--car-bottom': '32px', '--car-anim': 'headlight-travel-left', '--car-duration': '10s', '--car-delay': '5s', '--beam-length': '35px' }}>
+        <div className="car-taillight-beam" style={{ position: 'relative' }}>
+          <div className="car-taillight-dot" />
+        </div>
+      </div>
+      <div className="car-headlight going-right" style={{ '--car-bottom': '38px', '--car-anim': 'headlight-travel-right', '--car-duration': '11s', '--car-delay': '2s', '--beam-length': '30px' }}>
+        <div className="car-taillight-beam" style={{ position: 'relative' }}>
+          <div className="car-taillight-dot" />
+        </div>
+      </div>
+
       {/* Police helicopter spotlights */}
       <div className="police-spotlight" />
       <div className="police-spotlight-2" />
