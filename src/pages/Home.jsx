@@ -1,6 +1,29 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import cheatsData from '../assets/cheats_v2.json'
 
+/* ── Achievement Definitions ── */
+const ACHIEVEMENTS = [
+  // Speed
+  { id: 'first-blood', name: 'FIRST BLOOD', desc: 'Activate your first cheat', icon: '🏆', category: 'Speed', check: (s) => s.totalCheats >= 1 },
+  { id: 'speed-demon', name: 'SPEED DEMON', desc: 'Activate a cheat in under 2s', icon: '⚡', category: 'Speed', check: (s) => s.bestTime !== null && s.bestTime < 2000 },
+  { id: 'lightning', name: 'LIGHTNING', desc: 'Activate a cheat in under 1s', icon: '🔥', category: 'Speed', check: (s) => s.bestTime !== null && s.bestTime < 1000 },
+  // Streaks
+  { id: 'double-trouble', name: 'DOUBLE TROUBLE', desc: 'Reach a 2x combo streak', icon: '✌️', category: 'Streaks', check: (s) => s.bestStreak >= 2 },
+  { id: 'hat-trick', name: 'HAT TRICK', desc: 'Reach a 3x combo streak', icon: '🎩', category: 'Streaks', check: (s) => s.bestStreak >= 3 },
+  { id: 'godfather', name: 'GODFATHER', desc: 'Reach a 5x combo streak', icon: '👑', category: 'Streaks', check: (s) => s.bestStreak >= 5 },
+  { id: 'unbreakable', name: 'UNBREAKABLE', desc: 'Reach a 10x combo streak', icon: '💎', category: 'Streaks', check: (s) => s.bestStreak >= 10 },
+  // Volume
+  { id: 'warming-up', name: 'WARMING UP', desc: 'Activate 5 cheats total', icon: '🎯', category: 'Volume', check: (s) => s.totalCheats >= 5 },
+  { id: 'cheat-master', name: 'CHEAT MASTER', desc: 'Activate 25 cheats total', icon: '🎖️', category: 'Volume', check: (s) => s.totalCheats >= 25 },
+  { id: 'legend', name: 'LEGEND', desc: 'Activate 100 cheats total', icon: '🌟', category: 'Volume', check: (s) => s.totalCheats >= 100 },
+  { id: 'myth', name: 'MYTH', desc: 'Activate 500 cheats total', icon: '💫', category: 'Volume', check: (s) => s.totalCheats >= 500 },
+  // Exploration
+  { id: 'world-curious', name: 'CURIIOUS', desc: 'Discover 5 unique cheats', icon: '🗺️', category: 'Exploration', check: (s) => s.uniqueCheats >= 5 },
+  { id: 'world-traveler', name: 'WELL TRAVELED', desc: 'Discover 15 unique cheats', icon: '✈️', category: 'Exploration', check: (s) => s.uniqueCheats >= 15 },
+  { id: 'completionist', name: 'COMPLETIONIST', desc: 'Discover 30 unique cheats', icon: '🧩', category: 'Exploration', check: (s) => s.uniqueCheats >= 30 },
+  { id: 'collector', name: 'COLLECTOR', desc: 'Discover all unique cheats', icon: '🏅', category: 'Exploration', check: (s) => s.totalAvailable > 0 && s.uniqueCheats >= s.totalAvailable },
+]
+
 /* ── CRT Boot Screen Component ── */
 const BOOT_LINES = [
   { prefix: '>', text: 'SAN_ANDREAS_CHEATS v2.0' },
@@ -113,6 +136,16 @@ export default function Home() {
   const [hadInputSinceMatch, setHadInputSinceMatch] = useState(false)
   const [booted, setBooted] = useState(false)
 
+  // Achievement system
+  const [unlockedAchievements, setUnlockedAchievements] = useState(() => {
+    try {
+      const saved = localStorage.getItem('achievements')
+      return saved ? JSON.parse(saved) : {}
+    } catch { return {} }
+  })
+  const [achievementToast, setAchievementToast] = useState(null) // { id, name, desc, icon } or null
+  const [showAchievementGallery, setShowAchievementGallery] = useState(false)
+
   // Visual-only: compute partial match progress for input characters
   const inputCharStates = useMemo(() => {
     if (inputs.length === 0 || matchedCheat) return []
@@ -207,6 +240,51 @@ export default function Home() {
     return bestRatio
   }, [inputs, matchedCheat])
 
+  // Achievement checking logic
+  const uniqueCheatIdsRef = useRef(new Set())
+  const checkAchievements = useCallback(() => {
+    const totalAvailable = cheatsData?.cheats?.length || 0
+    const stats = {
+      totalCheats,
+      bestStreak,
+      bestTime,
+      uniqueCheats: uniqueCheatIdsRef.current.size,
+      totalAvailable,
+    }
+    const newlyUnlocked = []
+    for (const ach of ACHIEVEMENTS) {
+      if (unlockedAchievements[ach.id]) continue
+      if (ach.check(stats)) {
+        newlyUnlocked.push(ach)
+      }
+    }
+    if (newlyUnlocked.length > 0) {
+      const updated = { ...unlockedAchievements }
+      for (const ach of newlyUnlocked) {
+        updated[ach.id] = { unlockedAt: Date.now() }
+      }
+      setUnlockedAchievements(updated)
+      localStorage.setItem('achievements', JSON.stringify(updated))
+      // Show toast for the first newly unlocked achievement (queue if multiple)
+      const showNext = (index) => {
+        if (index >= newlyUnlocked.length) return
+        const ach = newlyUnlocked[index]
+        setAchievementToast({ id: ach.id, name: ach.name, desc: ach.desc, icon: ach.icon })
+        setTimeout(() => {
+          setAchievementToast(null)
+          // Show next after a short delay
+          setTimeout(() => showNext(index + 1), 400)
+        }, 3500)
+      }
+      showNext(0)
+    }
+  }, [totalCheats, bestStreak, bestTime, unlockedAchievements])
+
+  // Check achievements whenever stats change
+  useEffect(() => {
+    checkAchievements()
+  }, [checkAchievements])
+
   // Function to save cheat to history
   const saveCheatToHistory = useCallback((cheat, timestamp, elapsedMs, inputDevice) => {
     const newEntry = {
@@ -217,6 +295,9 @@ export default function Home() {
       elapsedTime: elapsedMs,
       inputDevice: inputDevice
     }
+    
+    // Track unique cheat IDs for achievements
+    uniqueCheatIdsRef.current.add(cheat.id)
     
     const updatedHistory = [newEntry, ...cheatHistory].slice(0, 50) // Keep only last 50 entries
     setCheatHistory(updatedHistory)
@@ -280,7 +361,14 @@ export default function Home() {
     const savedHistory = localStorage.getItem('cheatHistory')
     if (savedHistory) {
       try {
-        setCheatHistory(JSON.parse(savedHistory))
+        const parsed = JSON.parse(savedHistory)
+        setCheatHistory(parsed)
+        // Restore unique cheat IDs from history for achievements
+        for (const entry of parsed) {
+          // Extract cheat id from the stored id format "cheatId-timestamp"
+          const cheatId = entry.id?.split('-').slice(0, -1).join('-') || entry.name
+          uniqueCheatIdsRef.current.add(cheatId)
+        }
       } catch (e) {
         console.error('Failed to parse cheat history:', e)
       }
@@ -838,6 +926,18 @@ export default function Home() {
         </svg>
       </button>
 
+      {/* Achievement Trophy Button */}
+      <button
+        onClick={() => setShowAchievementGallery(true)}
+        className="absolute top-4 right-14 text-amber-200 hover:text-amber-400 achievement-btn cursor-pointer z-10 relative"
+        aria-label="View Achievements"
+      >
+        <span className="text-xl">🏆</span>
+        {Object.keys(unlockedAchievements).length > 0 && (
+          <span className="badge-count">{Object.keys(unlockedAchievements).length}</span>
+        )}
+      </button>
+
       {/* CJ Avatar with reactive animations */}
       <div className="text-2xl font-semibold tracking-tight text-center relative z-10">
         {cjSpeech && (
@@ -988,6 +1088,79 @@ export default function Home() {
                   </div>
                 ))
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Achievement unlock toast */}
+      {achievementToast && (
+        <div key={achievementToast.id} className="achievement-toast">
+          <div className="achievement-toast-inner">
+            <div className="achievement-toast-icon">{achievementToast.icon}</div>
+            <div className="achievement-toast-text">
+              <div className="achievement-toast-label">🏆 ACHIEVEMENT UNLOCKED</div>
+              <div className="achievement-toast-name">{achievementToast.name}</div>
+              <div className="achievement-toast-desc">{achievementToast.desc}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Achievement Gallery Modal */}
+      {showAchievementGallery && (
+        <div className="achievement-gallery" onClick={() => setShowAchievementGallery(false)}>
+          <div className="achievement-gallery-panel" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="achievement-gallery-header">
+              <div>
+                <h2 className="font-pixel text-sm text-amber-200 tracking-wider">🏆 ACHIEVEMENTS</h2>
+                <div className="achievement-gallery-progress">
+                  <span className="font-vt text-base text-amber-400/60">
+                    {Object.keys(unlockedAchievements).length}/{ACHIEVEMENTS.length}
+                  </span>
+                  <div className="achievement-progress-bar">
+                    <div
+                      className="achievement-progress-fill"
+                      style={{ width: `${(Object.keys(unlockedAchievements).length / ACHIEVEMENTS.length) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowAchievementGallery(false)}
+                className="font-pixel text-sm text-amber-400 hover:text-amber-200 cursor-pointer"
+              >
+                [X]
+              </button>
+            </div>
+
+            {/* Achievement Grid */}
+            <div className="achievement-grid">
+              {['Speed', 'Streaks', 'Volume', 'Exploration'].map((category) => {
+                const catAchievements = ACHIEVEMENTS.filter(a => a.category === category)
+                return (
+                  <div key={category}>
+                    <div className="achievement-category">{category.toUpperCase()}</div>
+                    {catAchievements.map((ach) => {
+                      const isUnlocked = !!unlockedAchievements[ach.id]
+                      const unlockDate = unlockedAchievements[ach.id]?.unlockedAt
+                      return (
+                        <div key={ach.id} className={`achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`}>
+                          <div className="achievement-card-icon">{ach.icon}</div>
+                          <div className="achievement-card-name">{ach.name}</div>
+                          <div className="achievement-card-desc">{ach.desc}</div>
+                          {isUnlocked && unlockDate && (
+                            <div className="achievement-card-date">
+                              {new Date(unlockDate).toLocaleDateString()}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

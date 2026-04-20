@@ -448,5 +448,71 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - All game logic (input handling, cheat matching, gamepad API) untouched
 
 ### Next Iteration
-- **Iteration 9:** Enhanced history modal with retro game stats, mini leaderboard, and visual flair
-- **Iteration 10:** More atmospheric effects — occasional plane with blinking lights flying across sky
+- **Iteration 10:** Enhanced history modal with retro game stats, mini leaderboard, and visual flair
+- **Iteration 11:** More atmospheric effects — occasional plane with blinking lights flying across sky
+
+---
+
+## Iteration 9 — Retro Achievement System
+**Date:** 2026-04-20
+**Branch:** visual-iterations
+**GitHub Issue:** #11 — [🎨 Iteration 9: Retro Achievement System](https://github.com/akramram/SanAndreasCheats/issues/11)
+
+### Planned
+- Add a pixel-art achievement system with unlockable milestones
+- Achievement categories: speed, streaks, volume, exploration
+- Achievements pop up with retro animation (GTA-style "Achievement Unlocked" toast)
+- Achievement gallery/panel accessible via trophy icon
+- 15 achievements covering different milestones
+- Persistent via localStorage
+
+### What Changed (Files Modified)
+- **src/App.css** — Added:
+  - `achievement-slide-in` keyframe: toast slides in from left with scale overshoot, holds, then fades out (3.5s)
+  - `.achievement-toast`: fixed position toast notification at top-left
+  - `.achievement-toast-inner`: pixel-bordered card with sparkle border animation (3 pulses)
+  - `.achievement-toast-icon`: large emoji icon with amber glow drop-shadow
+  - `.achievement-toast-text`, `.achievement-toast-label`, `.achievement-toast-name`, `.achievement-toast-desc`: structured toast text with pixel/VT fonts
+  - `achievement-border-sparkle` keyframe: pulsing amber border glow on unlock
+  - `.achievement-btn`: trophy button with hover scale + glow effect
+  - `.badge-count`: pixel-art counter badge showing unlocked count on trophy button
+  - `.achievement-gallery`: full-screen modal with blur backdrop and fade-in animation
+  - `.achievement-gallery-panel`: bordered panel matching pixel modal aesthetic
+  - `.achievement-gallery-header`: header with progress bar and close button
+  - `.achievement-gallery-progress`, `.achievement-progress-bar`, `.achievement-progress-fill`: amber gradient progress bar
+  - `.achievement-grid`: responsive CSS grid for achievement cards
+  - `.achievement-card`, `.achievement-card.unlocked`, `.achievement-card.locked`: achievement card with locked/unlocked visual states
+  - `.achievement-card-icon`, `.achievement-card-name`, `.achievement-card-desc`, `.achievement-card-date`: card content styling
+  - `.achievement-category`: category section headers in gallery
+- **src/pages/Home.jsx** — Added/updated:
+  - `ACHIEVEMENTS` constant: 15 achievements across 4 categories (Speed: first-blood, speed-demon, lightning; Streaks: double-trouble, hat-trick, godfather, unbreakable; Volume: warming-up, cheat-master, legend, myth; Exploration: curious, well-traveled, completionist, collector)
+  - Each achievement has: id, name, description, emoji icon, category, and check function
+  - New state: `unlockedAchievements` (object from localStorage), `achievementToast` (current toast display), `showAchievementGallery` (gallery modal visibility)
+  - `uniqueCheatIdsRef`: tracks unique cheats discovered for exploration achievements
+  - `checkAchievements` callback: evaluates all achievement check functions against current stats, unlocks new ones, saves to localStorage, queues toast notifications
+  - `useEffect` for achievement checking triggered on stat changes (totalCheats, bestStreak, bestTime)
+  - `saveCheatToHistory`: now tracks unique cheat IDs via ref
+  - History load effect: restores unique cheat IDs from saved history for achievement continuity
+  - Trophy button JSX: positioned next to history button with pixel badge count
+  - Achievement toast JSX: slides in from left with icon, title, and description
+  - Achievement gallery modal JSX: full grid of all achievements organized by category, locked ones are grayed out, unlocked ones show unlock date
+
+### What Improved
+- Added a complete gamification layer — 15 achievements give players goals to chase beyond just entering cheats
+- Achievement toast notifications provide satisfying feedback when milestones are hit (Xbox/GTA-style "Achievement Unlocked" pop)
+- Trophy button with badge counter gives at-a-glance progress visible at all times
+- Achievement gallery provides a full overview of all goals with locked/unlocked states and progress bar
+- Four distinct categories (Speed, Streaks, Volume, Exploration) encourage different playstyles
+- All achievements persist via localStorage — progress survives page reloads
+- Multiple achievements can queue up if unlocked simultaneously
+- Locked achievements are visually dimmed and grayed, motivating players to unlock them
+- Pixel-art styling throughout matches the existing retro aesthetic perfectly
+
+### Issues
+- Build passes cleanly (296KB JS, 52KB CSS)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+
+### Next Iteration
+- **Iteration 10:** Enhanced history modal with retro game stats and visual flair
+- **Iteration 11:** Atmospheric effects — plane with blinking lights flying across sky
+
