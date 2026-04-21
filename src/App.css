@@ -1721,6 +1721,47 @@
   margin-top: 4px;
 }
 
+/* ════════════════════════════════════════════
+   ITERATION 10 — Retro Sound Effects Engine
+   ════════════════════════════════════════════ */
+
+/* ── Sound toggle button ── */
+.sound-btn {
+  transition: all 0.2s ease;
+}
+.sound-btn:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.4));
+}
+.sound-btn:active {
+  transform: scale(0.95);
+}
+
+/* ── Sound wave pulse indicator when sound is on ── */
+.sound-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  background: #34d399;
+  border-radius: 0;
+  animation: sound-pulse-dot 2s ease-in-out infinite;
+}
+
+.sound-btn[aria-label="Mute Sound"]::after {
+  opacity: 1;
+}
+.sound-btn[aria-label="Unmute Sound"]::after {
+  opacity: 0;
+}
+
+@keyframes sound-pulse-dot {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
 /* Category headers in gallery */
 .achievement-category {
   grid-column: 1 / -1;

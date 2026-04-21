@@ -516,3 +516,75 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - **Iteration 10:** Enhanced history modal with retro game stats and visual flair
 - **Iteration 11:** Atmospheric effects — plane with blinking lights flying across sky
 
+---
+
+## Iteration 10 — Retro Sound Effects Engine (Web Audio API)
+**Date:** 2026-04-21
+**Branch:** visual-iterations
+**GitHub Issue:** #12 — [🎨 Iteration 10: Retro Sound Effects Engine (Web Audio)](https://github.com/akramram/SanAndreasCheats/issues/12)
+
+### Planned
+- Add Web Audio API synthesized retro sound effects system
+- Key click sounds when typing cheat input (retro pixel bleeps)
+- Error buzzer sound on fail/miss
+- Combo escalation sounds (pitch increases with streak)
+- Achievement unlock fanfare chime
+- Boot screen beep sequence
+- Volume control toggle
+
+### What Changed (Files Modified)
+- **src/utils/sounds.js** (NEW) — Complete retro sound effects engine using Web Audio API:
+  - Audio context management with lazy initialization and master gain control
+  - `playKeyClick()` — short pixel bleeps with randomized pitch for keyboard typing (800-1200Hz square waves)
+  - `playGamepadPress()` — deeper dual-tone press for gamepad buttons (600Hz + 900Hz)
+  - `playMatchSound(comboLevel)` — ascending arpeggio fanfare with overtones, pitch scales with combo level (+80Hz per level)
+  - `playComboHit(comboLevel)` — dramatic sawtooth frequency sweep from low to high with impact noise
+  - `playFailSound()` — descending dissonant tone (300Hz → 200Hz) with noise burst
+  - `playAchievementSound()` — triumphant 4-note major chord fanfare (C5-E5-G5-C6) with bass octave and sparkle noise
+  - `playBootBeep(index)` — ascending boot line beeps (440Hz + 40Hz per line)
+  - `playBootReady()` — 3-note ascending chime (C5-E5-G5) for boot ready state
+  - `playResetSound()` — soft descending blip (600Hz → 400Hz) for input timeout/reset
+  - `playPowerOn()` — low-frequency sine sweep (60Hz → 30Hz) for CRT power-on thud
+  - Volume control: `setMuted()`, `isMuted()`, `toggleMute()` with smooth gain transition
+  - All sounds generated procedurally — no external audio files needed
+- **src/pages/Home.jsx** — Integrated sound effects into all game events:
+  - Boot sequence: power-on thud on logo reveal, beep per boot line, chime on ready state
+  - Keyboard typing: `playKeyClick()` on each keypress
+  - Gamepad input: `playGamepadPress()` on each button press
+  - Cheat match: `playMatchSound(comboLevel)` with pitch scaling
+  - Combo hit (2+): `playComboHit(comboLevel)` for dramatic sweep
+  - Fail/miss: `playFailSound()` on inactivity timeout without match
+  - Input reset: `playResetSound()` on input buffer clear
+  - Achievement unlock: `playAchievementSound()` fanfare on new achievement
+  - New state: `soundEnabled` (tracks mute/unmute)
+  - Sound toggle button UI: speaker icon (on) / muted speaker icon (off) at top-right, between history and trophy buttons
+- **src/App.css** — Added:
+  - `.sound-btn` — smooth hover scale + glow, active press effect
+  - `.sound-btn::after` — green pulsing dot indicator showing sound is active
+  - `sound-pulse-dot` keyframe — gentle opacity/scale pulse animation
+  - ARIA-based CSS selectors for muted/unmuted visual states
+
+### What Improved
+- Added a complete audio dimension to the experience — every interaction now has audible feedback
+- Keyboard typing produces satisfying retro pixel bleeps with pitch variety
+- Gamepad buttons have a distinct deeper tone from keyboard clicks
+- Cheat matches play an ascending arpeggio that gets higher with combo level
+- Combo streaks trigger an additional dramatic sawtooth sweep at 2+ combos
+- Fail states have a descending buzzer that feels appropriately negative
+- Achievement unlocks get a triumphant 4-note fanfare matching the toast notification
+- Boot screen now has audio — power-on thud, ascending beeps per line, and a chime on ready
+- Input resets produce a soft blip so users know the buffer cleared
+- Volume toggle with green pulse indicator gives clear visual/audio state feedback
+- All sounds use Web Audio API synthesis — zero new files, tiny code footprint
+- Sound preference is user-controllable via the toggle button
+
+### Issues
+- Lint: 2 pre-existing warnings (no new warnings introduced)
+- Build passes cleanly (300KB JS, 53KB CSS)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+- Web Audio API requires user interaction to initialize (handled by existing click/keydown listener)
+
+### Next Iteration
+- **Iteration 11:** Enhanced history modal with retro game stats, visual flair, and mini session summary
+- **Iteration 12:** More atmospheric effects — plane with blinking lights flying across sky
+

@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import cheatsData from '../assets/cheats_v2.json'
+import {
+  playKeyClick, playGamepadPress, playMatchSound, playComboHit,
+  playFailSound, playAchievementSound, playBootBeep, playBootReady,
+  playResetSound, playPowerOn, isMuted, toggleMute
+} from '../utils/sounds'
 
 /* ── Achievement Definitions ── */
 const ACHIEVEMENTS = [
@@ -46,16 +51,25 @@ function BootScreen({ onBooted }) {
   useEffect(() => {
     // Power-on line: 0ms
     // Logo reveal: 400ms
-    const t1 = setTimeout(() => setPhase('logo'), 400)
+    const t1 = setTimeout(() => {
+      setPhase('logo')
+      playPowerOn()
+    }, 400)
     // Subtitle: 900ms
     const t2 = setTimeout(() => setPhase('subtitle'), 900)
     // Start showing lines: 1400ms, each line 150ms apart
     const lineTimers = BOOT_LINES.map((_, i) =>
-      setTimeout(() => setVisibleLines(i + 1), 1400 + i * 150)
+      setTimeout(() => {
+        setVisibleLines(i + 1)
+        playBootBeep(i)
+      }, 1400 + i * 150)
     )
     // Ready prompt: 1400 + bootLines.length * 150 + 300
     const readyTime = 1400 + BOOT_LINES.length * 150 + 300
-    const t3 = setTimeout(() => setPhase('ready'), readyTime)
+    const t3 = setTimeout(() => {
+      setPhase('ready')
+      playBootReady()
+    }, readyTime)
     // Boot out (zoom to reveal main UI): readyTime + 800
     const t4 = setTimeout(() => setBootOut(true), readyTime + 800)
     // Signal booted: readyTime + 1600
@@ -135,6 +149,7 @@ export default function Home() {
   const [comboAnim, setComboAnim] = useState(null) // null | 'enter' | 'bump'
   const [hadInputSinceMatch, setHadInputSinceMatch] = useState(false)
   const [booted, setBooted] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(() => !isMuted())
 
   // Achievement system
   const [unlockedAchievements, setUnlockedAchievements] = useState(() => {
@@ -265,6 +280,8 @@ export default function Home() {
       }
       setUnlockedAchievements(updated)
       localStorage.setItem('achievements', JSON.stringify(updated))
+      // Play achievement fanfare
+      playAchievementSound()
       // Show toast for the first newly unlocked achievement (queue if multiple)
       const showNext = (index) => {
         if (index >= newlyUnlocked.length) return
@@ -316,6 +333,7 @@ export default function Home() {
       setCjMood('disappoint')
       setCurrentStreak(0)
       setComboAnim(null)
+      playFailSound()
       setTimeout(() => setShowFail(false), 1200)
       setTimeout(() => setCjMood('idle'), 800)
     }
@@ -327,6 +345,7 @@ export default function Home() {
     setSpeechFading(false)
     setHadInputSinceMatch(false)
     prevStateRef.current = new Map()
+    playResetSound()
     if (clearTimerRef.current) {
       clearTimeout(clearTimerRef.current)
       clearTimerRef.current = null
@@ -502,6 +521,8 @@ export default function Home() {
 
     const clampAndSet = (nextItem, fromKeyboard = false) => {
       setIsKeyboardInput(fromKeyboard)
+      // Play key click sound
+      if (fromKeyboard) playKeyClick()
       // Set CJ to attention mode when typing
       setCjMood('typing')
       setHadInputSinceMatch(true)
@@ -534,6 +555,8 @@ export default function Home() {
         if (wasDifferent) {
           // Play sound immediately and trigger fireworks shortly after
           playNotif()
+          // Play retro match sound
+          playMatchSound(newStreak)
           // Trigger screen shake
           setShakeActive(true)
           setTimeout(() => setShakeActive(false), 400)
@@ -564,6 +587,8 @@ export default function Home() {
           } else {
             setComboAnim('bump')
             setTimeout(() => setComboAnim(null), 250)
+            // Extra combo hit sound at 2+
+            playComboHit(newStreak)
           }
 
           // Escalate fireworks based on combo
@@ -612,6 +637,7 @@ export default function Home() {
         if (!was && now) {
           const symbol = gp.mapping === 'standard' && buttonSymbols[i] ? buttonSymbols[i] : `B${i}`
           clampAndSet(symbol)
+          playGamepadPress()
         }
         prev.buttons[i] = now
       })
@@ -924,6 +950,28 @@ export default function Home() {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
+      </button>
+
+      {/* Sound Toggle Button */}
+      <button
+        onClick={() => {
+          const newState = toggleMute()
+          setSoundEnabled(newState)
+        }}
+        className="absolute top-4 right-28 text-amber-200 hover:text-amber-400 sound-btn cursor-pointer z-10"
+        aria-label={soundEnabled ? 'Mute Sound' : 'Unmute Sound'}
+        title={soundEnabled ? 'Mute Sound' : 'Unmute Sound'}
+      >
+        {soundEnabled ? (
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+          </svg>
+        )}
       </button>
 
       {/* Achievement Trophy Button */}
