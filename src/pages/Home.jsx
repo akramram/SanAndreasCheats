@@ -6,6 +6,32 @@ import {
   playResetSound, playPowerOn, isMuted, toggleMute
 } from '../utils/sounds'
 
+/* ── Category Definitions for Scanner ── */
+const CATEGORIES = {
+  weapons:      { label: 'WEAPONS',      color: '#f87171', hintClass: 'hint-weapons',      angle: 0 },
+  'player-stats': { label: 'PLAYER STATS', color: '#2dd4bf', hintClass: 'hint-player-stats', angle: 51 },
+  vehicles:     { label: 'VEHICLES',      color: '#60a5fa', hintClass: 'hint-vehicles',     angle: 103 },
+  world:        { label: 'WORLD',         color: '#a78bfa', hintClass: 'hint-world',        angle: 154 },
+  'wanted-level': { label: 'WANTED LEVEL', color: '#fb923c', hintClass: 'hint-wanted',    angle: 206 },
+  pedestrians:  { label: 'PEDESTRIANS',   color: '#f472b6', hintClass: 'hint-pedestrians',  angle: 257 },
+  misc:         { label: 'MISC',          color: '#fbbf24', hintClass: 'hint-misc',          angle: 309 },
+}
+
+// Pre-compute category groups from cheat data
+const CHEAT_CATEGORIES = (() => {
+  const groups = {}
+  for (const cat of Object.keys(CATEGORIES)) {
+    groups[cat] = []
+  }
+  for (const cheat of (cheatsData?.cheats || [])) {
+    const cat = cheat.category || 'misc'
+    if (groups[cat]) {
+      groups[cat].push(cheat)
+    }
+  }
+  return groups
+})()
+
 /* ── Achievement Definitions ── */
 const ACHIEVEMENTS = [
   // Speed
@@ -253,6 +279,52 @@ export default function Home() {
       }
     }
     return bestRatio
+  }, [inputs, matchedCheat])
+
+  // Category scanner: detect which category the player is closest to matching
+  const categoryScan = useMemo(() => {
+    if (inputs.length === 0 || matchedCheat) return { topCategory: null, scores: {}, topScore: 0 }
+
+    const scores = {}
+    let topCategory = null
+    let topScore = 0
+
+    for (const [cat, catCheats] of Object.entries(CHEAT_CATEGORIES)) {
+      let bestMatch = 0
+      for (const cheat of catCheats) {
+        const pcSeqs = cheat.pcSequence || []
+        const sequences = Array.isArray(pcSeqs[0]) ? pcSeqs : [pcSeqs]
+        for (const seq of sequences) {
+          if (seq.length === 0) continue
+          let matchCount = 0
+          for (let i = 0; i < inputs.length && i < seq.length; i++) {
+            if (inputs[i] === seq[i]) matchCount++
+            else break
+          }
+          const ratio = matchCount / seq.length
+          if (ratio > bestMatch) bestMatch = ratio
+        }
+        const psSeq = cheat.psSequence || []
+        if (psSeq.length > 0) {
+          let matchCount = 0
+          for (let i = 0; i < inputs.length && i < psSeq.length; i++) {
+            if (inputs[i] === psSeq[i]) matchCount++
+            else break
+          }
+          const ratio = matchCount / psSeq.length
+          if (ratio > bestMatch) bestMatch = ratio
+        }
+      }
+      scores[cat] = bestMatch
+      if (bestMatch > topScore) {
+        topScore = bestMatch
+        topCategory = cat
+      }
+    }
+
+    // Only show if there's a meaningful match (>30% of cheat length)
+    if (topScore < 0.3) return { topCategory: null, scores, topScore: 0 }
+    return { topCategory, scores, topScore }
   }, [inputs, matchedCheat])
 
   // Achievement checking logic
@@ -760,6 +832,32 @@ export default function Home() {
       <div className="shooting-star" style={{ '--shoot-left': '60%', '--shoot-top': '8%', '--shoot-duration': '8s', '--shoot-delay': '3s' }} />
       <div className="shooting-star" style={{ '--shoot-left': '80%', '--shoot-top': '20%', '--shoot-duration': '7s', '--shoot-delay': '7s' }} />
 
+      {/* Flying airplanes with blinking nav lights */}
+      <div className="flying-plane" style={{ top: '7%', '--plane-duration': '38s', '--plane-delay': '0s' }}>
+        <div className="plane-contrail" />
+        <div className="plane-body">
+          <div className="plane-nav-red" />
+          <div className="plane-nav-green" />
+          <div className="plane-strobe" />
+        </div>
+      </div>
+      <div className="flying-plane" style={{ top: '15%', '--plane-duration': '52s', '--plane-delay': '18s' }}>
+        <div className="plane-contrail" />
+        <div className="plane-body">
+          <div className="plane-nav-red" />
+          <div className="plane-nav-green" />
+          <div className="plane-strobe" style={{ animationDelay: '1.5s' }} />
+        </div>
+      </div>
+      <div className="flying-plane" style={{ top: '4%', '--plane-duration': '45s', '--plane-delay': '30s' }}>
+        <div className="plane-contrail" />
+        <div className="plane-body">
+          <div className="plane-nav-red" style={{ animationDelay: '0.6s' }} />
+          <div className="plane-nav-green" style={{ animationDelay: '0.6s' }} />
+          <div className="plane-strobe" style={{ animationDelay: '2.2s' }} />
+        </div>
+      </div>
+
       {/* Scrolling pixel cityscape */}
       <div className="pixel-cityscape" />
       <div className="pixel-cityscape-lights" />
@@ -1005,6 +1103,13 @@ export default function Home() {
         />
       </div>
 
+      {/* Category hint above input */}
+      {!matchedCheat && categoryScan.topCategory && CATEGORIES[categoryScan.topCategory] && (
+        <div className={`category-hint ${CATEGORIES[categoryScan.topCategory].hintClass} relative z-10`}>
+          ◆ {CATEGORIES[categoryScan.topCategory].label} ◆
+        </div>
+      )}
+
       {/* Cheat match display */}
       {matchedCheat && (
         <div key={matchedCheat.id} className={`text-center cheat-pop fireworks max-w-2xl mx-auto flex flex-col gap-3 relative z-10 px-6 py-4 pixel-border ${shakeActive ? 'screen-shake' : ''}`}>
@@ -1138,6 +1243,66 @@ export default function Home() {
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Category Scanner Radar */}
+      {booted && (
+        <div className={`category-scanner ${categoryScan.topCategory ? 'scanner-active' : 'scanner-hidden'}`}>
+          <div className="scanner-border" />
+          <div className="scanner-sweep" />
+          <div className="scanner-ring" />
+          <div className="scanner-center" />
+          {/* Category blips positioned in a circle */}
+          {Object.entries(CATEGORIES).map(([cat, info]) => {
+            const angleRad = (info.angle * Math.PI) / 180
+            const radius = 36
+            const x = 50 + radius * Math.cos(angleRad)
+            const y = 50 + radius * Math.sin(angleRad)
+            const score = categoryScan.scores[cat] || 0
+            const isActive = categoryScan.topCategory === cat
+            const hasMatch = score > 0.1
+            return (
+              <div
+                key={cat}
+                className={`scanner-blip ${isActive ? 'blip-active' : hasMatch ? '' : 'blip-dim'}`}
+                style={{
+                  left: `${x}%`,
+                  top: `${y}%`,
+                  transform: 'translate(-50%, -50%)',
+                  '--blip-color': info.color,
+                }}
+              />
+            )
+          })}
+          <div
+            className="scanner-category-label"
+            style={{
+              color: categoryScan.topCategory && CATEGORIES[categoryScan.topCategory]
+                ? CATEGORIES[categoryScan.topCategory].color
+                : 'rgba(251, 191, 36, 0.3)',
+            }}
+          >
+            {categoryScan.topCategory && CATEGORIES[categoryScan.topCategory]
+              ? CATEGORIES[categoryScan.topCategory].label
+              : 'SCANNING...'}
+          </div>
+        </div>
+      )}
+
+      {/* Scanner Legend */}
+      {booted && (
+        <div className={`scanner-legend ${categoryScan.topCategory ? 'legend-active' : ''}`}>
+          {Object.entries(CATEGORIES).map(([cat, info]) => (
+            <div
+              key={cat}
+              className={`legend-item ${categoryScan.topCategory === cat ? 'legend-lit' : ''}`}
+              style={{ '--legend-color': info.color }}
+            >
+              <div className="legend-dot" />
+              <span>{info.label}</span>
+            </div>
+          ))}
         </div>
       )}
 

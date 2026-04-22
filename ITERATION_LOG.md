@@ -588,3 +588,72 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - **Iteration 11:** Enhanced history modal with retro game stats, visual flair, and mini session summary
 - **Iteration 12:** More atmospheric effects — plane with blinking lights flying across sky
 
+---
+
+## Iteration 11 — Cheat Category Scanner & Flying Airplane
+**Date:** 2026-04-22
+**Branch:** visual-iterations
+**GitHub Issue:** #13 — [Iteration 11: Cheat Category Scanner & Flying Airplane](https://github.com/akramram/SanAndreasCheats/issues/13)
+
+### Planned
+- Add a radar/scanner UI element that shows which cheat category (Weapons, Health, Vehicles, etc.) the player is closest to matching
+- Category detection based on real-time input prefix matching against all cheats in each category
+- Visual scanner with rotating sweep line and category blips
+- Flying airplane with blinking navigation lights crossing the night sky
+- Category name fades in above input when player is on track
+
+### What Changed (Files Modified)
+- **src/App.css** — Added:
+  - `plane-fly` keyframe: horizontal fly across screen with fade-in/out at edges
+  - `nav-blink`, `nav-blink-alt` keyframes: alternating blink patterns for red/green nav lights
+  - `strobe-flash` keyframe: rapid double-flash pattern for white belly strobe
+  - `.flying-plane`: fixed position element with configurable speed and delay via CSS variables
+  - `.plane-body`: CSS-only airplane silhouette (body + wings via ::before + tail via ::after)
+  - `.plane-nav-red`, `.plane-nav-green`: colored pixel navigation lights with alternating blink
+  - `.plane-strobe`: white strobe light with double-flash pattern
+  - `.plane-contrail`: fading gradient trail behind the airplane
+  - `scanner-sweep` keyframe: 3s rotation for radar sweep line
+  - `scanner-pulse-ring` keyframe: breathing pulse on center ring
+  - `blip-appear` keyframe: pop-in effect for radar blips
+  - `category-hint-fade`, `category-hint-out` keyframes: entrance/exit animations for category hint
+  - `.category-scanner`: fixed bottom-right octagonal radar display with scanner-hidden/scanner-active states
+  - `.scanner-border`: clip-path octagonal border with dark background
+  - `.scanner-sweep`: rotating gradient sweep line with conic-gradient glow cone
+  - `.scanner-ring`, `.scanner-center`: center elements of the radar
+  - `.scanner-blip`, `.blip-dim`, `.blip-active`: category blips with 3 visual states (dim/normal/active)
+  - `.scanner-category-label`: label below scanner showing current detected category
+  - `.category-hint`: pixel-font hint badge above input with category color coding
+  - 8 category color classes: `.hint-weapons` through `.hint-player-stats`
+  - `.scanner-legend`: compact legend below scanner listing all 7 categories
+  - `.legend-item`, `.legend-lit`, `.legend-dot`: legend entries with active highlight state
+- **src/pages/Home.jsx** — Added/updated:
+  - `CATEGORIES` constant: 7 cheat categories with label, color, hint CSS class, and radar angle position
+  - `CHEAT_CATEGORIES`: pre-computed lookup grouping cheats by category (computed once at module load)
+  - `categoryScan` useMemo: computes per-category match scores against current input buffer, returns top category + all scores — purely visual, no game logic changes
+  - 3 flying airplane JSX elements at different heights (4%, 7%, 15%) with varied speeds (38s, 45s, 52s) and staggered delays — each has nav red, nav green, and strobe lights
+  - Category hint badge JSX: appears above input when player is typing and matches a category prefix (>30% match)
+  - Category scanner radar JSX: octagonal radar display at bottom-right with rotating sweep, 7 positioned category blips, center ring, and dynamic category label
+  - Scanner legend JSX: compact vertical list of all categories below radar, highlights active category
+
+### What Improved
+- Night sky now has 3 airplanes flying across at different altitudes and speeds with authentic navigation lighting (red port, green starboard, white belly strobe) — very Los Santos International Airport
+- Contrail trails behind each airplane add realism
+- Alternating blink patterns on nav lights (red/green alternate) are authentic to real aviation
+- White strobe flashes briefly twice per cycle, matching real aircraft anti-collision lights
+- Players now get real-time category hints while typing — a "◆ WEAPONS ◆" badge appears in red when your input matches a weapon cheat prefix, "◆ VEHICLES ◆" in blue for vehicles, etc.
+- Mini radar scanner at bottom-right shows all 7 categories as blips on an octagonal display
+- Radar has a rotating green sweep line with glow cone, matching military/police scanner aesthetic
+- Active category blip enlarges and turns green while others dim — immediately shows which category you're heading toward
+- Scanner starts dimmed (15% opacity) and brightens when actively scanning — non-intrusive
+- Color-coded legend below the scanner lists all categories, highlighting the active one
+- All 7 categories have unique colors: Weapons (red), Player Stats (teal), Vehicles (blue), World (purple), Wanted Level (orange), Pedestrians (pink), Misc (amber)
+
+### Issues
+- Lint: 2 pre-existing warnings (no new warnings introduced)
+- Build passes cleanly (304KB JS, 59KB CSS)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+
+### Next Iteration
+- **Iteration 12:** Enhanced history modal with retro game stats, session summary, and visual flair
+- **Iteration 13:** Dynamic weather effects — occasional lightning flashes, rain particles
+
