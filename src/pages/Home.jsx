@@ -3,8 +3,45 @@ import cheatsData from '../assets/cheats_v2.json'
 import {
   playKeyClick, playGamepadPress, playMatchSound, playComboHit,
   playFailSound, playAchievementSound, playBootBeep, playBootReady,
-  playResetSound, playPowerOn, isMuted, toggleMute
+  playResetSound, playPowerOn, isMuted, toggleMute,
+  playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust
 } from '../utils/sounds'
+
+/* ── Weather System Constants ── */
+// Weather cycle: clear(25s) → cloudy(12s) → rain(18s) → storm(15s) → clearing(15s) → clear
+const WEATHER_PHASES = [
+  { id: 'clear',    duration: 25000 },
+  { id: 'cloudy',   duration: 12000 },
+  { id: 'rain',     duration: 18000 },
+  { id: 'storm',    duration: 15000 },
+  { id: 'clearing', duration: 15000 },
+]
+
+// Pre-generate rain positions (deterministic, no random in render)
+const RAIN_DROPS_LIGHT = Array.from({ length: 60 }, (_, i) => ({
+  id: `rain-${i}`,
+  left: `${(i * 1.68 + 3.7) % 100}%`,
+  height: `${14 + (i % 5) * 3}px`,
+  duration: `${0.6 + (i % 7) * 0.08}s`,
+  delay: `${(i * 0.04) % 1}s`,
+}))
+
+const RAIN_DROPS_HEAVY = Array.from({ length: 120 }, (_, i) => ({
+  id: `rain-h-${i}`,
+  left: `${(i * 0.83 + 1.2) % 100}%`,
+  height: `${16 + (i % 6) * 4}px`,
+  duration: `${0.4 + (i % 8) * 0.06}s`,
+  delay: `${(i * 0.02) % 0.8}s`,
+  heavy: true,
+}))
+
+const RAIN_SPLASHES = Array.from({ length: 25 }, (_, i) => ({
+  id: `splash-${i}`,
+  left: `${(i * 4 + 2) % 100}%`,
+  bottom: `${5 + (i % 4) * 12}px`,
+  duration: `${0.4 + (i % 5) * 0.1}s`,
+  delay: `${(i * 0.08) % 1}s`,
+}))
 
 /* ── Category Definitions for Scanner ── */
 const CATEGORIES = {
@@ -186,6 +223,15 @@ export default function Home() {
   })
   const [achievementToast, setAchievementToast] = useState(null) // { id, name, desc, icon } or null
   const [showAchievementGallery, setShowAchievementGallery] = useState(false)
+
+  // Weather system
+  const [weatherPhase, setWeatherPhase] = useState('clear')
+  const [lightningKey, setLightningKey] = useState(0)
+  const [lightningIntense, setLightningIntense] = useState(false)
+  const [boltKey, setBoltKey] = useState(0)
+  const [boltX, setBoltX] = useState(0)
+  const weatherTimerRef = useRef(null)
+  const lightningTimerRef = useRef(null)
 
   // Visual-only: compute partial match progress for input characters
   const inputCharStates = useMemo(() => {
@@ -373,6 +419,81 @@ export default function Home() {
   useEffect(() => {
     checkAchievements()
   }, [checkAchievements])
+
+  // Weather cycle system
+  useEffect(() => {
+    if (!booted) return
+
+    let phaseIndex = 0
+    const advancePhase = () => {
+      phaseIndex = (phaseIndex + 1) % WEATHER_PHASES.length
+      const phase = WEATHER_PHASES[phaseIndex]
+      setWeatherPhase(phase.id)
+
+      // Start/stop rain ambient sounds
+      if (phase.id === 'rain') {
+        startRainAmbient(0.3)
+      } else if (phase.id === 'storm') {
+        updateRainIntensity(0.7)
+      } else if (phase.id === 'clearing') {
+        stopRainAmbient()
+      } else if (phase.id === 'cloudy') {
+        playWindGust()
+      }
+
+      weatherTimerRef.current = setTimeout(advancePhase, phase.duration)
+    }
+
+    // Start the cycle after a brief clear period
+    weatherTimerRef.current = setTimeout(advancePhase, WEATHER_PHASES[0].duration)
+
+    return () => {
+      if (weatherTimerRef.current) clearTimeout(weatherTimerRef.current)
+      if (lightningTimerRef.current) clearTimeout(lightningTimerRef.current)
+      stopRainAmbient()
+    }
+  }, [booted])
+
+  // Lightning strikes during storm phase
+  useEffect(() => {
+    if (weatherPhase !== 'storm') {
+      if (lightningTimerRef.current) clearTimeout(lightningTimerRef.current)
+      return
+    }
+
+    const triggerLightning = (intense = false) => {
+      setLightningIntense(intense)
+      setLightningKey(k => k + 1)
+      setBoltX(10 + Math.random() * 80)
+      setBoltKey(k => k + 1)
+      const delay = 300 + Math.random() * 1500
+      setTimeout(() => playThunder(intense ? 0.3 : 0.6), delay)
+    }
+
+    // Schedule next lightning
+    const scheduleNext = () => {
+      const nextDelay = 3000 + Math.random() * 6000
+      lightningTimerRef.current = setTimeout(() => {
+        const isIntense = Math.random() > 0.6
+        triggerLightning(isIntense)
+        // Occasionally double-strike
+        if (Math.random() > 0.7) {
+          setTimeout(() => triggerLightning(false), 200 + Math.random() * 400)
+        }
+        scheduleNext()
+      }, nextDelay)
+    }
+
+    // First strike shortly after entering storm
+    lightningTimerRef.current = setTimeout(() => {
+      triggerLightning(true)
+      scheduleNext()
+    }, 2000)
+
+    return () => {
+      if (lightningTimerRef.current) clearTimeout(lightningTimerRef.current)
+    }
+  }, [weatherPhase])
 
   // Function to save cheat to history
   const saveCheatToHistory = useCallback((cheat, timestamp, elapsedMs, inputDevice) => {
@@ -824,6 +945,92 @@ export default function Home() {
     <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
       {/* CRT Boot Screen */}
       {!booted && <BootScreen onBooted={() => setBooted(true)} />}
+
+      {/* Weather System Layers */}
+      {booted && (
+        <>
+          {/* Cloud cover */}
+          <div className={`weather-clouds ${weatherPhase === 'cloudy' || weatherPhase === 'rain' ? 'cloudy' : weatherPhase === 'storm' || weatherPhase === 'clearing' ? 'overcast' : ''}`}>
+            <div className="cloud-layer" />
+          </div>
+
+          {/* Ambient dimming */}
+          <div className={`weather-ambiance ${weatherPhase === 'rain' || weatherPhase === 'clearing' ? 'dim' : weatherPhase === 'storm' ? 'dim-heavy' : ''}`} />
+
+          {/* Rain effect */}
+          <div className={`weather-rain ${weatherPhase === 'rain' ? 'raining' : weatherPhase === 'storm' ? 'raining-heavy' : ''}`}>
+            {(weatherPhase === 'rain' || weatherPhase === 'clearing') && RAIN_DROPS_LIGHT.map(drop => (
+              <div
+                key={drop.id}
+                className="raindrop"
+                style={{
+                  left: drop.left,
+                  height: drop.height,
+                  '--rain-duration': drop.duration,
+                  '--rain-delay': drop.delay,
+                }}
+              />
+            ))}
+            {(weatherPhase === 'storm' || weatherPhase === 'rain') && RAIN_DROPS_HEAVY.map(drop => (
+              <div
+                key={drop.id}
+                className={`raindrop ${drop.heavy ? 'raindrop-heavy' : ''}`}
+                style={{
+                  left: drop.left,
+                  height: drop.height,
+                  '--rain-duration': drop.duration,
+                  '--rain-delay': drop.delay,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Rain splash ripples */}
+          <div className={`weather-rain-splashes ${(weatherPhase === 'rain' || weatherPhase === 'storm' || weatherPhase === 'clearing') ? 'splashing' : ''}`}>
+            {RAIN_SPLASHES.map(splash => (
+              <div
+                key={splash.id}
+                className="rain-splash"
+                style={{
+                  left: splash.left,
+                  '--splash-bottom': splash.bottom,
+                  '--splash-duration': splash.duration,
+                  '--splash-delay': splash.delay,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Wet ground reflection */}
+          <div className={`weather-ground-wet ${(weatherPhase === 'rain' || weatherPhase === 'storm' || weatherPhase === 'clearing') ? 'wet' : ''}`} />
+
+          {/* Lightning flash */}
+          <div
+            key={`lightning-${lightningKey}`}
+            className={`weather-lightning ${lightningIntense ? 'flash-intense' : 'flash'}`}
+          />
+
+          {/* Lightning bolt visual */}
+          <div
+            key={`bolt-${boltKey}`}
+            className="lightning-bolt strike"
+            style={{ left: `${boltX}%`, top: '2%' }}
+          >
+            <svg width="24" height="200" viewBox="0 0 24 200" style={{ filter: 'drop-shadow(0 0 8px rgba(200, 210, 255, 0.8))' }}>
+              <polygon points="12,0 4,80 14,80 6,160 18,160 8,200 16,200 22,120 12,120 20,40 10,40" fill="rgba(220, 230, 255, 0.9)" />
+              <polygon points="12,0 4,80 14,80 6,160 18,160 8,200 16,200 22,120 12,120 20,40 10,40" fill="white" opacity="0.6" />
+            </svg>
+          </div>
+
+          {/* Weather status indicator */}
+          <div className="weather-indicator">
+            <span className="weather-icon">
+              {weatherPhase === 'clear' ? '☀' : weatherPhase === 'cloudy' ? '☁' : weatherPhase === 'rain' ? '🌧' : weatherPhase === 'storm' ? '⛈' : '🌦'}
+            </span>
+          </div>
+        </>
+      )}
+
       {/* Background layers */}
       <div className="pixel-stars" />
 

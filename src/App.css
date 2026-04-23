@@ -2136,3 +2136,247 @@
 .legend-item.legend-lit .legend-dot {
   box-shadow: 0 0 4px var(--legend-color, #fbbf24);
 }
+
+/* ══════════════════════════════════════════════════════
+   DYNAMIC WEATHER SYSTEM — Rain, Lightning, Clouds
+   ══════════════════════════════════════════════════════ */
+
+/* ── Cloud Cover ── */
+.weather-clouds {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 4s ease-in-out;
+}
+
+.weather-clouds.cloudy {
+  opacity: 1;
+}
+
+.weather-clouds.overcast {
+  opacity: 1;
+}
+
+.cloud-layer {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 120% 60% at 20% 10%, rgba(40, 40, 60, 0.4) 0%, transparent 70%),
+              radial-gradient(ellipse 100% 50% at 60% 5%, rgba(35, 35, 55, 0.35) 0%, transparent 60%),
+              radial-gradient(ellipse 80% 40% at 85% 15%, rgba(45, 45, 65, 0.3) 0%, transparent 50%),
+              radial-gradient(ellipse 140% 50% at 40% 0%, rgba(30, 30, 50, 0.25) 0%, transparent 65%);
+}
+
+.weather-clouds.overcast .cloud-layer {
+  background: radial-gradient(ellipse 120% 60% at 20% 10%, rgba(25, 25, 40, 0.6) 0%, transparent 70%),
+              radial-gradient(ellipse 100% 50% at 60% 5%, rgba(20, 20, 35, 0.55) 0%, transparent 60%),
+              radial-gradient(ellipse 80% 40% at 85% 15%, rgba(30, 30, 45, 0.5) 0%, transparent 50%),
+              radial-gradient(ellipse 140% 50% at 40% 0%, rgba(15, 15, 30, 0.45) 0%, transparent 65%);
+}
+
+/* ── Rain Effect ── */
+.weather-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  overflow: hidden;
+}
+
+.weather-rain.raining {
+  opacity: 1;
+}
+
+.weather-rain.raining-heavy {
+  opacity: 1;
+}
+
+.raindrop {
+  position: absolute;
+  top: -20px;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(150, 170, 200, 0.3), rgba(180, 200, 230, 0.5));
+  border-radius: 0;
+  image-rendering: pixelated;
+  animation: rain-fall var(--rain-duration, 0.8s) linear infinite;
+  animation-delay: var(--rain-delay, 0s);
+  left: var(--rain-left, 50%);
+  height: var(--rain-height, 18px);
+  transform: rotate(8deg);
+}
+
+.raindrop.raindrop-heavy {
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(140, 160, 200, 0.4), rgba(170, 190, 220, 0.7));
+  transform: rotate(10deg);
+}
+
+@keyframes rain-fall {
+  0% { transform: rotate(8deg) translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: rotate(8deg) translateY(105vh); opacity: 0; }
+}
+
+/* ── Rain Splash Ripples at Ground Level ── */
+.weather-rain-splashes {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  overflow: hidden;
+}
+
+.weather-rain-splashes.splashing {
+  opacity: 1;
+}
+
+.rain-splash {
+  position: absolute;
+  bottom: var(--splash-bottom, 10px);
+  left: var(--splash-left, 50%);
+  width: 6px;
+  height: 2px;
+  border: 1px solid rgba(150, 170, 200, 0.25);
+  border-radius: 0;
+  image-rendering: pixelated;
+  animation: splash-ripple var(--splash-duration, 0.6s) ease-out infinite;
+  animation-delay: var(--splash-delay, 0s);
+}
+
+@keyframes splash-ripple {
+  0% { transform: scale(0.5, 0.5); opacity: 0.6; }
+  100% { transform: scale(3, 2); opacity: 0; }
+}
+
+/* ── Lightning Flash ── */
+.weather-lightning {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background: white;
+  opacity: 0;
+}
+
+.weather-lightning.flash {
+  animation: lightning-flash 0.6s ease-out;
+}
+
+.weather-lightning.flash-intense {
+  animation: lightning-flash-intense 0.8s ease-out;
+}
+
+@keyframes lightning-flash {
+  0% { opacity: 0; }
+  5% { opacity: 0.7; }
+  10% { opacity: 0.1; }
+  15% { opacity: 0.5; }
+  25% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes lightning-flash-intense {
+  0% { opacity: 0; }
+  3% { opacity: 0.9; }
+  6% { opacity: 0.15; }
+  10% { opacity: 0.7; }
+  14% { opacity: 0.1; }
+  18% { opacity: 0.4; }
+  30% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* ── Lightning Bolt Visual ── */
+.lightning-bolt {
+  position: fixed;
+  z-index: 99;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.lightning-bolt.strike {
+  animation: bolt-strike 0.5s ease-out forwards;
+}
+
+@keyframes bolt-strike {
+  0% { opacity: 0; }
+  5% { opacity: 1; }
+  15% { opacity: 0.6; }
+  20% { opacity: 1; }
+  35% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* ── Weather Transition Overlay (dimming/brightening) ── */
+.weather-ambiance {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: rgba(5, 5, 15, 0);
+  transition: background 5s ease-in-out;
+}
+
+.weather-ambiance.dim {
+  background: rgba(5, 5, 15, 0.25);
+}
+
+.weather-ambiance.dim-heavy {
+  background: rgba(5, 5, 15, 0.4);
+}
+
+/* ── Wet Ground Reflection ── */
+.weather-ground-wet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 55px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 3s ease-in-out;
+  background: linear-gradient(to top,
+    rgba(80, 100, 130, 0.15) 0%,
+    rgba(60, 80, 110, 0.08) 50%,
+    transparent 100%);
+}
+
+.weather-ground-wet.wet {
+  opacity: 1;
+}
+
+/* ── Weather Status Indicator ── */
+.weather-indicator {
+  position: fixed;
+  top: 50px;
+  left: 8px;
+  z-index: 8;
+  pointer-events: none;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  color: rgba(150, 170, 200, 0.4);
+  transition: all 0.5s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.weather-indicator .weather-icon {
+  font-size: 12px;
+  animation: weather-icon-pulse 3s ease-in-out infinite;
+}
+
+@keyframes weather-icon-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}

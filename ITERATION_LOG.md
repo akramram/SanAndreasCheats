@@ -657,3 +657,68 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - **Iteration 12:** Enhanced history modal with retro game stats, session summary, and visual flair
 - **Iteration 13:** Dynamic weather effects — occasional lightning flashes, rain particles
 
+---
+
+## Iteration 12 — Dynamic Weather System: Rain, Lightning & Thunder
+**Date:** 2026-04-23
+**Branch:** visual-iterations
+**GitHub Issue:** #14 — [Iteration 12: Dynamic Weather System - Rain, Lightning and Thunder](https://github.com/akramram/SanAndreasCheats/issues/14)
+
+### Planned
+- Add pixel-art rain effect (thin falling lines at slight angle)
+- Lightning flash with dramatic full-screen illumination
+- Thunder sound effect via Web Audio API
+- Dynamic cloud cover that rolls in during rain
+- Weather cycle: clear → cloudy → rain → storm → clearing
+- Rain splash ripples at street level
+
+### What Changed (Files Modified)
+- **src/utils/sounds.js** — Added:
+  - `playThunder(distance)` — deep bass rumble with noise crack, distance parameter controls volume/duration (close = loud brief, far = softer longer). Frequency sweeps from 40-60Hz down to 20Hz with low-pass filtered noise burst
+  - `startRainAmbient(intensity)` — continuous looping noise buffer with bandpass filter (6-10kHz) for rainfall atmosphere. Intensity controls gain and filter frequency
+  - `stopRainAmbient()` — smooth fadeout over 1.5s then cleanup
+  - `updateRainIntensity(intensity)` — live adjustment of rain ambient gain and filter frequency for smooth transitions
+  - `playWindGust()` — brief whooshing wind sound with bandpass frequency sweep (200Hz → 800Hz → 150Hz) and envelope shaping
+- **src/App.css** — Added:
+  - `.weather-clouds`, `.cloud-layer` — cloud cover overlay with radial gradient clouds, two opacity states (cloudy/overcast), 4s fade transition
+  - `.weather-rain`, `.raindrop`, `.raindrop-heavy` — rain container and individual droplets with configurable position, size, and speed via CSS variables. Heavy drops are wider (2px) with brighter gradient
+  - `rain-fall` keyframe — diagonal fall animation with 8deg rotation, fade in/out at top/bottom
+  - `.weather-rain-splashes`, `.rain-splash` — pixel splash ripples at ground level with configurable position and timing
+  - `splash-ripple` keyframe — scale-out + fade animation for splash effect
+  - `.weather-lightning`, `.flash`, `.flash-intense` — full-screen white flash with two intensity levels. Normal flash: 3-pulse pattern over 0.6s. Intense: 5-pulse pattern over 0.8s reaching 90% opacity
+  - `.lightning-bolt`, `.strike` — SVG lightning bolt visual with drop-shadow glow, fade-in/strike/fade-out animation over 0.5s
+  - `.weather-ambiance` — ambient dimming overlay with 3 states (clear/dim/dim-heavy) and 5s transition
+  - `.weather-ground-wet` — wet ground reflection gradient at bottom, 3s fade in
+  - `.weather-indicator` — subtle weather icon in top-left corner showing current phase (☀☁🌧⛈🌦)
+- **src/pages/Home.jsx** — Added:
+  - `WEATHER_PHASES` constant: 5-phase weather cycle with durations — clear(25s), cloudy(12s), rain(18s), storm(15s), clearing(15s) = ~85s total cycle
+  - `RAIN_DROPS_LIGHT`: 60 pre-generated light raindrop positions (deterministic, no random in render)
+  - `RAIN_DROPS_HEAVY`: 120 pre-generated heavy raindrop positions
+  - `RAIN_SPLASHES`: 25 pre-generated splash ripple positions
+  - New state: `weatherPhase`, `lightningKey`, `lightningIntense`, `boltKey`, `boltX`
+  - Weather cycle useEffect: advances through phases after boot, triggers rain ambient on rain phase, intensifies on storm, wind gust on cloudy, stops rain on clearing
+  - Lightning useEffect: during storm phase, schedules lightning strikes every 3-9s with 40% chance of intense flash. Occasional double-strikes (30% chance). Thunder plays 300-1800ms after flash (simulating distance). SVG bolt renders at random horizontal position with glow effect
+
+### What Improved
+- The Los Santos nightscape now has a full dynamic weather cycle that transforms the atmosphere every ~85 seconds
+- Clear phase: normal starfield view as before (25 seconds of calm)
+- Cloudy phase: cloud cover rolls in with subtle wind gust sound, stars dim behind clouds
+- Rain phase: 60 light pixel-art raindrops fall diagonally, wet ground reflection appears, soft rain ambient sound starts, 25 splash ripples animate at street level
+- Storm phase: rain intensifies to 120 heavy drops, cloud cover darkens to overcast, ambient dims heavily, lightning bolts strike with SVG visuals, dramatic full-screen white flashes (normal + intense variants), thunder rumbles with realistic delay, occasional double-strikes
+- Clearing phase: clouds remain but rain eases back to light, ground stays wet
+- All transitions are smooth (2-5s CSS transitions on opacity/background)
+- Weather indicator in top-left shows current phase with emoji icon
+- Rain ambient sound adjusts dynamically with weather intensity
+- Zero impact on game logic — all weather is purely visual/atmospheric
+- Performance optimized: rain positions are pre-generated (no random in render), all animations use CSS transform/opacity for GPU acceleration
+
+### Issues
+- Build passes cleanly (310KB JS, 63KB CSS)
+- Lint: 2 pre-existing warnings (no new warnings or errors)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+- Weather cycle runs independently — doesn't interact with gameplay mechanics
+
+### Next Iteration
+- **Iteration 13:** Enhanced history modal with session stats dashboard and visual flair
+- **Iteration 14:** Wanted level stars system that fills up as cheats are activated
+

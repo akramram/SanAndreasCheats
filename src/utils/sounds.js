@@ -199,3 +199,124 @@ export function playPowerOn() {
   osc.start(ctx.currentTime)
   osc.stop(ctx.currentTime + 0.45)
 }
+
+/** Thunder rumble — deep bass rumble with noise burst */
+export function playThunder(distance = 0.5) {
+  if (_muted) return
+  const ctx = getCtx()
+  // Low rumble
+  const osc = ctx.createOscillator()
+  const oscGain = ctx.createGain()
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(40 + Math.random() * 20, ctx.currentTime)
+  osc.frequency.exponentialRampToValueAtTime(20, ctx.currentTime + 2 * distance)
+  const vol = 0.25 * (1 - distance * 0.6)
+  oscGain.gain.setValueAtTime(vol, ctx.currentTime)
+  oscGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2 * distance)
+  osc.connect(oscGain)
+  oscGain.connect(getMaster())
+  osc.start(ctx.currentTime)
+  osc.stop(ctx.currentTime + 2 * distance + 0.1)
+  // Noise crack component
+  const bufferSize = Math.floor(ctx.sampleRate * 1.5 * distance)
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.15))
+  }
+  const noise = ctx.createBufferSource()
+  noise.buffer = buffer
+  const noiseGain = ctx.createGain()
+  noiseGain.gain.value = vol * 0.6
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5 * distance)
+  const filter = ctx.createBiquadFilter()
+  filter.type = 'lowpass'
+  filter.frequency.value = 200
+  noise.connect(filter)
+  filter.connect(noiseGain)
+  noiseGain.connect(getMaster())
+  noise.start(ctx.currentTime)
+  noise.stop(ctx.currentTime + 1.5 * distance + 0.1)
+}
+
+/** Rain ambient — continuous soft noise for rain atmosphere */
+let rainNode = null
+let rainGainNode = null
+let rainFilterNode = null
+
+export function startRainAmbient(intensity = 0.3) {
+  if (_muted || rainNode) return
+  const ctx = getCtx()
+  const bufferSize = ctx.sampleRate * 4
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1
+  }
+  rainNode = ctx.createBufferSource()
+  rainNode.buffer = buffer
+  rainNode.loop = true
+  rainFilterNode = ctx.createBiquadFilter()
+  rainFilterNode.type = 'bandpass'
+  rainFilterNode.frequency.value = 6000 + intensity * 4000
+  rainFilterNode.Q.value = 0.3
+  rainGainNode = ctx.createGain()
+  rainGainNode.gain.value = 0.04 + intensity * 0.06
+  rainNode.connect(rainFilterNode)
+  rainFilterNode.connect(rainGainNode)
+  rainGainNode.connect(getMaster())
+  rainNode.start()
+}
+
+export function stopRainAmbient() {
+  if (!rainNode) return
+  try {
+    const ctx = getCtx()
+    rainGainNode.gain.setTargetAtTime(0, ctx.currentTime, 0.3)
+    setTimeout(() => {
+      try {
+        rainNode.stop()
+      } catch { /* already stopped */ }
+      rainNode = null
+      rainGainNode = null
+      rainFilterNode = null
+    }, 1500)
+  } catch { /* cleanup */ }
+}
+
+export function updateRainIntensity(intensity) {
+  if (rainGainNode && rainFilterNode) {
+    const ctx = getCtx()
+    rainGainNode.gain.setTargetAtTime(0.04 + intensity * 0.06, ctx.currentTime, 0.2)
+    rainFilterNode.frequency.setTargetAtTime(6000 + intensity * 4000, ctx.currentTime, 0.2)
+  }
+}
+
+/** Wind gust — brief whooshing sound */
+export function playWindGust() {
+  if (_muted) return
+  const ctx = getCtx()
+  const bufferSize = ctx.sampleRate * 1.5
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * Math.sin((i / bufferSize) * Math.PI)
+  }
+  const noise = ctx.createBufferSource()
+  noise.buffer = buffer
+  const filter = ctx.createBiquadFilter()
+  filter.type = 'bandpass'
+  filter.frequency.setValueAtTime(200, ctx.currentTime)
+  filter.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.3)
+  filter.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 1.2)
+  filter.Q.value = 1
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0, ctx.currentTime)
+  gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.15)
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.3)
+  noise.connect(filter)
+  filter.connect(gain)
+  gain.connect(getMaster())
+  noise.start(ctx.currentTime)
+  noise.stop(ctx.currentTime + 1.5)
+}
