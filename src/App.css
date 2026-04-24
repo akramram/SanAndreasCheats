@@ -2380,3 +2380,288 @@
   0%, 100% { opacity: 0.5; }
   50% { opacity: 0.8; }
 }
+
+/* ═══════════════════════════════════════════════
+   ══ WANTED LEVEL STARS SYSTEM ══
+   ═══════════════════════════════════════════════ */
+
+/* Star container — top left HUD */
+.wanted-level-display {
+  position: fixed;
+  top: 48px;
+  left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 100;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.wanted-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 2px;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
+}
+
+.wanted-stars-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+/* Individual star */
+.wanted-star {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+/* CSS-only pixel star shape */
+.wanted-star::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Star using clip-path polygon */
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2% 35%, 39% 35%
+  );
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  transition: background 0.3s ease, filter 0.3s ease;
+}
+
+.wanted-star.active::before {
+  background: #ffffff;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))
+          drop-shadow(0 0 12px rgba(100, 200, 255, 0.4));
+}
+
+.wanted-star.active.star-warn::before {
+  background: #fbbf24;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.9))
+          drop-shadow(0 0 12px rgba(251, 191, 36, 0.5));
+}
+
+.wanted-star.active.star-danger::before {
+  background: #f87171;
+  filter: drop-shadow(0 0 8px rgba(248, 113, 113, 0.9))
+          drop-shadow(0 0 16px rgba(248, 113, 113, 0.6));
+}
+
+/* Star fill animation — flash then settle */
+@keyframes star-fill-flash {
+  0% {
+    transform: scale(0.5) rotate(-20deg);
+    opacity: 0.3;
+  }
+  30% {
+    transform: scale(1.6) rotate(10deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.9) rotate(-5deg);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1.15) rotate(3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.wanted-star.just-gained {
+  animation: star-fill-flash 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Idle pulse on active stars */
+@keyframes star-idle-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))
+            drop-shadow(0 0 12px rgba(100, 200, 255, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 1))
+            drop-shadow(0 0 20px rgba(100, 200, 255, 0.6));
+  }
+}
+
+@keyframes star-idle-pulse-warn {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.9))
+            drop-shadow(0 0 12px rgba(251, 191, 36, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(251, 191, 36, 1))
+            drop-shadow(0 0 20px rgba(251, 191, 36, 0.7));
+  }
+}
+
+@keyframes star-idle-pulse-danger {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(248, 113, 113, 0.9))
+            drop-shadow(0 0 16px rgba(248, 113, 113, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(248, 113, 113, 1))
+            drop-shadow(0 0 24px rgba(248, 113, 113, 0.8));
+  }
+}
+
+.wanted-star.active:not(.just-gained) {
+  animation: star-idle-pulse 2.5s ease-in-out infinite;
+}
+.wanted-star.active.star-warn:not(.just-gained) {
+  animation: star-idle-pulse-warn 2s ease-in-out infinite;
+}
+.wanted-star.active.star-danger:not(.just-gained) {
+  animation: star-idle-pulse-danger 1.5s ease-in-out infinite;
+}
+
+/* Star lost animation — fade and shrink */
+@keyframes star-lost {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.3) rotate(45deg);
+    opacity: 0.1;
+  }
+}
+
+.wanted-star.just-lost {
+  animation: star-lost 0.4s ease-in forwards;
+}
+
+/* "WANTED LEVEL UP" toast */
+@keyframes wanted-toast-in {
+  0% {
+    transform: translateX(-100%) scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(10px) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes wanted-toast-out {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-120%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.wanted-toast {
+  position: fixed;
+  top: 80px;
+  left: 12px;
+  z-index: 150;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid rgba(251, 191, 36, 0.6);
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  animation: wanted-toast-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  pointer-events: none;
+}
+
+.wanted-toast.fade-out {
+  animation: wanted-toast-out 0.3s ease-in forwards;
+}
+
+.wanted-toast-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+  letter-spacing: 1px;
+}
+
+.wanted-toast-sub {
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+}
+
+/* Max wanted level overlay — red tint + flashing */
+@keyframes wanted-max-pulse {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.12;
+  }
+}
+
+.wanted-max-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(248, 50, 50, 0.15) 0%, rgba(248, 50, 50, 0.05) 60%, transparent 100%);
+  pointer-events: none;
+  z-index: 60;
+  animation: wanted-max-pulse 2s ease-in-out infinite;
+}
+
+/* Red edge vignette for max wanted */
+.wanted-max-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 59;
+  box-shadow: inset 0 0 100px rgba(200, 30, 30, 0.2),
+              inset 0 0 50px rgba(200, 30, 30, 0.15);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.wanted-max-vignette.active {
+  opacity: 1;
+  animation: wanted-max-pulse 2.5s ease-in-out infinite;
+}
+
+/* Flash on reaching max wanted level */
+@keyframes wanted-max-flash {
+  0% { opacity: 0.7; }
+  20% { opacity: 0; }
+  40% { opacity: 0.5; }
+  60% { opacity: 0; }
+  80% { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+.wanted-max-flash {
+  position: fixed;
+  inset: 0;
+  background: rgba(248, 50, 50, 0.3);
+  pointer-events: none;
+  z-index: 200;
+  animation: wanted-max-flash 1s ease-out forwards;
+}
+
+/* Scanline intensity increase at high wanted levels */
+.wanted-intensify-scanlines .scanlines::after {
+  opacity: 0.12 !important;
+}

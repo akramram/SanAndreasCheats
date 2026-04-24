@@ -4,7 +4,8 @@ import {
   playKeyClick, playGamepadPress, playMatchSound, playComboHit,
   playFailSound, playAchievementSound, playBootBeep, playBootReady,
   playResetSound, playPowerOn, isMuted, toggleMute,
-  playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust
+  playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust,
+  playWantedStar, playWantedLost, startSiren, stopSiren
 } from '../utils/sounds'
 
 /* ── Weather System Constants ── */
@@ -233,6 +234,15 @@ export default function Home() {
   const weatherTimerRef = useRef(null)
   const lightningTimerRef = useRef(null)
 
+  // Wanted level system
+  const [wantedLevel, setWantedLevel] = useState(0) // 0-5, based on streak
+  const [wantedStarAnim, setWantedStarAnim] = useState(null) // { index: 0-4, type: 'gained'|'lost' }
+  const [wantedToast, setWantedToast] = useState(null) // { level: number } or null
+  const [showWantedMaxFlash, setShowWantedMaxFlash] = useState(false)
+  const [sirenActive, setSirenActive] = useState(false)
+  const prevStreakRef = useRef(0)
+  const wantedToastTimerRef = useRef(null)
+
   // Visual-only: compute partial match progress for input characters
   const inputCharStates = useMemo(() => {
     if (inputs.length === 0 || matchedCheat) return []
@@ -454,6 +464,71 @@ export default function Home() {
     }
   }, [booted])
 
+  // Wanted level system — reacts to streak changes
+  useEffect(() => {
+    const prevStreak = prevStreakRef.current
+    const newWanted = Math.min(currentStreak, 5)
+    const prevWanted = Math.min(prevStreak, 5)
+
+    if (newWanted !== prevWanted) {
+      if (newWanted > prevWanted) {
+        // Gained stars — animate each new star
+        for (let i = prevWanted; i < newWanted; i++) {
+          setTimeout(() => {
+            setWantedStarAnim({ index: i, type: 'gained' })
+            playWantedStar(i + 1)
+            // Clear the animation class after it plays
+            setTimeout(() => setWantedStarAnim(null), 500)
+          }, (i - prevWanted) * 120)
+        }
+        // Show toast
+        setWantedToast({ level: newWanted })
+        if (wantedToastTimerRef.current) clearTimeout(wantedToastTimerRef.current)
+        wantedToastTimerRef.current = setTimeout(() => {
+          setWantedToast(null)
+        }, 2500)
+
+        // Max wanted level effects
+        if (newWanted === 5 && prevWanted < 5) {
+          setShowWantedMaxFlash(true)
+          startSiren()
+          setSirenActive(true)
+          setTimeout(() => setShowWantedMaxFlash(false), 1000)
+        }
+      } else if (newWanted < prevWanted) {
+        // Lost stars — animate each lost star
+        for (let i = prevWanted - 1; i >= newWanted; i--) {
+          setTimeout(() => {
+            setWantedStarAnim({ index: i, type: 'lost' })
+            // Clear the animation class after it plays
+            setTimeout(() => setWantedStarAnim(null), 400)
+          }, (prevWanted - 1 - i) * 80)
+        }
+        // Play lost sound
+        setTimeout(() => playWantedLost(), 100)
+        // Stop siren if dropping below max
+        if (prevWanted === 5) {
+          stopSiren()
+          setSirenActive(false)
+        }
+      }
+      setWantedLevel(newWanted)
+    }
+
+    prevStreakRef.current = currentStreak
+    return () => {
+      // Don't clear timer here — let it complete
+    }
+  }, [currentStreak])
+
+  // Clean up siren on unmount
+  useEffect(() => {
+    return () => {
+      stopSiren()
+      if (wantedToastTimerRef.current) clearTimeout(wantedToastTimerRef.current)
+    }
+  }, [])
+
   // Lightning strikes during storm phase
   useEffect(() => {
     if (weatherPhase !== 'storm') {
@@ -526,6 +601,11 @@ export default function Home() {
       setCjMood('disappoint')
       setCurrentStreak(0)
       setComboAnim(null)
+      // Stop siren on streak break
+      if (sirenActive) {
+        stopSiren()
+        setSirenActive(false)
+      }
       playFailSound()
       setTimeout(() => setShowFail(false), 1200)
       setTimeout(() => setCjMood('idle'), 800)
@@ -746,6 +826,9 @@ export default function Home() {
         }
         
         if (wasDifferent) {
+          // Calculate new streak first (needed for sounds)
+          const newStreak = currentStreak + 1
+
           // Play sound immediately and trigger fireworks shortly after
           playNotif()
           // Play retro match sound
@@ -755,7 +838,6 @@ export default function Home() {
           setTimeout(() => setShakeActive(false), 400)
 
           // Update streak & combo
-          const newStreak = currentStreak + 1
           setCurrentStreak(newStreak)
           setTotalCheats(t => t + 1)
           setHadInputSinceMatch(false)
@@ -942,11 +1024,12 @@ export default function Home() {
   }, [inputs])
 
   return (
-    <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
+    <>
       {/* CRT Boot Screen */}
       {!booted && <BootScreen onBooted={() => setBooted(true)} />}
 
-      {/* Weather System Layers */}
+      <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
+        {/* Weather System Layers */}
       {booted && (
         <>
           {/* Cloud cover */}
@@ -1030,6 +1113,53 @@ export default function Home() {
           </div>
         </>
       )}
+
+      {/* Wanted Level Stars HUD */}
+      {booted && (
+        <div className="wanted-level-display">
+          <div className="wanted-label">WANTED</div>
+          <div className="wanted-stars-row">
+            {[0, 1, 2, 3, 4].map(i => {
+              const isActive = i < wantedLevel
+              const isJustGained = wantedStarAnim?.index === i && wantedStarAnim?.type === 'gained'
+              const isJustLost = wantedStarAnim?.index === i && wantedStarAnim?.type === 'lost'
+              // Color escalation: 0-1 white, 2-3 amber, 4 red
+              let starClass = 'wanted-star'
+              if (isActive) starClass += ' active'
+              if (isActive && i >= 4) starClass += ' star-danger'
+              else if (isActive && i >= 2) starClass += ' star-warn'
+              if (isJustGained) starClass += ' just-gained'
+              if (isJustLost) starClass += ' just-lost'
+              return <div key={i} className={starClass} />
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Wanted level toast notification */}
+      {wantedToast && (
+        <div key={`wanted-toast-${wantedToast.level}`} className={`wanted-toast ${wantedToast.level === 5 ? '' : ''}`}>
+          <div className="wanted-toast-text">
+            {wantedToast.level >= 5 ? '⚠ MAXIMUM WANTED ⚠' : `★ WANTED LEVEL ${wantedToast.level} ★`}
+          </div>
+          <div className="wanted-toast-sub">
+            {wantedToast.level === 1 && 'They know you\'re here...'}
+            {wantedToast.level === 2 && 'Police alerted!'}
+            {wantedToast.level === 3 && 'Cruisers dispatched!'}
+            {wantedToast.level === 4 && 'NOOSE incoming!'}
+            {wantedToast.level >= 5 && 'The whole city is after you!'}
+          </div>
+        </div>
+      )}
+
+      {/* Max wanted level effects */}
+      {wantedLevel >= 5 && (
+        <>
+          <div className="wanted-max-overlay" />
+          <div className={`wanted-max-vignette active`} />
+        </>
+      )}
+      {showWantedMaxFlash && <div className="wanted-max-flash" />}
 
       {/* Background layers */}
       <div className="pixel-stars" />
@@ -1586,6 +1716,7 @@ export default function Home() {
         </div>
       )}
     </main>
+  </>
   )
 }
 

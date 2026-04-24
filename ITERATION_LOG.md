@@ -722,3 +722,77 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - **Iteration 13:** Enhanced history modal with session stats dashboard and visual flair
 - **Iteration 14:** Wanted level stars system that fills up as cheats are activated
 
+---
+
+## Iteration 13 — GTA Wanted Level Stars System
+**Date:** 2026-04-24
+**Branch:** visual-iterations
+**GitHub Issue:** #15 — [🎨 Iteration 13: GTA Wanted Level Stars System](https://github.com/akramram/SanAndreasCheats/issues/15)
+
+### Planned
+- Add iconic 5-star wanted level display (pixel-art CSS stars)
+- Stars fill based on combo streak (1 star per streak level, max 5)
+- Dramatic star fill animation with flash/pulse on gain
+- Star loss animation when streak breaks
+- At 5 stars: max wanted level effects (red screen tint, flashing, police siren sound)
+- Wanted level sound effect via Web Audio API (ascending jingle per star)
+- 'WANTED LEVEL UP' toast notification
+- Idle pulse on active stars
+
+### What Changed (Files Modified)
+- **src/utils/sounds.js** — Added:
+  - `playWantedStar(level)` — ascending double-beep alert tone per star level (A4→A5), more urgent at 5 stars with rapid alternating tones
+  - `playWantedLost()` — descending defeat tone sequence (660→260Hz) when wanted level drops
+  - `startSiren()` — continuous police siren using sawtooth oscillator with LFO frequency modulation for authentic wail effect
+  - `stopSiren()` — smooth fadeout with delayed cleanup
+- **src/App.css** — Added:
+  - `.wanted-level-display`: Fixed top-left HUD container for stars, with label and stars row
+  - `.wanted-star`: CSS-only star shape using `clip-path: polygon()` with 10-point star silhouette
+  - `.wanted-star.active`: White star with blue-white glow drop-shadow
+  - `.wanted-star.active.star-warn`: Amber/yellow star for levels 2-3
+  - `.wanted-star.active.star-danger`: Red star for level 4+
+  - `star-fill-flash` keyframe: Dramatic scale+rotation entrance animation with overshoot bounce (0.5s)
+  - `.wanted-star.just-gained`: Applies the fill flash animation
+  - `star-idle-pulse`, `star-idle-pulse-warn`, `star-idle-pulse-danger` keyframes: Gentle glow pulsing on active stars, faster/more intense at higher levels
+  - `star-lost` keyframe: Scale up then shrink+rotate exit animation (0.4s)
+  - `.wanted-star.just-lost`: Applies the loss animation
+  - `wanted-toast-in`, `wanted-toast-out` keyframes: Slide-in from left with overshoot, slide-out to left
+  - `.wanted-toast`: Pixel-bordered toast notification with clip-path border styling
+  - `.wanted-toast-text`, `.wanted-toast-sub`: Press Start 2P and VT323 text styling with amber glow
+  - `wanted-max-pulse` keyframe: Breathing red pulse overlay
+  - `.wanted-max-overlay`: Red radial gradient overlay that pulses at max wanted level
+  - `.wanted-max-vignette`: Red inset box-shadow edge vignette for intensity at max wanted
+  - `wanted-max-flash` keyframe: Multi-pulse red flash on first reaching max wanted (1s)
+  - `.wanted-max-flash`: Full-screen red flash element
+- **src/pages/Home.jsx** — Added/updated:
+  - New state: `wantedLevel` (0-5), `wantedStarAnim` (animation trigger), `wantedToast` (toast display), `showWantedMaxFlash` (one-shot flash), `sirenActive` (siren status)
+  - New refs: `prevStreakRef` (tracks streak changes), `wantedToastTimerRef`
+  - Wanted level useEffect: watches `currentStreak` changes, calculates new wanted level (min(streak, 5)), triggers star gain/loss animations with staggered timing, shows toast with GTA-themed messages ("Police alerted!", "NOOSE incoming!", "The whole city is after you!"), starts police siren at max level, triggers dramatic red flash on reaching 5 stars
+  - Siren cleanup useEffect: stops siren and clears toast timers on unmount
+  - `resetOnInactivity()`: Now also stops siren when streak breaks
+  - Wanted level HUD JSX: 5 CSS-only star shapes in a row below "WANTED" label, color-coded by level (white → amber → red)
+  - Wanted toast JSX: Slide-in notification with level-specific messages
+  - Max wanted effects JSX: Red overlay + vignette when at 5 stars, one-shot flash on reaching max
+
+### What Improved
+- Added an iconic GTA SA visual element — the wanted level stars — giving players immediate visual feedback on their combo streak
+- Stars are CSS-only (no images), using clip-path polygon for a clean 10-point star shape
+- Color escalation creates urgency: white (calm) → amber (getting serious) → red (maximum danger)
+- Each star gain has a dramatic flash animation with rotation and scale overshoot
+- Stars pulse gently when active, faster and more intensely at higher wanted levels
+- Star loss has a shrink+rotate animation that feels like losing control
+- Wanted toast notifications slide in with GTA-themed messages that escalate: "They know you're here..." → "Police alerted!" → "Cruisers dispatched!" → "NOOSE incoming!" → "The whole city is after you!"
+- At 5 stars (max wanted): pulsing red screen overlay, red edge vignette, dramatic red flash, and a continuous police siren wail via Web Audio API — the atmosphere becomes intense
+- Wanted level sound effects are ascending alert tones that get more urgent with each star level
+- Siren uses sawtooth oscillator with LFO modulation for an authentic police siren wail
+- The whole system integrates seamlessly with the existing combo/streak system — no game logic changes needed
+
+### Issues
+- Build passes cleanly (313KB JS, 67KB CSS)
+- Lint: 2 pre-existing warnings (no new warnings introduced)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+
+### Next Iteration
+- **Iteration 14:** Enhanced history modal with session stats dashboard and visual flair
+- **Iteration 15:** More dynamic atmospheric effects — GTA radio station display, car radio tuning
+

@@ -292,6 +292,76 @@ export function updateRainIntensity(intensity) {
   }
 }
 
+/** Wanted level star gain — ascending alert tone per star level */
+export function playWantedStar(level) {
+  if (_muted) return
+  // Each star plays a higher-pitched alert tone, getting more urgent
+  const baseFreqs = [440, 523, 622, 740, 880] // A4, C5, Eb5, F#5, A5
+  const freq = baseFreqs[Math.min(level - 1, 4)]
+  // Quick ascending double-beep per star
+  playTone(freq, 0.08, 'square', 0.2)
+  setTimeout(() => playTone(freq * 1.2, 0.12, 'square', 0.25), 60)
+  // At 5 stars, add urgency — fast alternating tones
+  if (level >= 5) {
+    setTimeout(() => playTone(freq, 0.06, 'square', 0.2), 140)
+    setTimeout(() => playTone(freq * 1.2, 0.06, 'square', 0.2), 180)
+    setTimeout(() => playTone(freq, 0.06, 'square', 0.2), 220)
+    setTimeout(() => playTone(freq * 1.2, 0.1, 'square', 0.25), 260)
+  }
+}
+
+/** Wanted level lost — descending defeat tone */
+export function playWantedLost() {
+  if (_muted) return
+  playTone(660, 0.1, 'square', 0.15)
+  setTimeout(() => playTone(520, 0.1, 'square', 0.12), 80)
+  setTimeout(() => playTone(390, 0.15, 'square', 0.1), 160)
+  setTimeout(() => playTone(260, 0.25, 'square', 0.08), 250)
+}
+
+/** Police siren for max wanted level */
+let sirenNode = null
+let sirenGainNode = null
+
+export function startSiren() {
+  if (_muted || sirenNode) return
+  const ctx = getCtx()
+  const osc = ctx.createOscillator()
+  const gain = ctx.createGain()
+  osc.type = 'sawtooth'
+  // Oscillate between two frequencies for siren wail
+  const lfo = ctx.createOscillator()
+  const lfoGain = ctx.createGain()
+  lfo.type = 'sine'
+  lfo.frequency.value = 2.5 // siren wail speed
+  lfoGain.gain.value = 150
+  lfo.connect(lfoGain)
+  lfoGain.connect(osc.frequency)
+  osc.frequency.value = 600
+  gain.gain.value = 0.06
+  osc.connect(gain)
+  gain.connect(getMaster())
+  osc.start()
+  lfo.start()
+  sirenNode = osc
+  sirenGainNode = gain
+}
+
+export function stopSiren() {
+  if (!sirenNode) return
+  try {
+    const ctx = getCtx()
+    sirenGainNode.gain.setTargetAtTime(0, ctx.currentTime, 0.15)
+    setTimeout(() => {
+      try {
+        sirenNode.stop()
+      } catch { /* already stopped */ }
+      sirenNode = null
+      sirenGainNode = null
+    }, 500)
+  } catch { /* cleanup */ }
+}
+
 /** Wind gust — brief whooshing sound */
 export function playWindGust() {
   if (_muted) return
