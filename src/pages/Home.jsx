@@ -110,7 +110,8 @@ function BootScreen({ onBooted }) {
   const [bootOut, setBootOut] = useState(false)
   const [visibleLines, setVisibleLines] = useState(0)
 
-  const stableOnBooted = useCallback(onBooted, [onBooted])
+  const onBootedRef = useRef(onBooted)
+  onBootedRef.current = onBooted
 
   useEffect(() => {
     // Power-on line: 0ms
@@ -137,7 +138,7 @@ function BootScreen({ onBooted }) {
     // Boot out (zoom to reveal main UI): readyTime + 800
     const t4 = setTimeout(() => setBootOut(true), readyTime + 800)
     // Signal booted: readyTime + 1600
-    const t5 = setTimeout(() => stableOnBooted(), readyTime + 1600)
+    const t5 = setTimeout(() => onBootedRef.current(), readyTime + 1600)
 
     return () => {
       clearTimeout(t1)
@@ -147,7 +148,7 @@ function BootScreen({ onBooted }) {
       clearTimeout(t5)
       lineTimers.forEach(clearTimeout)
     }
-  }, [stableOnBooted])
+  }, []) // BootScreen is conditionally rendered; effect should run only once
 
   return (
     <div className={`boot-screen ${bootOut ? 'booting-out' : ''}`}>
