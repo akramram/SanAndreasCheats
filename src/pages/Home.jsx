@@ -5,7 +5,8 @@ import {
   playFailSound, playAchievementSound, playBootBeep, playBootReady,
   playResetSound, playPowerOn, isMuted, toggleMute,
   playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust,
-  playWantedStar, playWantedLost, startSiren, stopSiren
+  playWantedStar, playWantedLost, startSiren, stopSiren,
+  playRadioStatic, playRadioTune, startRadioJingle, stopRadioJingle, setRadioVolume
 } from '../utils/sounds'
 
 /* ── Weather System Constants ── */
@@ -91,6 +92,18 @@ const ACHIEVEMENTS = [
   { id: 'world-traveler', name: 'WELL TRAVELED', desc: 'Discover 15 unique cheats', icon: '✈️', category: 'Exploration', check: (s) => s.uniqueCheats >= 15 },
   { id: 'completionist', name: 'COMPLETIONIST', desc: 'Discover 30 unique cheats', icon: '🧩', category: 'Exploration', check: (s) => s.uniqueCheats >= 30 },
   { id: 'collector', name: 'COLLECTOR', desc: 'Discover all unique cheats', icon: '🏅', category: 'Exploration', check: (s) => s.totalAvailable > 0 && s.uniqueCheats >= s.totalAvailable },
+]
+
+/* ── Radio Station Definitions ── */
+const RADIO_STATIONS = [
+  { id: 0, name: 'K-DST', freq: '87.6', genre: 'Classic Rock', genreId: 'rock', song: 'Running Down a Dream' },
+  { id: 1, name: 'RADIO LOS SANTOS', freq: '105.2', genre: 'West Coast Hip Hop', genreId: 'hiphop', song: 'Gangsta Gangsta' },
+  { id: 2, name: 'K-ROSE', freq: '105.5', genre: 'Country', genreId: 'country', song: 'All My Ex\'s Live in Texas' },
+  { id: 3, name: 'K-JAH', freq: '105.3', genre: 'Reggae', genreId: 'reggae', song: 'Police & Thieves' },
+  { id: 4, name: 'MASTER SOUNDS', freq: '98.3', genre: 'Rare Groove', genreId: 'jazz', song: 'The Bridge' },
+  { id: 5, name: 'SF-UR', freq: '103.3', genre: 'House Music', genreId: 'house', song: 'Born Slippy' },
+  { id: 6, name: 'BOUNCE FM', freq: '103.9', genre: 'Funk', genreId: 'funk', song: 'Super Freak' },
+  { id: 7, name: 'PLAYBACK FM', freq: '95.6', genre: 'Old School Hip Hop', genreId: 'boomBap', song: 'The Message' },
 ]
 
 /* ── CRT Boot Screen Component ── */
@@ -243,6 +256,15 @@ export default function Home() {
   const [sirenActive, setSirenActive] = useState(false)
   const prevStreakRef = useRef(0)
   const wantedToastTimerRef = useRef(null)
+
+  // Radio station system
+  const [currentStation, setCurrentStation] = useState(0)
+  const [radioChanging, setRadioChanging] = useState(false)
+  const [vuBarHeights, setVuBarHeights] = useState(Array(12).fill(3))
+  const [radioStatic, setRadioStatic] = useState(false)
+  const radioTimerRef = useRef(null)
+  const vuAnimFrameRef = useRef(null)
+  const prevStationRef = useRef(0)
 
   // Visual-only: compute partial match progress for input characters
   const inputCharStates = useMemo(() => {
@@ -464,6 +486,106 @@ export default function Home() {
       stopRainAmbient()
     }
   }, [booted])
+
+  // Radio station cycling & VU meter animation
+  useEffect(() => {
+    if (!booted) return
+
+    // Start initial station jingle
+    const initialDelay = setTimeout(() => {
+      startRadioJingle(RADIO_STATIONS[currentStation].genreId)
+    }, 1500)
+
+    // Auto-cycle stations every ~25 seconds
+    const cycleStations = () => {
+      const nextStation = (prevStationRef.current + 1) % RADIO_STATIONS.length
+      prevStationRef.current = nextStation
+      // Trigger static + tune sound
+      setRadioStatic(true)
+      playRadioStatic()
+      playRadioTune()
+      setRadioChanging(true)
+
+      setTimeout(() => {
+        setCurrentStation(nextStation)
+        setRadioStatic(false)
+        setTimeout(() => setRadioChanging(false), 300)
+      }, 400)
+
+      // Start new jingle after brief static
+      setTimeout(() => {
+        startRadioJingle(RADIO_STATIONS[nextStation].genreId)
+      }, 500)
+
+      radioTimerRef.current = setTimeout(cycleStations, 25000)
+    }
+
+    radioTimerRef.current = setTimeout(cycleStations, 25000)
+
+    // VU meter animation — randomized bar heights for visual effect
+    const animateVU = () => {
+      const baseHeight = currentStreak >= 3 ? 8 : currentStreak >= 1 ? 6 : 4
+      const maxDeviation = currentStreak >= 3 ? 8 : 5
+      setVuBarHeights(prev => prev.map((_, i) => {
+        const center = baseHeight + Math.sin(Date.now() / 200 + i * 0.8) * 3
+        const random = Math.random() * maxDeviation
+        return Math.max(2, Math.min(18, center + random))
+      }))
+      vuAnimFrameRef.current = requestAnimationFrame(animateVU)
+    }
+    vuAnimFrameRef.current = requestAnimationFrame(animateVU)
+
+    return () => {
+      clearTimeout(initialDelay)
+      if (radioTimerRef.current) clearTimeout(radioTimerRef.current)
+      if (vuAnimFrameRef.current) cancelAnimationFrame(vuAnimFrameRef.current)
+      stopRadioJingle()
+    }
+  }, [booted])
+
+  // Radio volume responds to weather
+  useEffect(() => {
+    if (weatherPhase === 'storm') {
+      setRadioVolume(0.3)
+    } else if (weatherPhase === 'rain' || weatherPhase === 'clearing') {
+      setRadioVolume(0.6)
+    } else {
+      setRadioVolume(1.0)
+    }
+  }, [weatherPhase])
+
+  // Change radio station on cheat match (more energetic stations at higher combos)
+  const changeStationOnMatch = useCallback((combo) => {
+    // Pick station based on combo — higher combos = more energetic
+    let stationIdx
+    if (combo >= 5) {
+      // House, Hip Hop, Funk — energetic
+      stationIdx = [1, 5, 6][Math.floor(Math.random() * 3)]
+    } else if (combo >= 3) {
+      // Rock, Hip Hop, Old School
+      stationIdx = [0, 1, 7][Math.floor(Math.random() * 3)]
+    } else {
+      // Any station randomly
+      stationIdx = Math.floor(Math.random() * RADIO_STATIONS.length)
+    }
+    if (stationIdx === currentStation) return
+
+    prevStationRef.current = stationIdx
+    setRadioStatic(true)
+    playRadioStatic()
+    playRadioTune()
+    setRadioChanging(true)
+
+    setTimeout(() => {
+      setCurrentStation(stationIdx)
+      setRadioStatic(false)
+      setTimeout(() => setRadioChanging(false), 300)
+    }, 400)
+
+    setTimeout(() => {
+      startRadioJingle(RADIO_STATIONS[stationIdx].genreId)
+    }, 500)
+  }, [currentStation])
 
   // Wanted level system — reacts to streak changes
   useEffect(() => {
@@ -870,6 +992,9 @@ export default function Home() {
           // Escalate fireworks based on combo
           const comboMultiplier = Math.min(newStreak, 5)
           setTimeout(() => triggerFireworks(comboMultiplier), 300)
+
+          // Change radio station to match energy level
+          changeStationOnMatch(newStreak)
 
           // CJ celebration!
           setCjMood('celebrating')
@@ -1712,6 +1837,96 @@ export default function Home() {
                   </div>
                 )
               })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* GTA SA Radio Station Tuner */}
+      {booted && (
+        <div className={`radio-panel ${radioChanging ? 'station-changing' : ''} ${currentStreak >= 4 ? 'combo-fire' : currentStreak >= 2 ? 'combo-hot' : ''}`}>
+          <div className="radio-panel-inner">
+            {/* LCD Display */}
+            <div className="radio-lcd">
+              {radioStatic && <div className="radio-lcd-static" />}
+              <div className="radio-lcd-content">
+                <div className="radio-station-name">
+                  {RADIO_STATIONS[currentStation]?.name || '---'}
+                </div>
+                <div className="radio-frequency">
+                  {RADIO_STATIONS[currentStation]?.freq || '---.-'}
+                </div>
+                <div className="radio-genre">
+                  {RADIO_STATIONS[currentStation]?.genre || ''}
+                </div>
+                <div className="radio-now-playing">
+                  ♫ {RADIO_STATIONS[currentStation]?.song || ''}
+                </div>
+              </div>
+              <div className="radio-lcd-scanlines" />
+            </div>
+
+            {/* VU Meter */}
+            <div className="radio-vu-meter">
+              {vuBarHeights.map((h, i) => (
+                <div
+                  key={i}
+                  className={`vu-bar ${h >= 14 ? 'vu-red' : h >= 9 ? 'vu-yellow' : 'vu-green'}`}
+                  style={{ height: `${h}px` }}
+                />
+              ))}
+            </div>
+
+            {/* Controls */}
+            <div className="radio-controls">
+              <button
+                className="radio-knob radio-knob-prev"
+                onClick={() => {
+                  const prev = (prevStationRef.current - 1 + RADIO_STATIONS.length) % RADIO_STATIONS.length
+                  prevStationRef.current = prev
+                  setRadioStatic(true)
+                  playRadioStatic()
+                  playRadioTune()
+                  setRadioChanging(true)
+                  setTimeout(() => {
+                    setCurrentStation(prev)
+                    setRadioStatic(false)
+                    setTimeout(() => setRadioChanging(false), 300)
+                  }, 400)
+                  setTimeout(() => startRadioJingle(RADIO_STATIONS[prev].genreId), 500)
+                }}
+                title="Previous Station"
+              >
+                ◀
+              </button>
+              <div className="radio-station-dots">
+                {RADIO_STATIONS.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`station-dot ${i === currentStation ? 'active' : ''}`}
+                  />
+                ))}
+              </div>
+              <button
+                className="radio-knob radio-knob-next"
+                onClick={() => {
+                  const next = (prevStationRef.current + 1) % RADIO_STATIONS.length
+                  prevStationRef.current = next
+                  setRadioStatic(true)
+                  playRadioStatic()
+                  playRadioTune()
+                  setRadioChanging(true)
+                  setTimeout(() => {
+                    setCurrentStation(next)
+                    setRadioStatic(false)
+                    setTimeout(() => setRadioChanging(false), 300)
+                  }, 400)
+                  setTimeout(() => startRadioJingle(RADIO_STATIONS[next].genreId), 500)
+                }}
+                title="Next Station"
+              >
+                ▶
+              </button>
             </div>
           </div>
         </div>

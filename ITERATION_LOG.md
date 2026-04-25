@@ -796,3 +796,48 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - **Iteration 14:** Enhanced history modal with session stats dashboard and visual flair
 - **Iteration 15:** More dynamic atmospheric effects — GTA radio station display, car radio tuning
 
+---
+
+## Iteration 14: GTA SA Radio Station Display & Tuner
+**Date:** 2025-04-25
+**Branch:** visual-iterations
+
+### Planned Changes
+- Add an authentic in-game-style car radio panel to the UI
+- 8 iconic GTA San Andreas radio stations with genre-specific synthesized jingles
+- LCD display with scanlines, VU meter with animated bars, station tuning controls
+- Radio auto-cycles every ~25 seconds with static/tune transition effects
+- Cheat matches trigger station changes (higher combos → more energetic stations)
+- Weather affects radio volume (storms = quieter, clear = full)
+- Combo streaks make radio panel glow (amber at 2+, red at 4+)
+
+### Files Modified
+- `src/utils/sounds.js` — Added radio sound system: `playRadioStatic()`, `playRadioTune()`, `startRadioJingle(genreId)` with 8 genre jingles, `stopRadioJingle()`, `setRadioVolume()`
+- `src/App.css` — Added 300+ lines of radio CSS: panel, LCD display, scanlines, VU meter, station dots, tuning knobs, combo-reactive glow animations
+- `src/pages/Home.jsx` — Added RADIO_STATIONS constant (8 stations), radio state variables, cycling useEffect, VU meter animation, `changeStationOnMatch()`, weather-reactive volume, radio panel JSX
+
+### What Changed from Plan
+- Everything implemented as planned — no scope changes
+
+### What Improved
+- Added a deeply immersive GTA SA atmosphere element — the car radio — making the app feel more like the actual game
+- 8 authentic stations: K-DST (Rock), Radio Los Santos (Hip Hop), K-Rose (Country), K-JAH (Reggae), Master Sounds (Jazz), SF-UR (House), Bounce FM (Funk), Playback FM (Old School)
+- Each station has a unique Web Audio API synthesized jingle: rock uses sawtooth power chords, hip hop uses sine sub-bass + noise hi-hats, country uses triangle picking, reggae uses offbeat chords, jazz uses walking bass, house uses four-on-floor kick, funk uses slap bass, boomBap uses breakbeat pattern
+- Retro car radio visual design with dark metallic panel, green LCD text (matching the game's aesthetic), and animated VU meter bars
+- Station transitions include brief static burst + tuning sound for realism
+- VU meter responds to player streak — higher streaks = more energetic meter movement
+- Cheat matches dynamically switch to more energetic stations at higher combos
+- Weather integration: storms lower radio volume to 30%, rain to 60%, clear at 100%
+- Combo-reactive panel glow: amber at streak ≥ 2, pulsing red at streak ≥ 4
+- Manual prev/next controls with station indicator dots
+
+### Issues
+- Build passes cleanly (322KB JS, 72KB CSS)
+- Lint: 3 pre-existing warnings (no new warnings or errors introduced)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+- Core cheat input mechanic fully preserved
+
+### Next Iteration
+- **Iteration 15:** CJ character reactions with animated emoji states and dialogue bubbles
+- **Iteration 16:** Mini-map / GPS-style navigation display showing cheat categories
+

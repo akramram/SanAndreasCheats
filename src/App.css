@@ -2665,3 +2665,352 @@
 .wanted-intensify-scanlines .scanlines::after {
   opacity: 0.12 !important;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   RADIO STATION DISPLAY
+   ══════════════════════════════════════════════════════════════ */
+
+/* Radio panel — retro car radio aesthetic */
+.radio-panel {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  z-index: 80;
+  background: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 50%, #151515 100%);
+  border: 2px solid #333;
+  border-radius: 6px;
+  padding: 8px 10px;
+  min-width: 220px;
+  max-width: 240px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: opacity 0.4s ease;
+}
+
+.radio-panel.radio-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* LCD display area */
+.radio-lcd {
+  background: #0a1a0a;
+  border: 1px solid #1a3a1a;
+  border-radius: 3px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* LCD scanline overlay */
+.radio-lcd::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  pointer-events: none;
+}
+
+/* Static noise overlay on station change */
+.radio-lcd-static {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 0, 0.03) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    rgba(0, 255, 0, 0.02) 2px
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  animation: radio-static-flicker 0.15s steps(4) 2;
+}
+
+.radio-lcd-static.active {
+  animation: radio-static-flicker 0.08s steps(3) 6;
+}
+
+@keyframes radio-static-flicker {
+  0% { opacity: 0; }
+  25% { opacity: 0.8; }
+  50% { opacity: 0.2; }
+  75% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+/* Station name */
+.radio-station-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #33ff33;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.5);
+  margin-bottom: 3px;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Frequency display */
+.radio-frequency {
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  color: #22cc22;
+  text-shadow: 0 0 6px rgba(34, 204, 34, 0.4);
+  position: relative;
+  z-index: 1;
+}
+
+/* Genre label */
+.radio-genre {
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  color: #1a8a1a;
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+/* "Now playing" text */
+.radio-now-playing {
+  font-family: 'VT323', monospace;
+  font-size: 13px;
+  color: #33ff33;
+  opacity: 0.7;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* VU Meter bars */
+.radio-vu-meter {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 20px;
+  margin-top: 6px;
+  padding: 2px 4px;
+  background: #0a0a0a;
+  border: 1px solid #222;
+  border-radius: 2px;
+}
+
+.radio-vu-bar {
+  width: 4px;
+  min-height: 2px;
+  background: #33ff33;
+  border-radius: 1px;
+  transition: height 0.1s ease, background-color 0.2s ease;
+  box-shadow: 0 0 4px rgba(51, 255, 51, 0.3);
+}
+
+.radio-vu-bar.vu-warn {
+  background: #ffaa00;
+  box-shadow: 0 0 4px rgba(255, 170, 0, 0.3);
+}
+
+.radio-vu-bar.vu-hot {
+  background: #ff3333;
+  box-shadow: 0 0 4px rgba(255, 51, 51, 0.3);
+}
+
+/* VU meter animation when active */
+.radio-vu-meter.vu-active .radio-vu-bar {
+  animation: vu-bar-bounce 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes vu-bar-bounce {
+  0% { transform: scaleY(0.7); }
+  100% { transform: scaleY(1); }
+}
+
+/* Preset buttons row */
+.radio-presets {
+  display: flex;
+  gap: 3px;
+  margin-top: 6px;
+}
+
+.radio-preset-btn {
+  flex: 1;
+  padding: 3px 2px;
+  background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+  border: 1px solid #333;
+  border-radius: 2px;
+  color: #888;
+  font-family: 'VT323', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.radio-preset-btn:hover {
+  background: linear-gradient(180deg, #3a3a3a, #2a2a2a);
+  color: #ccc;
+  border-color: #555;
+}
+
+.radio-preset-btn.active {
+  background: linear-gradient(180deg, #1a3a1a, #0a1a0a);
+  border-color: #33ff33;
+  color: #33ff33;
+  text-shadow: 0 0 4px rgba(51, 255, 51, 0.3);
+}
+
+/* Radio power indicator */
+.radio-power-dot {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #33ff33;
+  box-shadow: 0 0 6px rgba(51, 255, 51, 0.6);
+  animation: radio-power-pulse 2s ease-in-out infinite;
+}
+
+@keyframes radio-power-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Radio antenna icon */
+.radio-antenna {
+  display: inline-block;
+  font-size: 10px;
+  margin-right: 4px;
+  color: #666;
+}
+
+/* Station change animation for LCD text */
+.radio-lcd.station-changing .radio-station-name,
+.radio-lcd.station-changing .radio-frequency {
+  animation: lcd-text-glitch 0.3s steps(2) 1;
+}
+
+@keyframes lcd-text-glitch {
+  0% { opacity: 1; transform: translateX(0); }
+  20% { opacity: 0.3; transform: translateX(-2px); }
+  40% { opacity: 0.7; transform: translateX(2px); }
+  60% { opacity: 0.2; transform: translateX(-1px); }
+  80% { opacity: 0.9; transform: translateX(1px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Combo-reactive radio glow */
+.radio-panel.combo-hot {
+  border-color: #ffaa00;
+  box-shadow: 0 0 20px rgba(255, 170, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.radio-panel.combo-fire {
+  border-color: #ff3333;
+  box-shadow: 0 0 25px rgba(255, 51, 51, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: radio-fire-pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes radio-fire-pulse {
+  0% { box-shadow: 0 0 20px rgba(255, 51, 51, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+  100% { box-shadow: 0 0 35px rgba(255, 51, 51, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+}
+
+/* Radio panel inner layout */
+.radio-panel-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* LCD content wrapper */
+.radio-lcd-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* LCD scanline overlay */
+.radio-lcd-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Station indicator dots */
+.radio-station-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.station-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.station-dot.active {
+  background: #39ff14;
+  border-color: #39ff14;
+  box-shadow: 0 0 6px rgba(57, 255, 20, 0.5);
+}
+
+/* Radio controls */
+.radio-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.radio-knob {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.radio-knob:hover {
+  border-color: #39ff14;
+  color: #39ff14;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.radio-knob:active {
+  transform: scale(0.92);
+  background: linear-gradient(145deg, #222, #111);
+}
