@@ -266,6 +266,14 @@ export default function Home() {
   const vuAnimFrameRef = useRef(null)
   const prevStationRef = useRef(0)
 
+  // Cheat Codex system
+  const [showCodex, setShowCodex] = useState(false)
+  const [codexTab, setCodexTab] = useState('ALL')
+  const [codexSearch, setCodexSearch] = useState('')
+  const [codexDiscoveryToast, setCodexDiscoveryToast] = useState(null) // { id, name } or null
+  const codexDiscoveryTimerRef = useRef(null)
+  const prevUniqueCountRef = useRef(0)
+
   // Visual-only: compute partial match progress for input characters
   const inputCharStates = useMemo(() => {
     if (inputs.length === 0 || matchedCheat) return []
@@ -452,6 +460,26 @@ export default function Home() {
   useEffect(() => {
     checkAchievements()
   }, [checkAchievements])
+
+  // Codex: detect new discoveries and show toast
+  useEffect(() => {
+    const currentCount = uniqueCheatIdsRef.current.size
+    const prevCount = prevUniqueCountRef.current
+    if (currentCount > prevCount && prevCount > 0) {
+      // A new cheat was discovered — find the latest one from history
+      // The most recent history entry is the one just discovered
+      if (cheatHistory.length > 0) {
+        const latest = cheatHistory[0]
+        setCodexDiscoveryToast({ id: latest.id, name: latest.name })
+        if (codexDiscoveryTimerRef.current) clearTimeout(codexDiscoveryTimerRef.current)
+        codexDiscoveryTimerRef.current = setTimeout(() => {
+          setCodexDiscoveryToast(null)
+        }, 3000)
+      }
+    }
+    prevUniqueCountRef.current = currentCount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalCheats])
 
   // Weather cycle system
   useEffect(() => {
@@ -1547,6 +1575,19 @@ export default function Home() {
         )}
       </button>
 
+      {/* Cheat Codex Button */}
+      <button
+        onClick={() => { setShowCodex(true); setCodexSearch(''); setCodexTab('ALL'); }}
+        className="absolute top-4 right-44 text-amber-200 hover:text-amber-400 codex-btn cursor-pointer z-10 relative"
+        aria-label="Cheat Codex"
+        title="Cheat Codex"
+      >
+        <span className="text-xl">📕</span>
+        {uniqueCheatIdsRef.current.size > 0 && (
+          <span className="codex-badge">{uniqueCheatIdsRef.current.size}</span>
+        )}
+      </button>
+
       {/* CJ Avatar with reactive animations */}
       <div className="text-2xl font-semibold tracking-tight text-center relative z-10">
         {cjSpeech && (
@@ -1841,6 +1882,207 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Codex Discovery Toast */}
+      {codexDiscoveryToast && (
+        <div key={`codex-toast-${codexDiscoveryToast.id}`} className="codex-discovery-toast">
+          <div className="codex-discovery-toast-inner">
+            <div className="codex-discovery-toast-icon">📖</div>
+            <div className="codex-discovery-toast-text">
+              <div className="codex-discovery-toast-label">NEW DISCOVERY</div>
+              <div className="codex-discovery-toast-name">{codexDiscoveryToast.name}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cheat Codex Modal */}
+      {showCodex && (() => {
+        const allCheats = cheatsData?.cheats || []
+        const discovered = uniqueCheatIdsRef.current
+        const totalCheatsCount = allCheats.length
+        const discoveredCount = discovered.size
+        const discoveryPct = totalCheatsCount > 0 ? Math.round((discoveredCount / totalCheatsCount) * 100) : 0
+
+        // Build category stats
+        const catStats = {}
+        for (const [catKey, catInfo] of Object.entries(CATEGORIES)) {
+          const catCheats = CHEAT_CATEGORIES[catKey] || []
+          const catDiscovered = catCheats.filter(c => discovered.has(c.id)).length
+          catStats[catKey] = { total: catCheats.length, discovered: catDiscovered, info: catInfo }
+        }
+
+        // Filter by tab
+        const activeTab = codexTab
+        const filteredByTab = activeTab === 'ALL'
+          ? allCheats
+          : allCheats.filter(c => (c.category || 'misc') === activeTab)
+
+        // Filter by search
+        const searchTerm = codexSearch.toLowerCase().trim()
+        const filtered = searchTerm.length === 0
+          ? filteredByTab
+          : filteredByTab.filter(c => {
+              if (discovered.has(c.id)) {
+                return c.name.toLowerCase().includes(searchTerm) ||
+                       (c.description || '').toLowerCase().includes(searchTerm)
+              }
+              return false // Don't search classified entries
+            })
+
+        // Group filtered cheats by category
+        const groupedByCategory = {}
+        for (const cheat of filtered) {
+          const cat = cheat.category || 'misc'
+          if (!groupedByCategory[cat]) groupedByCategory[cat] = []
+          groupedByCategory[cat].push(cheat)
+        }
+
+        // Sort categories in defined order
+        const catOrder = Object.keys(CATEGORIES)
+        const sortedCats = Object.keys(groupedByCategory).sort(
+          (a, b) => catOrder.indexOf(a) - catOrder.indexOf(b)
+        )
+
+        return (
+          <div className="codex-modal" onClick={() => setShowCodex(false)}>
+            <div className="codex-panel" onClick={(e) => e.stopPropagation()}>
+              {/* Header */}
+              <div className="codex-panel-header">
+                <button className="codex-close" onClick={() => setShowCodex(false)}>[X]</button>
+                <div className="codex-overview">
+                  <div>
+                    <div className="codex-title">CODEX</div>
+                    <div className="codex-subtitle">San Andreas Intelligence Dossier</div>
+                  </div>
+                  <div className="codex-progress-wrap">
+                    <span className="codex-progress-label">DECODED</span>
+                    <div className="codex-progress-bar">
+                      <div className="codex-progress-fill" style={{ width: `${discoveryPct}%` }} />
+                    </div>
+                    <span className="codex-pct">{discoveryPct}%</span>
+                  </div>
+                </div>
+                {/* Search */}
+                <div className="codex-search">
+                  <span className="codex-search-icon">🔍</span>
+                  <input
+                    type="text"
+                    placeholder="Search decoded entries..."
+                    value={codexSearch}
+                    onChange={(e) => setCodexSearch(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+              </div>
+
+              {/* Category tabs */}
+              <div className="codex-tabs">
+                <button
+                  className={`codex-tab ${activeTab === 'ALL' ? 'active' : ''}`}
+                  onClick={() => setCodexTab('ALL')}
+                >
+                  ALL <span className="codex-tab-count">{discoveredCount}/{totalCheatsCount}</span>
+                </button>
+                {catOrder.map(catKey => {
+                  const stats = catStats[catKey]
+                  if (!stats || stats.total === 0) return null
+                  return (
+                    <button
+                      key={catKey}
+                      className={`codex-tab ${activeTab === catKey ? 'active' : ''}`}
+                      onClick={() => setCodexTab(catKey)}
+                      style={{ '--tab-color': stats.info.color }}
+                    >
+                      {stats.info.label} <span className="codex-tab-count">{stats.discovered}/{stats.total}</span>
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Content */}
+              <div className="codex-content">
+                {sortedCats.length === 0 && (
+                  <div className="codex-empty">
+                    <div className="codex-empty-icon">🔒</div>
+                    {searchTerm ? `No decoded entries matching "${searchTerm}"` : 'No entries in this category'}
+                  </div>
+                )}
+                {sortedCats.map(catKey => {
+                  const catInfo = CATEGORIES[catKey]
+                  if (!catInfo) return null
+                  const cheats = groupedByCategory[catKey]
+                  const stats = catStats[catKey]
+                  return (
+                    <div key={catKey} className="codex-category-section">
+                      <div className="codex-category-header">
+                        <span className="codex-category-name" style={{ color: catInfo.color }}>
+                          ◆ {catInfo.label}
+                        </span>
+                        <span className="codex-category-count" style={{ color: catInfo.color }}>
+                          {stats.discovered}/{stats.total} decoded
+                        </span>
+                      </div>
+                      <div className="codex-category-bar">
+                        <div
+                          className="codex-category-fill"
+                          style={{
+                            width: `${stats.total > 0 ? (stats.discovered / stats.total) * 100 : 0}%`,
+                            background: catInfo.color,
+                          }}
+                        />
+                      </div>
+                      {cheats.map(cheat => {
+                        const isDiscovered = discovered.has(cheat.id)
+                        return (
+                          <div
+                            key={cheat.id}
+                            className={`codex-entry ${isDiscovered ? 'declassified' : 'classified'}`}
+                          >
+                            {isDiscovered ? (
+                              <div className="codex-declassified-inner">
+                                <span className="codex-declassified-stamp">DECLASSIFIED</span>
+                                <div className="codex-entry-name">{cheat.name}</div>
+                                {cheat.description && (
+                                  <div className="codex-entry-desc">{cheat.description}</div>
+                                )}
+                                <div className="codex-entry-code">
+                                  {(() => {
+                                    const pcSeqs = cheat.pcSequence || []
+                                    if (Array.isArray(pcSeqs[0])) {
+                                      return pcSeqs.map(seq => seq.join('')).join(' / ')
+                                    }
+                                    return pcSeqs.join('') || cheat.psSequence?.join(' ') || '—'
+                                  })()}
+                                </div>
+                                <div
+                                  className="codex-entry-category-tag"
+                                  style={{
+                                    color: catInfo.color,
+                                    background: `${catInfo.color}15`,
+                                    border: `1px solid ${catInfo.color}30`,
+                                  }}
+                                >
+                                  {catInfo.label}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="codex-classified-inner">
+                                <span className="codex-classified-stamp">CLASSIFIED</span>
+                                <div className="codex-redacted-bar" />
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* GTA SA Radio Station Tuner */}
       {booted && (

@@ -838,6 +838,90 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - Core cheat input mechanic fully preserved
 
 ### Next Iteration
-- **Iteration 15:** CJ character reactions with animated emoji states and dialogue bubbles
+- **Iteration 15:** Cheat Codex — spy dossier discovery journal with classified/declassified entries
 - **Iteration 16:** Mini-map / GPS-style navigation display showing cheat categories
+
+---
+
+## Iteration 15 — Cheat Codex: Spy Dossier Discovery Journal
+**Date:** 2026-04-26
+**Branch:** visual-iterations
+**GitHub Issue:** #16 — [🎨 Iteration 15: Cheat Codex — Spy Dossier Discovery Journal](https://github.com/akramram/SanAndreasCheats/issues/16)
+
+### Planned
+- Add a Cheat Codex button (book/dossier icon) to the top toolbar
+- Create a full-screen modal styled as a GTA spy dossier/journal
+- All cheats organized by 7 categories with pixel-art headers
+- Undiscovered cheats show as CLASSIFIED with redacted black bars
+- Discovered cheats are DECLASSIFIED with full info revealed
+- Category progress bars (X/Y discovered) with color coding
+- Overall discovery percentage with pixel progress bar
+- NEW DISCOVERY flash animation when finding a cheat for the first time
+- Search/filter functionality within the codex
+- Persistent discovery state via localStorage (tied to existing uniqueCheatIds tracking)
+
+### What Changed (Files Modified)
+- **src/App.css** — Added 350+ lines of codex styling:
+  - `.codex-btn` — toolbar button with hover scale + glow effect
+  - `.codex-badge` — amber discovery count badge with pixel font
+  - `.codex-modal` — full-screen backdrop with blur and fade-in animation
+  - `.codex-panel` — dossier-styled panel with manila folder aesthetic (warm brown gradients, aged paper border)
+  - `codex-panel-in` keyframe: dramatic scale+translate entrance with cubic-bezier overshoot
+  - `.codex-panel-header` — dossier top section with decorative "CLASSIFIED" border stamp via ::before pseudo-element
+  - `.codex-title`, `.codex-subtitle` — CODEX title with amber pixel font and "San Andreas Intelligence Dossier" subtitle
+  - `.codex-progress-wrap`, `.codex-progress-bar`, `.codex-progress-fill` — overall discovery progress bar with amber gradient
+  - `.codex-search` — retro-styled search input with pixel font and amber focus state
+  - `.codex-tabs` — horizontal scrollable category tab bar
+  - `.codex-tab`, `.codex-tab.active` — tab buttons with amber active state and category counts
+  - `.codex-content` — scrollable content area with styled scrollbar
+  - `.codex-category-section`, `.codex-category-header`, `.codex-category-bar`, `.codex-category-fill` — per-category progress sections
+  - `.codex-entry.classified` — undiscovered entry with dimmed styling
+  - `.codex-entry.declassified` — discovered entry with full styling
+  - `.codex-classified-inner`, `.codex-classified-stamp` — CLASSIFIED stamp with red border, rotation
+  - `.codex-redacted-bar` — repeating gradient black bars mimicking redacted text
+  - `.codex-declassified-inner`, `.codex-declassified-stamp` — DECLASSIFIED stamp with green border
+  - `.codex-entry-name`, `.codex-entry-desc`, `.codex-entry-code` — full cheat info display
+  - `.codex-entry-category-tag` — color-coded category tag
+  - `codex-new-discovery` keyframe — green glow pulse animation on new discovery
+  - `codex-discovery-toast-in`, `codex-discovery-toast-out` keyframes — slide-in/slide-out toast animations
+  - `.codex-discovery-toast` — toast notification for new discoveries
+  - `.codex-empty` — empty state with lock icon
+- **src/pages/Home.jsx** — Added:
+  - New state: `showCodex`, `codexTab`, `codexSearch`, `codexDiscoveryToast`, `prevUniqueCountRef`
+  - Codex discovery detection useEffect: watches `totalCheats` changes, compares unique cheat count to previous, shows discovery toast when a new cheat is found for the first time
+  - Codex button JSX: 📕 book icon at top-right with amber discovery count badge
+  - Codex discovery toast JSX: slides in from right with 📖 icon, "NEW DISCOVERY" label, and cheat name
+  - Full codex modal JSX (inline IIFE for clean variable scoping):
+    - Computes overall discovery stats (total, discovered, percentage)
+    - Builds per-category discovery stats from CHEAT_CATEGORIES
+    - Category tab bar with ALL + 7 category tabs showing X/Y counts
+    - Search bar filtering decoded (discovered) entries only
+    - Content grouped by category in defined order
+    - Each category section: colored header, progress bar, list of entries
+    - Discovered entries: full name, description, PC code (with dual-sequence support), category tag, "DECLASSIFIED" stamp
+    - Undiscovered entries: "CLASSIFIED" stamp + redacted black bars
+    - Empty state for filtered/no results
+
+### What Improved
+- Added a complete collection/discovery mechanic — players now have a reason to explore all cheat codes beyond achievements
+- The Codex creates a spy dossier aesthetic that fits perfectly with the GTA SA theme — feels like CJ is reading classified C.R.A.S.H. files
+- Undiscovered cheats show as "CLASSIFIED" with redacted black bars — creates intrigue and motivation to discover more
+- Discovered cheats are "DECLASSIFIED" with full info revealed — satisfying reveal moment
+- Category tabs allow filtering by Weapons, Vehicles, Player Stats, etc. with per-category progress bars
+- Overall discovery percentage gives a clear "completionist" goal (e.g., "DECODED 47%" with progress bar)
+- Search bar lets players quickly find specific discovered cheats
+- "NEW DISCOVERY" toast notification slides in when a cheat is found for the first time — adds excitement to the discovery moment
+- Discovery state is persistent via the existing `uniqueCheatIdsRef` + localStorage cheat history — survives page reloads
+- The codex ties into the exploration achievement system — it provides the visual "codex" that the achievements track progress toward
+- All styling uses the pixel font system and warm amber/brown palette consistent with the retro aesthetic
+
+### Issues
+- Build passes cleanly (328KB JS, 80KB CSS)
+- Lint: 3 pre-existing warnings (no new warnings introduced)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+- Core cheat input mechanic fully preserved
+
+### Next Iteration
+- **Iteration 16:** Mini-map / GPS-style navigation display showing cheat categories
+- **Iteration 17:** Enhanced history modal with session stats dashboard and visual flair
 
