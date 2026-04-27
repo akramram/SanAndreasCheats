@@ -925,3 +925,105 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - **Iteration 16:** Mini-map / GPS-style navigation display showing cheat categories
 - **Iteration 17:** Enhanced history modal with session stats dashboard and visual flair
 
+---
+
+## Iteration 16 — Cash Economy & Cosmetic Shop
+**Date:** 2026-04-27
+**Branch:** visual-iterations
+**GitHub Issue:** #17 — [🎨 Iteration 16: Cash Economy and Cosmetic Shop](https://github.com/akramram/SanAndreasCheats/issues/17)
+
+### Planned
+- Add GTA-style cash economy — players earn $GTA money for activating cheats
+- Escalating payouts based on speed, combo streak, and cheat rarity
+- Persistent cash balance via localStorage
+- Cash pickup animation (floating dollar bills on match)
+- Cosmetic Shop modal with purchasable visual upgrades
+- Cash register sound effect via Web Audio API
+
+### What Changed (Files Modified)
+- **src/utils/sounds.js** — Added 4 new sound effects:
+  - `playCashRegister()` — two-tone ascending "cha-ching" (sine waves at 1200Hz + 1800Hz) for big payouts (≥$500)
+  - `playCoinPickup()` — rapid ascending square wave arpeggio (880→1100→1320→1760Hz) for smaller payouts
+  - `playPurchaseSound()` — satisfying "ker-chunk" triangle+sine transaction confirmation
+  - `playCantAffordSound()` — low descending sawtooth buzz (150→100Hz) for insufficient funds
+- **src/App.css** — Added ~480 lines of cash/shop styling:
+  - `.cash-hud` — Fixed top-center GTA-style green money counter with pixel font and glow
+  - `.cash-popup` — Floating "+$AMOUNT" text that floats upward and fades (1.4s animation)
+  - `.cash-bill` — Pixel-art floating green money bill particles with rotation and drift
+  - `cash-float-up` keyframe — scale+translate+fade for cash popup
+  - `cash-bill-float` keyframe — 3-stage rotation+drift+fade for bill particles
+  - `.shop-btn` — Toolbar shop button with hover scale+glow
+  - `.shop-modal-backdrop` — Blur backdrop with fade-in
+  - `.shop-panel` — Main shop container with amber border, bounce entrance animation
+  - `shop-panel-in` keyframe — Scale+translate entrance with overshoot bounce
+  - `.shop-header` — Title + balance display with gradient accent
+  - `.shop-balance` — Green pixel-font cash display
+  - `.shop-close-btn` — Pixel-bordered close button
+  - `.shop-tabs` — Horizontal scrollable category tab bar
+  - `.shop-tab`, `.shop-tab.active` — Tab buttons with amber active state
+  - `.shop-content` — Scrollable content area with styled scrollbar
+  - `.shop-items` — CSS grid layout for item cards
+  - `.shop-item` — Individual item card with hover lift+glow effects
+  - `.shop-item.owned`, `.shop-item.equipped`, `.shop-item.locked` — Item state variants
+  - `.shop-item.equipped::after` — "EQUIPPED" badge overlay
+  - `.shop-item-icon`, `.shop-item-name`, `.shop-item-desc`, `.shop-item-price` — Item content styles
+  - `.shop-buy-btn` — Buy/EQUIP/EQUIPPED button variants with hover/active states
+  - `shop-purchase-flash` keyframe — Green glow pulse on purchase
+  - `.neon-swatch` — Color preview swatch for neon items
+  - `.color-preview` — Text preview with active cosmetic effect
+  - 7 `.glow-color-*` classes — Active neon glow effects (amber, red, green, blue, purple, cyan, pink, rainbow)
+  - `rainbow-glow` keyframe — Cycling rainbow color animation
+  - 4 `.cj-frame-*` classes — Avatar frame cosmetics (gold, neon, flame, diamond) with drop-shadow effects
+  - `neon-frame-pulse` keyframe — Pulsing cyan-to-purple frame animation
+  - 3 `.input-effect-*` classes — Custom input character animations (trail, ghost, glitch)
+  - `input-trail-effect`, `input-ghost-effect`, `input-glitch-effect` keyframes — Unique per-char entrance animations
+  - 3 `.bg-theme-*` classes — Background theme cosmetics (sunset, matrix, retrowave)
+- **src/pages/Home.jsx** — Added:
+  - `CASH_BASE`, `CASH_SPEED_BONUS`, `CASH_COMBO_MULT`, `CASH_RARE_MULT` — Cash calculation constants
+  - `SHOP_CATEGORIES` — 5 shop category definitions (ALL, NEON, FRAMES, INPUT FX, BG THEMES)
+  - `SHOP_ITEMS` — 18 cosmetic items across 4 categories:
+    - Neon Colors (7): Crimson Glow, Matrix Green, Ocean Blue, Purple Haze, Cyber Cyan, Hot Pink, Prism Shift
+    - Avatar Frames (4): Gold Frame, Neon Frame, Flame Aura, Diamond
+    - Input Effects (3): Pop Trail, Ghost Type, Glitch Type
+    - Background Themes (3): LS Sunset, Matrix Fall, Retrowave
+  - Cash state: `cash` (localStorage-backed), `cashPopups`, `cashBills`, `showShop`, `shopTab`, `ownedItems`, `equippedItems`
+  - `purchaseItem()` — Buy cosmetic, deduct cash, auto-equip, play purchase sound, persist to localStorage
+  - `equipItem()` — Toggle equip/unequip per category, persist to localStorage
+  - `activeGlowClass`, `activeFrameClass`, `activeEffectClass`, `activeThemeClass` — Computed cosmetic CSS classes
+  - Cash earning in cheat match block: calculates payout based on base + speed bonus + combo multiplier + rarity multiplier
+  - Cash popup and bill particle spawning on match
+  - Cash sounds: coin pickup for small amounts, cash register for ≥$500
+  - Cash HUD JSX: top-center green "$AMOUNT" display, visible after first cheat
+  - Cash popup JSX: floating "+$AMOUNT" animation
+  - Cash bill particles JSX: 6-16 floating green pixel bills
+  - Shop button JSX: 🛒 icon at top toolbar
+  - Full shop modal JSX: BINCO SHOP (GTA clothing store reference), category tabs, item grid with buy/equip/unequip buttons, balance display, color swatches, price display
+  - Cosmetic class application: active neon glow on matched cheat name, active frame on CJ avatar, active effect on main container, active theme on main container
+
+### What Improved
+- Added a complete gameplay economy loop — players now earn GTA money for activating cheats
+- Cash payouts escalate based on multiple factors: base $100, speed bonus (under 2s = +$50, under 1s = +$100), combo multiplier (1.5x per streak level), and rarity bonus (2x for cheats with 10+ character sequences)
+- A 5x combo on a rare cheat completed in under 1 second can earn $3,375 — meaningful progression
+- "BINCO SHOP" (GTA SA clothing store reference) lets players spend earned cash on cosmetic upgrades
+- 18 purchasable cosmetics across 4 categories with real visual effects:
+  - **Neon Colors** change the cheat name glow on match (7 options including cycling rainbow)
+  - **Avatar Frames** change CJ's drop-shadow/glow effect (gold, neon pulse, flame, diamond)
+  - **Input Effects** change how characters appear when typing (bouncy pop, ghost fade, digital glitch)
+  - **Background Themes** change atmospheric elements (warm sunset horizon, green matrix stars, retrowave purple)
+- Cash display is GTA-style green pixel font at top center — feels authentic
+- Floating "+$AMOUNT" popup and green money bill particles add satisfying feedback on each earn
+- Sound design: coin pickup arpeggio for small amounts, cash register "cha-ching" for big payouts, satisfying purchase "ker-chunk", error buzz for insufficient funds
+- Shop has a polished UI: category tabs, item cards with hover effects, color swatches, equip/unequip toggle, persistent state
+- All cosmetic effects apply in real-time — equip a neon color and immediately see it on the next cheat match
+- Everything persists in localStorage — cash balance, owned items, and equipped items survive page reloads
+
+### Issues
+- Build passes cleanly (340KB JS, 90KB CSS)
+- Lint: 3 pre-existing warnings (no new warnings introduced)
+- All game logic (input handling, cheat matching, gamepad API) untouched
+- Core cheat input mechanic fully preserved
+
+### Next Iteration
+- **Iteration 17:** Enhanced history modal with session stats dashboard and visual flair
+- **Iteration 18:** Dynamic atmospheric effects — more variety in weather, ambient sounds
+

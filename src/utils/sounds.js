@@ -724,6 +724,100 @@ export function setRadioVolume(vol) {
   }
 }
 
+/** Cash register "cha-ching" sound — two quick ascending tones */
+export function playCashRegister() {
+  if (_muted) return
+  const ctx = getCtx()
+  const t = ctx.currentTime
+  // First "ding" at 1200Hz
+  const osc1 = ctx.createOscillator()
+  osc1.type = 'sine'
+  osc1.frequency.setValueAtTime(1200, t)
+  const g1 = ctx.createGain()
+  g1.gain.setValueAtTime(0.25, t)
+  g1.gain.exponentialRampToValueAtTime(0.001, t + 0.25)
+  osc1.connect(g1).connect(getMaster())
+  osc1.start(t)
+  osc1.stop(t + 0.25)
+  // Second "ding" at 1800Hz (the "ching")
+  const osc2 = ctx.createOscillator()
+  osc2.type = 'sine'
+  osc2.frequency.setValueAtTime(1800, t + 0.12)
+  const g2 = ctx.createGain()
+  g2.gain.setValueAtTime(0, t)
+  g2.gain.linearRampToValueAtTime(0.2, t + 0.12)
+  g2.gain.exponentialRampToValueAtTime(0.001, t + 0.45)
+  osc2.connect(g2).connect(getMaster())
+  osc2.start(t + 0.1)
+  osc2.stop(t + 0.45)
+}
+
+/** Coin pickup — rapid ascending arpeggio (GTA style) */
+export function playCoinPickup() {
+  if (_muted) return
+  const ctx = getCtx()
+  const t = ctx.currentTime
+  const notes = [880, 1100, 1320, 1760]
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator()
+    osc.type = 'square'
+    osc.frequency.setValueAtTime(freq, t + i * 0.06)
+    const g = ctx.createGain()
+    g.gain.setValueAtTime(0.12, t + i * 0.06)
+    g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.06 + 0.1)
+    osc.connect(g).connect(getMaster())
+    osc.start(t + i * 0.06)
+    osc.stop(t + i * 0.06 + 0.1)
+  })
+}
+
+/** Purchase sound — satisfied "ker-chunk" transaction */
+export function playPurchaseSound() {
+  if (_muted) return
+  const ctx = getCtx()
+  const t = ctx.currentTime
+  // Low "ker" 
+  const osc1 = ctx.createOscillator()
+  osc1.type = 'triangle'
+  osc1.frequency.setValueAtTime(300, t)
+  osc1.frequency.exponentialRampToValueAtTime(200, t + 0.15)
+  const g1 = ctx.createGain()
+  g1.gain.setValueAtTime(0.3, t)
+  g1.gain.exponentialRampToValueAtTime(0.001, t + 0.2)
+  osc1.connect(g1).connect(getMaster())
+  osc1.start(t)
+  osc1.stop(t + 0.2)
+  // High "pling" confirmation
+  const osc2 = ctx.createOscillator()
+  osc2.type = 'sine'
+  osc2.frequency.setValueAtTime(1500, t + 0.12)
+  osc2.frequency.exponentialRampToValueAtTime(2000, t + 0.35)
+  const g2 = ctx.createGain()
+  g2.gain.setValueAtTime(0, t)
+  g2.gain.linearRampToValueAtTime(0.2, t + 0.15)
+  g2.gain.exponentialRampToValueAtTime(0.001, t + 0.4)
+  osc2.connect(g2).connect(getMaster())
+  osc2.start(t + 0.12)
+  osc2.stop(t + 0.4)
+}
+
+/** Error buzz — can't afford item */
+export function playCantAffordSound() {
+  if (_muted) return
+  const ctx = getCtx()
+  const t = ctx.currentTime
+  const osc = ctx.createOscillator()
+  osc.type = 'sawtooth'
+  osc.frequency.setValueAtTime(150, t)
+  osc.frequency.linearRampToValueAtTime(100, t + 0.2)
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0.15, t)
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.25)
+  osc.connect(g).connect(getMaster())
+  osc.start(t)
+  osc.stop(t + 0.25)
+}
+
 /** Wind gust — brief whooshing sound */
 export function playWindGust() {
   if (_muted) return

@@ -6,7 +6,8 @@ import {
   playResetSound, playPowerOn, isMuted, toggleMute,
   playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust,
   playWantedStar, playWantedLost, startSiren, stopSiren,
-  playRadioStatic, playRadioTune, startRadioJingle, stopRadioJingle, setRadioVolume
+  playRadioStatic, playRadioTune, startRadioJingle, stopRadioJingle, setRadioVolume,
+  playCashRegister, playCoinPickup, playPurchaseSound, playCantAffordSound
 } from '../utils/sounds'
 
 /* ── Weather System Constants ── */
@@ -104,6 +105,45 @@ const RADIO_STATIONS = [
   { id: 5, name: 'SF-UR', freq: '103.3', genre: 'House Music', genreId: 'house', song: 'Born Slippy' },
   { id: 6, name: 'BOUNCE FM', freq: '103.9', genre: 'Funk', genreId: 'funk', song: 'Super Freak' },
   { id: 7, name: 'PLAYBACK FM', freq: '95.6', genre: 'Old School Hip Hop', genreId: 'boomBap', song: 'The Message' },
+]
+
+/* ── Cash Economy Constants ── */
+const CASH_BASE = 100       // Base payout per cheat
+const CASH_SPEED_BONUS = 50 // Bonus for <2s, extra for <1s
+const CASH_COMBO_MULT = 1.5 // Multiplier per combo level
+const CASH_RARE_MULT = 2.0  // Multiplier for "rare" cheats (longer sequences)
+
+/* ── Cosmetic Shop Definitions ── */
+const SHOP_CATEGORIES = [
+  { id: 'all', label: 'ALL', icon: '🏪' },
+  { id: 'neon', label: 'NEON COLORS', icon: '🎨' },
+  { id: 'frames', label: 'AVATAR FRAMES', icon: '🖼️' },
+  { id: 'effects', label: 'INPUT FX', icon: '✨' },
+  { id: 'themes', label: 'BG THEMES', icon: '🌆' },
+]
+
+const SHOP_ITEMS = [
+  // Neon Colors (cheat text glow)
+  { id: 'neon-red', name: 'CRIMSON GLOW', desc: 'Red neon text glow', price: 500, cat: 'neon', cssClass: 'glow-color-red', swatch: '#f87171' },
+  { id: 'neon-green', name: 'MATRIX GREEN', desc: 'Classic green glow', price: 400, cat: 'neon', cssClass: 'glow-color-green', swatch: '#4ade80' },
+  { id: 'neon-blue', name: 'OCEAN BLUE', desc: 'Cool blue aura', price: 500, cat: 'neon', cssClass: 'glow-color-blue', swatch: '#60a5fa' },
+  { id: 'neon-purple', name: 'PURPLE HAZE', desc: 'Groovy purple glow', price: 600, cat: 'neon', cssClass: 'glow-color-purple', swatch: '#a78bfa' },
+  { id: 'neon-cyan', name: 'CYBER CYAN', desc: 'Futuristic cyan', price: 550, cat: 'neon', cssClass: 'glow-color-cyan', swatch: '#22d3ee' },
+  { id: 'neon-pink', name: 'HOT PINK', desc: 'Miami vibes', price: 500, cat: 'neon', cssClass: 'glow-color-pink', swatch: '#ec4899' },
+  { id: 'neon-rainbow', name: 'PRISM SHIFT', desc: 'Cycling rainbow', price: 2000, cat: 'neon', cssClass: 'glow-color-rainbow', swatch: 'linear-gradient(90deg,#f87171,#fbbf24,#4ade80,#22d3ee,#a78bfa,#ec4899)' },
+  // Avatar Frames
+  { id: 'frame-gold', name: 'GOLD FRAME', desc: 'Classic gold border', price: 300, cat: 'frames', cssClass: 'cj-frame-gold', icon: '🥇' },
+  { id: 'frame-neon', name: 'NEON FRAME', desc: 'Pulsing neon outline', price: 800, cat: 'frames', cssClass: 'cj-frame-neon', icon: '💜' },
+  { id: 'frame-flame', name: 'FLAME AURA', desc: 'Fire and fury', price: 1200, cat: 'frames', cssClass: 'cj-frame-flame', icon: '🔥' },
+  { id: 'frame-diamond', name: 'DIAMOND', desc: 'Rare diamond finish', price: 3000, cat: 'frames', cssClass: 'cj-frame-diamond', icon: '💎' },
+  // Input Effects
+  { id: 'fx-trail', name: 'POP TRAIL', desc: 'Bouncy pop-in letters', price: 400, cat: 'effects', cssClass: 'input-effect-trail', icon: '📈' },
+  { id: 'fx-ghost', name: 'GHOST TYPE', desc: 'Phantom fade-in', price: 500, cat: 'effects', cssClass: 'input-effect-ghost', icon: '👻' },
+  { id: 'fx-glitch', name: 'GLITCH TYPE', desc: 'Digital distortion', price: 700, cat: 'effects', cssClass: 'input-effect-glitch', icon: '📺' },
+  // Background Themes
+  { id: 'theme-sunset', name: 'LS SUNSET', desc: 'Warm sunset horizon', price: 600, cat: 'themes', cssClass: 'bg-theme-sunset', icon: '🌅' },
+  { id: 'theme-matrix', name: 'MATRIX FALL', desc: 'Green digital rain', price: 800, cat: 'themes', cssClass: 'bg-theme-matrix', icon: '💚' },
+  { id: 'theme-retrowave', name: 'RETROWAVE', desc: 'Synthwave purple', price: 1000, cat: 'themes', cssClass: 'bg-theme-retrowave', icon: '🌃' },
 ]
 
 /* ── CRT Boot Screen Component ── */
@@ -273,6 +313,27 @@ export default function Home() {
   const [codexDiscoveryToast, setCodexDiscoveryToast] = useState(null) // { id, name } or null
   const codexDiscoveryTimerRef = useRef(null)
   const prevUniqueCountRef = useRef(0)
+
+  // Cash economy system
+  const [cash, setCash] = useState(() => {
+    return parseInt(localStorage.getItem('gtaCash') || '0', 10)
+  })
+  const [cashPopups, setCashPopups] = useState([]) // { id, amount, x, y }
+  const [cashBills, setCashBills] = useState([]) // floating bill particles
+  const [showShop, setShowShop] = useState(false)
+  const [shopTab, setShopTab] = useState('all')
+  const [ownedItems, setOwnedItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ownedCosmetics')
+      return saved ? JSON.parse(saved) : []
+    } catch { return [] }
+  })
+  const [equippedItems, setEquippedItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('equippedCosmetics')
+      return saved ? JSON.parse(saved) : {}
+    } catch { return {} }
+  })
 
   // Visual-only: compute partial match progress for input characters
   const inputCharStates = useMemo(() => {
@@ -721,6 +782,50 @@ export default function Home() {
     }
   }, [weatherPhase])
 
+  // Shop: purchase item
+  const purchaseItem = useCallback((item) => {
+    if (ownedItems.includes(item.id)) return
+    if (cash < item.price) {
+      playCantAffordSound()
+      return
+    }
+    const newCash = cash - item.price
+    setCash(newCash)
+    localStorage.setItem('gtaCash', String(newCash))
+    const newOwned = [...ownedItems, item.id]
+    setOwnedItems(newOwned)
+    localStorage.setItem('ownedCosmetics', JSON.stringify(newOwned))
+    // Auto-equip on purchase
+    const catKey = item.cat // 'neon', 'frames', 'effects', 'themes'
+    const newEquipped = { ...equippedItems, [catKey]: item.id }
+    setEquippedItems(newEquipped)
+    localStorage.setItem('equippedCosmetics', JSON.stringify(newEquipped))
+    playPurchaseSound()
+  }, [cash, ownedItems, equippedItems])
+
+  // Shop: equip item
+  const equipItem = useCallback((item) => {
+    if (!ownedItems.includes(item.id)) return
+    const catKey = item.cat
+    // Toggle: if already equipped, unequip
+    if (equippedItems[catKey] === item.id) {
+      const newEquipped = { ...equippedItems }
+      delete newEquipped[catKey]
+      setEquippedItems(newEquipped)
+      localStorage.setItem('equippedCosmetics', JSON.stringify(newEquipped))
+    } else {
+      const newEquipped = { ...equippedItems, [catKey]: item.id }
+      setEquippedItems(newEquipped)
+      localStorage.setItem('equippedCosmetics', JSON.stringify(newEquipped))
+    }
+  }, [ownedItems, equippedItems])
+
+  // Compute active cosmetic CSS classes
+  const activeGlowClass = equippedItems.neon ? SHOP_ITEMS.find(i => i.id === equippedItems.neon)?.cssClass : ''
+  const activeFrameClass = equippedItems.frames ? SHOP_ITEMS.find(i => i.id === equippedItems.frames)?.cssClass : ''
+  const activeEffectClass = equippedItems.effects ? SHOP_ITEMS.find(i => i.id === equippedItems.effects)?.cssClass : ''
+  const activeThemeClass = equippedItems.themes ? SHOP_ITEMS.find(i => i.id === equippedItems.themes)?.cssClass : ''
+
   // Function to save cheat to history
   const saveCheatToHistory = useCallback((cheat, timestamp, elapsedMs, inputDevice) => {
     const newEntry = {
@@ -1024,6 +1129,44 @@ export default function Home() {
           // Change radio station to match energy level
           changeStationOnMatch(newStreak)
 
+          // Cash economy — earn money for cheat activation
+          const seqLen = found.pcSequence ? (Array.isArray(found.pcSequence[0]) ? found.pcSequence[0].length : found.pcSequence.length) : (found.psSequence?.length || 7)
+          const isRare = seqLen >= 10
+          let earned = CASH_BASE
+          if (currentStartTime) {
+            const elapsed = Date.now() - currentStartTime
+            if (elapsed < 1000) earned += CASH_SPEED_BONUS * 2
+            else if (elapsed < 2000) earned += CASH_SPEED_BONUS
+          }
+          if (newStreak > 1) earned = Math.floor(earned * Math.pow(CASH_COMBO_MULT, newStreak - 1))
+          if (isRare) earned = Math.floor(earned * CASH_RARE_MULT)
+          setCash(prev => {
+            const newCash = prev + earned
+            localStorage.setItem('gtaCash', String(newCash))
+            return newCash
+          })
+          // Cash popup animation
+          const popupId = `cash-${Date.now()}`
+          setCashPopups(prev => [...prev, { id: popupId, amount: earned, x: 50, y: 40 }])
+          setTimeout(() => setCashPopups(prev => prev.filter(p => p.id !== popupId)), 1500)
+          // Cash bill particles
+          const bills = Array.from({ length: 6 + Math.min(newStreak, 5) * 2 }, (_, i) => ({
+            id: `bill-${Date.now()}-${i}`,
+            '--bill-delay': `${Math.random() * 0.3}s`,
+            '--bill-duration': `${1.2 + Math.random() * 0.8}s`,
+            '--bill-tx1': `${(Math.random() - 0.5) * 60}px`,
+            '--bill-ty1': `${-10 - Math.random() * 20}px`,
+            '--bill-tx2': `${(Math.random() - 0.5) * 80}px`,
+            '--bill-ty2': `${-30 - Math.random() * 30}px`,
+            '--bill-tx3': `${(Math.random() - 0.5) * 50}px`,
+            '--bill-ty3': `${-70 - Math.random() * 40}px`,
+          }))
+          setCashBills(bills)
+          setTimeout(() => setCashBills([]), 2500)
+          // Cash sounds
+          if (earned >= 500) playCashRegister()
+          else playCoinPickup()
+
           // CJ celebration!
           setCjMood('celebrating')
           // Show speech bubble — different phrases based on combo level
@@ -1182,7 +1325,7 @@ export default function Home() {
       {/* CRT Boot Screen */}
       {!booted && <BootScreen onBooted={() => setBooted(true)} />}
 
-      <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
+      <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''} ${activeThemeClass} ${activeEffectClass}`} style={{ opacity: booted ? undefined : 0 }}>
         {/* Weather System Layers */}
       {booted && (
         <>
@@ -1530,6 +1673,56 @@ export default function Home() {
         />
       ))}
 
+      {/* Cash HUD Display */}
+      {booted && (
+        <div className={`cash-hud ${totalCheats > 0 ? 'visible' : ''}`}>
+          <span className="cash-dollar-sign">$</span>
+          <span className="cash-amount">{cash.toLocaleString()}</span>
+        </div>
+      )}
+
+      {/* Cash popup animations */}
+      {cashPopups.map(p => (
+        <div
+          key={p.id}
+          className="cash-popup"
+          style={{ left: `${p.x}%`, top: `${p.y}%` }}
+        >
+          +${p.amount.toLocaleString()}
+        </div>
+      ))}
+
+      {/* Cash bill particles */}
+      {cashBills.map(bill => (
+        <div
+          key={bill.id}
+          className="cash-bill"
+          style={{
+            left: '50%',
+            top: '45%',
+            '--bill-delay': bill['--bill-delay'],
+            '--bill-duration': bill['--bill-duration'],
+            '--bill-tx1': bill['--bill-tx1'],
+            '--bill-ty1': bill['--bill-ty1'],
+            '--bill-tx2': bill['--bill-tx2'],
+            '--bill-ty2': bill['--bill-ty2'],
+            '--bill-tx3': bill['--bill-tx3'],
+            '--bill-ty3': bill['--bill-ty3'],
+          }}
+        />
+      ))}
+
+      {/* Shop Button */}
+      <button
+        onClick={() => setShowShop(true)}
+        className="shop-btn text-amber-200 hover:text-amber-400"
+        style={{ right: '60px' }}
+        aria-label="Cosmetic Shop"
+        title="Cosmetic Shop"
+      >
+        <span className="text-xl">🛒</span>
+      </button>
+
       {/* History Button */}
       <button
         onClick={openHistoryModal}
@@ -1598,7 +1791,7 @@ export default function Home() {
         <img
           src={`${base}cj.svg`}
           alt="CJ"
-          className={`w-20 h-20 object-contain drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] ${
+          className={`w-20 h-20 mx-auto mb-2 object-contain ${activeFrameClass} ${
             cjMood === 'celebrating' ? 'cj-celebrate' :
             cjMood === 'disappoint' ? 'cj-disappoint' :
             cjMood === 'typing' ? 'cj-attention' :
@@ -1622,7 +1815,7 @@ export default function Home() {
               TIME: {(elapsedTime / 1000).toFixed(2)}s
             </div>
           )}
-          <div className="font-pixel text-base font-medium text-amber-200 match-glow">{matchedCheat.name}</div>
+          <div className={`font-pixel text-base font-medium text-amber-200 match-glow ${activeGlowClass}`}>{matchedCheat.name}</div>
           {matchedCheat.description && (
             <div className="font-vt text-xl opacity-90">{matchedCheat.description}</div>
           )}
@@ -2173,6 +2366,170 @@ export default function Home() {
           </div>
         </div>
       )}
+      {/* Cosmetic Shop Modal */}
+      {showShop && (() => {
+        const filteredItems = shopTab === 'all' ? SHOP_ITEMS : SHOP_ITEMS.filter(i => i.cat === shopTab)
+        return (
+          <div className="shop-modal-backdrop" onClick={() => setShowShop(false)}>
+            <div className="shop-panel" onClick={e => e.stopPropagation()}>
+              <div className="shop-header">
+                <div>
+                  <div className="shop-title">🛒 BINCO SHOP</div>
+                  <div className="shop-balance" style={{ marginTop: 6 }}>${cash.toLocaleString()}</div>
+                </div>
+                <button className="shop-close-btn" onClick={() => setShowShop(false)}>✕ CLOSE</button>
+              </div>
+
+              <div className="shop-tabs">
+                {SHOP_CATEGORIES.map(cat => (
+                  <div
+                    key={cat.id}
+                    className={`shop-tab ${shopTab === cat.id ? 'active' : ''}`}
+                    onClick={() => setShopTab(cat.id)}
+                  >
+                    {cat.icon} {cat.label}
+                  </div>
+                ))}
+              </div>
+
+              <div className="shop-content">
+                {/* Neon Colors Section */}
+                {(shopTab === 'all' || shopTab === 'neon') && (
+                  <div style={{ marginBottom: shopTab === 'all' ? 20 : 0 }}>
+                    {shopTab === 'all' && <div className="shop-category-header">🎨 NEON COLORS</div>}
+                    <div className="shop-items">
+                      {filteredItems.filter(i => i.cat === 'neon').map(item => {
+                        const isOwned = ownedItems.includes(item.id)
+                        const isEquipped = equippedItems.neon === item.id
+                        return (
+                          <div key={item.id} className={`shop-item ${isOwned ? 'owned' : ''} ${isEquipped ? 'equipped' : ''}`}>
+                            <div className="shop-item-icon">{item.cat === 'neon' ? '🎨' : item.icon}</div>
+                            <div className="shop-item-name">{item.name}</div>
+                            <div className="shop-item-desc">{item.desc}</div>
+                            {item.swatch && (
+                              <div className="neon-swatch" style={{ background: item.swatch.startsWith('linear') ? item.swatch : item.swatch }}>
+                                <div className={`color-preview ${isEquipped ? item.cssClass : ''}`} style={{ color: isEquipped ? undefined : item.swatch.startsWith('linear') ? '#f59e0b' : item.swatch }}>SAMPLE</div>
+                              </div>
+                            )}
+                            <div className={`shop-item-price ${!isOwned && cash < item.price ? 'cant-afford' : ''}`}>
+                              ${item.price.toLocaleString()}
+                            </div>
+                            {!isOwned && (
+                              <button className="shop-buy-btn" onClick={() => purchaseItem(item)}>BUY</button>
+                            )}
+                            {isOwned && !isEquipped && (
+                              <button className="shop-buy-btn equip-btn" onClick={() => equipItem(item)}>EQUIP</button>
+                            )}
+                            {isEquipped && (
+                              <button className="shop-buy-btn equipped-btn" onClick={() => equipItem(item)}>EQUIPPED</button>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Avatar Frames Section */}
+                {(shopTab === 'all' || shopTab === 'frames') && (
+                  <div style={{ marginBottom: shopTab === 'all' ? 20 : 0 }}>
+                    {shopTab === 'all' && <div className="shop-category-header">🖼️ AVATAR FRAMES</div>}
+                    <div className="shop-items">
+                      {filteredItems.filter(i => i.cat === 'frames').map(item => {
+                        const isOwned = ownedItems.includes(item.id)
+                        const isEquipped = equippedItems.frames === item.id
+                        return (
+                          <div key={item.id} className={`shop-item ${isOwned ? 'owned' : ''} ${isEquipped ? 'equipped' : ''}`}>
+                            <div className="shop-item-icon">{item.icon}</div>
+                            <div className="shop-item-name">{item.name}</div>
+                            <div className="shop-item-desc">{item.desc}</div>
+                            <div className={`shop-item-price ${!isOwned && cash < item.price ? 'cant-afford' : ''}`}>
+                              ${item.price.toLocaleString()}
+                            </div>
+                            {!isOwned && (
+                              <button className="shop-buy-btn" onClick={() => purchaseItem(item)}>BUY</button>
+                            )}
+                            {isOwned && !isEquipped && (
+                              <button className="shop-buy-btn equip-btn" onClick={() => equipItem(item)}>EQUIP</button>
+                            )}
+                            {isEquipped && (
+                              <button className="shop-buy-btn equipped-btn" onClick={() => equipItem(item)}>EQUIPPED</button>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Input Effects Section */}
+                {(shopTab === 'all' || shopTab === 'effects') && (
+                  <div style={{ marginBottom: shopTab === 'all' ? 20 : 0 }}>
+                    {shopTab === 'all' && <div className="shop-category-header">✨ INPUT FX</div>}
+                    <div className="shop-items">
+                      {filteredItems.filter(i => i.cat === 'effects').map(item => {
+                        const isOwned = ownedItems.includes(item.id)
+                        const isEquipped = equippedItems.effects === item.id
+                        return (
+                          <div key={item.id} className={`shop-item ${isOwned ? 'owned' : ''} ${isEquipped ? 'equipped' : ''}`}>
+                            <div className="shop-item-icon">{item.icon}</div>
+                            <div className="shop-item-name">{item.name}</div>
+                            <div className="shop-item-desc">{item.desc}</div>
+                            <div className={`shop-item-price ${!isOwned && cash < item.price ? 'cant-afford' : ''}`}>
+                              ${item.price.toLocaleString()}
+                            </div>
+                            {!isOwned && (
+                              <button className="shop-buy-btn" onClick={() => purchaseItem(item)}>BUY</button>
+                            )}
+                            {isOwned && !isEquipped && (
+                              <button className="shop-buy-btn equip-btn" onClick={() => equipItem(item)}>EQUIP</button>
+                            )}
+                            {isEquipped && (
+                              <button className="shop-buy-btn equipped-btn" onClick={() => equipItem(item)}>EQUIPPED</button>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Background Themes Section */}
+                {(shopTab === 'all' || shopTab === 'themes') && (
+                  <div style={{ marginBottom: shopTab === 'all' ? 20 : 0 }}>
+                    {shopTab === 'all' && <div className="shop-category-header">🌆 BG THEMES</div>}
+                    <div className="shop-items">
+                      {filteredItems.filter(i => i.cat === 'themes').map(item => {
+                        const isOwned = ownedItems.includes(item.id)
+                        const isEquipped = equippedItems.themes === item.id
+                        return (
+                          <div key={item.id} className={`shop-item ${isOwned ? 'owned' : ''} ${isEquipped ? 'equipped' : ''}`}>
+                            <div className="shop-item-icon">{item.icon}</div>
+                            <div className="shop-item-name">{item.name}</div>
+                            <div className="shop-item-desc">{item.desc}</div>
+                            <div className={`shop-item-price ${!isOwned && cash < item.price ? 'cant-afford' : ''}`}>
+                              ${item.price.toLocaleString()}
+                            </div>
+                            {!isOwned && (
+                              <button className="shop-buy-btn" onClick={() => purchaseItem(item)}>BUY</button>
+                            )}
+                            {isOwned && !isEquipped && (
+                              <button className="shop-buy-btn equip-btn" onClick={() => equipItem(item)}>EQUIP</button>
+                            )}
+                            {isEquipped && (
+                              <button className="shop-buy-btn equipped-btn" onClick={() => equipItem(item)}>EQUIPPED</button>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+      })()}
     </main>
   </>
   )
