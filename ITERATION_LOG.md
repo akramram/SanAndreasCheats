@@ -1027,3 +1027,39 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - **Iteration 17:** Enhanced history modal with session stats dashboard and visual flair
 - **Iteration 18:** Dynamic atmospheric effects — more variety in weather, ambient sounds
 
+---
+
+## Iteration 17 — Restore Original cheat_activated.mp3 as Primary Match Sound
+**Date:** 2026-05-05
+**Branch:** visual-iterations
+**GitHub Issue:** #18 — [🔊 Use original cheat_activated.mp3 as the primary cheat match sound](https://github.com/akramram/SanAndreasCheats/issues/18)
+
+### Planned
+- Remove synthesized Web Audio API fanfare (`playMatchSound`) from cheat match handler
+- Keep and emphasize the original `cheat_activated.mp3` sound effect
+- Clean up unused `playMatchSound` import from Home.jsx
+- Slightly increase MP3 volume for better prominence
+
+### What Changed (Files Modified)
+- **src/pages/Home.jsx**:
+  - Removed `playMatchSound` from `../utils/sounds` import
+  - Removed `playMatchSound(newStreak)` call in cheat match handler
+  - Updated comment from "Play sound immediately and trigger fireworks" to "Play original cheat activated sound"
+  - Increased `audioRef.current.volume` from `0.6` to `0.85`
+
+### What Improved
+- The iconic GTA San Andreas "Cheat Activated" sound effect is now the sole match sound
+- No more layered synthesized arpeggio clashing with the authentic MP3
+- Cleaner, more nostalgic audio feedback on every cheat activation
+- Volume increase makes the sound more satisfying and audible
+
+### Issues
+- Build passes cleanly (340KB JS, 89KB CSS)
+- Lint: 3 pre-existing warnings (0 new)
+- All game logic untouched
+- `playMatchSound` still exists in `sounds.js` for potential future use
+
+### Next Iteration
+- **Iteration 18:** Enhanced history modal with session stats dashboard and visual flair
+- **Iteration 19:** Dynamic atmospheric effects — more variety in weather, ambient sounds
+

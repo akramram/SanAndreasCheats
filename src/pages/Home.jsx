@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import cheatsData from '../assets/cheats_v2.json'
 import {
-  playKeyClick, playGamepadPress, playMatchSound, playComboHit,
+  playKeyClick, playGamepadPress, playComboHit,
   playFailSound, playAchievementSound, playBootBeep, playBootReady,
   playResetSound, playPowerOn, isMuted, toggleMute,
   playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust,
@@ -1085,10 +1085,8 @@ export default function Home() {
           // Calculate new streak first (needed for sounds)
           const newStreak = currentStreak + 1
 
-          // Play sound immediately and trigger fireworks shortly after
+          // Play original cheat activated sound
           playNotif()
-          // Play retro match sound
-          playMatchSound(newStreak)
           // Trigger screen shake
           setShakeActive(true)
           setTimeout(() => setShakeActive(false), 400)
@@ -1260,7 +1258,7 @@ export default function Home() {
       // Prepare audio on first user gesture for autoplay policies
       if (!audioRef.current) {
         audioRef.current = new Audio('cheat_activated.mp3')
-        audioRef.current.volume = 0.6
+        audioRef.current.volume = 0.85
         // Try to unlock audio; ignore failures
         audioRef.current.play().then(() => {
           audioRef.current.pause()
