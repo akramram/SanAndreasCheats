@@ -1063,3 +1063,68 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - **Iteration 18:** Enhanced history modal with session stats dashboard and visual flair
 - **Iteration 19:** Dynamic atmospheric effects — more variety in weather, ambient sounds
 
+
+---
+
+## Iteration 18 — Add GTA SA Radio Tracks from SoundCloud
+**Date:** 2026-05-05
+**Branch:** visual-iterations
+**GitHub Issue:** #21 — [🎨 Visual Iteration 18: Add GTA SA Radio Tracks from SoundCloud](https://github.com/akramram/SanAndreasCheats/issues/21)
+
+### Planned
+- Integrate actual GTA SA radio station audio tracks from SoundCloud playlist: https://soundcloud.com/furtheram/sets/grand-theft-auto-san-andreas
+- Map 10 SoundCloud tracks to radio stations
+- Add SoundCloud Widget API integration for real audio playback
+- Hide song names in UI — only show radio station name
+- Use SoundCloud audio titles as internal reference
+- Disable auto-cycling for stations with real audio
+- Keep synthesized jingles as fallback for K-JAH and if SoundCloud fails
+
+### What Changed (Files Modified)
+- **src/pages/Home.jsx**:
+  - Expanded `RADIO_STATIONS` from 8 to 11 stations:
+    - Added 3 new stations with real SoundCloud audio: RADIO X (104.1), WCTR (95.6), CSR 103.9 (103.9)
+    - Updated 7 existing stations with `scUrl` pointing to their matching SoundCloud tracks
+    - Updated frequencies to match real GTA SA radio frequencies
+    - Updated `song` fields to use actual SoundCloud track titles as reference
+  - Added SoundCloud Widget API integration:
+    - `scIframeRef`, `scWidgetRef`, `scReady` state
+    - Dynamic script loading for `https://w.soundcloud.com/player/api.js`
+    - Widget initialization with `SC.Widget(iframe)` and `READY` event binding
+  - Added `playStationAudio(stationIdx)` helper:
+    - If station has `scUrl` and widget is ready → `widget.load(scUrl, { auto_play: true, ... })`
+    - Otherwise → fallback to synthesized `startRadioJingle(genreId)`
+  - Modified radio cycling effect:
+    - Auto-cycle timer only starts if current station has no real audio (K-JAH)
+    - After cycling to a station with real audio, timer stops (no more auto-cycling)
+    - Initial station audio uses `playStationAudio` instead of `startRadioJingle`
+  - Updated `changeStationOnMatch` to include new energetic stations (Radio X at index 8)
+  - Updated manual prev/next knob handlers to use `playStationAudio`
+  - Added hidden `<iframe>` for SoundCloud widget (positioned off-screen)
+  - **Removed `.radio-now-playing` from radio LCD UI** — song name is now hidden, only station name/freq/genre visible
+
+- **src/utils/sounds.js**:
+  - Added fallback genre mappings for new stations without dedicated jingles:
+    - `alternative` → `rock`
+    - `talk` → `jazz`
+    - `soul` → `funk`
+
+### What Improved
+- Radio stations now play **actual GTA San Andreas radio audio** from the official SoundCloud collection — 10 full station tracks (~11.5 hours of content)
+- Stations with real audio no longer auto-cycle every 25 seconds, letting users enjoy full radio broadcasts
+- The radio tuner feels more authentic — switching stations changes the actual audio, not just a synthesized jingle
+- Song names are hidden from the UI, keeping the focus on the radio station branding (name, frequency, genre)
+- SoundCloud audio titles are preserved as internal reference data
+- K-JAH still uses the synthesized reggae jingle as fallback since there's no matching SoundCloud track
+- If SoundCloud fails to load, all stations gracefully fall back to their synthesized jingles
+- 3 new stations expand the radio variety: RADIO X (Alternative Rock), WCTR (Talk Radio), CSR 103.9 (Contemporary Soul)
+
+### Issues
+- Build passes cleanly (343KB JS, 89KB CSS)
+- Lint: 3 pre-existing warnings (0 new)
+- All game logic untouched
+- SoundCloud embed relies on external service availability and may be blocked in some regions (graceful fallback to jingles)
+
+### Next Iteration
+- **Iteration 19:** Enhanced history modal with session stats dashboard and visual flair
+- **Iteration 20:** Dynamic atmospheric effects — more variety in weather, ambient sounds

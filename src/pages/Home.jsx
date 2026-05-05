@@ -97,14 +97,17 @@ const ACHIEVEMENTS = [
 
 /* ── Radio Station Definitions ── */
 const RADIO_STATIONS = [
-  { id: 0, name: 'K-DST', freq: '87.6', genre: 'Classic Rock', genreId: 'rock', song: 'Running Down a Dream' },
-  { id: 1, name: 'RADIO LOS SANTOS', freq: '105.2', genre: 'West Coast Hip Hop', genreId: 'hiphop', song: 'Gangsta Gangsta' },
-  { id: 2, name: 'K-ROSE', freq: '105.5', genre: 'Country', genreId: 'country', song: 'All My Ex\'s Live in Texas' },
-  { id: 3, name: 'K-JAH', freq: '105.3', genre: 'Reggae', genreId: 'reggae', song: 'Police & Thieves' },
-  { id: 4, name: 'MASTER SOUNDS', freq: '98.3', genre: 'Rare Groove', genreId: 'jazz', song: 'The Bridge' },
-  { id: 5, name: 'SF-UR', freq: '103.3', genre: 'House Music', genreId: 'house', song: 'Born Slippy' },
-  { id: 6, name: 'BOUNCE FM', freq: '103.9', genre: 'Funk', genreId: 'funk', song: 'Super Freak' },
-  { id: 7, name: 'PLAYBACK FM', freq: '95.6', genre: 'Old School Hip Hop', genreId: 'boomBap', song: 'The Message' },
+  { id: 0, name: 'K-DST', freq: '101.1', genre: 'Classic Rock', genreId: 'rock', song: 'Grand Theft Auto San Andreas K-DST', scUrl: 'https://soundcloud.com/furtheram4/grand-theft-auto-san-andreas-k' },
+  { id: 1, name: 'RADIO LOS SANTOS', freq: '106.1', genre: 'West Coast Hip Hop', genreId: 'hiphop', song: 'Grand Theft Auto San Andreas Radio Los Santos', scUrl: 'https://soundcloud.com/ryan-cassidy-14/grand-theft-auto-san-andreas' },
+  { id: 2, name: 'K-ROSE', freq: '97.6', genre: 'Country', genreId: 'country', song: 'Grand Theft Auto San Andreas K Rose', scUrl: 'https://soundcloud.com/ryan-cassidy-13/grand-theft-auto-san-andreas-k' },
+  { id: 3, name: 'K-JAH', freq: '103.7', genre: 'Reggae', genreId: 'reggae', song: 'Police & Thieves' },
+  { id: 4, name: 'MASTER SOUNDS', freq: '98.3', genre: 'Rare Groove', genreId: 'jazz', song: 'San Andreas Master Sounds 98.3', scUrl: 'https://soundcloud.com/furtheram22/san-andreas-master-sounds-98-3' },
+  { id: 5, name: 'SF-UR', freq: '105.7', genre: 'House Music', genreId: 'house', song: 'Grand Theft Auto San Andreas SF-UR', scUrl: 'https://soundcloud.com/ryan-cassidy-13/grand-theft-auto-san-andreas' },
+  { id: 6, name: 'BOUNCE FM', freq: '105.5', genre: 'Funk', genreId: 'funk', song: 'Grand Theft Auto San Andreas Bounce FM', scUrl: 'https://soundcloud.com/furtheram11/grand-theft-auto-san-andreas' },
+  { id: 7, name: 'PLAYBACK FM', freq: '105.1', genre: 'Old School Hip Hop', genreId: 'boomBap', song: 'San Andreas Playback FM', scUrl: 'https://soundcloud.com/furtheram22/san-andreas-playback-fm' },
+  { id: 8, name: 'RADIO X', freq: '104.1', genre: 'Alternative Rock', genreId: 'alternative', song: 'Grand Theft Auto San Andreas Radio X', scUrl: 'https://soundcloud.com/furtheram/grand-theft-auto-san-andreas' },
+  { id: 9, name: 'WCTR', freq: '95.6', genre: 'Talk Radio', genreId: 'talk', song: 'Grand Theft Auto San Andreas WCTR West Coast Talk Radio', scUrl: 'https://soundcloud.com/furtheram-1/grand-theft-auto-san-andreas' },
+  { id: 10, name: 'CSR 103.9', freq: '103.9', genre: 'Contemporary Soul', genreId: 'soul', song: 'Grand Theft Auto San Andreas CSR 103.9 Contemporary Soul Radio', scUrl: 'https://soundcloud.com/furtheram11/grand-theft-auto-san-andreas-1' },
 ]
 
 /* ── Cash Economy Constants ── */
@@ -305,6 +308,10 @@ export default function Home() {
   const radioTimerRef = useRef(null)
   const vuAnimFrameRef = useRef(null)
   const prevStationRef = useRef(0)
+  // SoundCloud Widget refs
+  const scIframeRef = useRef(null)
+  const scWidgetRef = useRef(null)
+  const [scReady, setScReady] = useState(false)
 
   // Cheat Codex system
   const [showCodex, setShowCodex] = useState(false)
@@ -576,20 +583,67 @@ export default function Home() {
     }
   }, [booted])
 
+  // SoundCloud Widget API integration
+  useEffect(() => {
+    if (!booted) return
+    const script = document.createElement('script')
+    script.src = 'https://w.soundcloud.com/player/api.js'
+    script.async = true
+    script.onload = () => {
+      if (scIframeRef.current && window.SC && window.SC.Widget) {
+        const widget = window.SC.Widget(scIframeRef.current)
+        scWidgetRef.current = widget
+        widget.bind(window.SC.Widget.Events.READY, () => {
+          setScReady(true)
+        })
+      }
+    }
+    document.body.appendChild(script)
+    return () => {
+      if (script.parentNode) document.body.removeChild(script)
+    }
+  }, [booted])
+
+  // Helper to play station audio (SoundCloud or synthesized jingle)
+  const playStationAudio = useCallback((stationIdx) => {
+    const station = RADIO_STATIONS[stationIdx]
+    if (!station) return
+    if (station.scUrl && scReady && scWidgetRef.current) {
+      stopRadioJingle()
+      scWidgetRef.current.load(station.scUrl, {
+        auto_play: true,
+        show_artwork: false,
+        show_comments: false,
+        show_user: false,
+        show_reposts: false,
+        visual: false,
+        buying: false,
+        liking: false,
+        download: false,
+        sharing: false,
+        show_playcount: false,
+      })
+    } else {
+      if (scWidgetRef.current) {
+        try { scWidgetRef.current.pause() } catch { /* ignore */ }
+      }
+      startRadioJingle(station.genreId)
+    }
+  }, [scReady])
+
   // Radio station cycling & VU meter animation
   useEffect(() => {
     if (!booted) return
 
-    // Start initial station jingle
+    // Start initial station audio
     const initialDelay = setTimeout(() => {
-      startRadioJingle(RADIO_STATIONS[currentStation].genreId)
+      playStationAudio(currentStation)
     }, 1500)
 
-    // Auto-cycle stations every ~25 seconds
+    // Auto-cycle only for stations without real SoundCloud audio (K-JAH)
     const cycleStations = () => {
       const nextStation = (prevStationRef.current + 1) % RADIO_STATIONS.length
       prevStationRef.current = nextStation
-      // Trigger static + tune sound
       setRadioStatic(true)
       playRadioStatic()
       playRadioTune()
@@ -601,15 +655,22 @@ export default function Home() {
         setTimeout(() => setRadioChanging(false), 300)
       }, 400)
 
-      // Start new jingle after brief static
       setTimeout(() => {
-        startRadioJingle(RADIO_STATIONS[nextStation].genreId)
+        playStationAudio(nextStation)
       }, 500)
 
-      radioTimerRef.current = setTimeout(cycleStations, 25000)
+      // Only auto-cycle again if the new station has no real audio
+      const station = RADIO_STATIONS[nextStation]
+      if (!station?.scUrl) {
+        radioTimerRef.current = setTimeout(cycleStations, 25000)
+      }
     }
 
-    radioTimerRef.current = setTimeout(cycleStations, 25000)
+    // Only start auto-cycle if current station has no real audio
+    const station = RADIO_STATIONS[currentStation]
+    if (!station?.scUrl) {
+      radioTimerRef.current = setTimeout(cycleStations, 25000)
+    }
 
     // VU meter animation — randomized bar heights for visual effect
     const animateVU = () => {
@@ -630,7 +691,7 @@ export default function Home() {
       if (vuAnimFrameRef.current) cancelAnimationFrame(vuAnimFrameRef.current)
       stopRadioJingle()
     }
-  }, [booted])
+  }, [booted, currentStation, playStationAudio])
 
   // Radio volume responds to weather
   useEffect(() => {
@@ -648,11 +709,11 @@ export default function Home() {
     // Pick station based on combo — higher combos = more energetic
     let stationIdx
     if (combo >= 5) {
-      // House, Hip Hop, Funk — energetic
-      stationIdx = [1, 5, 6][Math.floor(Math.random() * 3)]
+      // House, Hip Hop, Funk, Alternative — energetic
+      stationIdx = [1, 5, 6, 8][Math.floor(Math.random() * 4)]
     } else if (combo >= 3) {
-      // Rock, Hip Hop, Old School
-      stationIdx = [0, 1, 7][Math.floor(Math.random() * 3)]
+      // Rock, Hip Hop, Old School, Alternative
+      stationIdx = [0, 1, 7, 8][Math.floor(Math.random() * 4)]
     } else {
       // Any station randomly
       stationIdx = Math.floor(Math.random() * RADIO_STATIONS.length)
@@ -672,9 +733,9 @@ export default function Home() {
     }, 400)
 
     setTimeout(() => {
-      startRadioJingle(RADIO_STATIONS[stationIdx].genreId)
+      playStationAudio(stationIdx)
     }, 500)
-  }, [currentStation])
+  }, [currentStation, playStationAudio])
 
   // Wanted level system — reacts to streak changes
   useEffect(() => {
@@ -2290,9 +2351,6 @@ export default function Home() {
                 <div className="radio-genre">
                   {RADIO_STATIONS[currentStation]?.genre || ''}
                 </div>
-                <div className="radio-now-playing">
-                  ♫ {RADIO_STATIONS[currentStation]?.song || ''}
-                </div>
               </div>
               <div className="radio-lcd-scanlines" />
             </div>
@@ -2324,7 +2382,7 @@ export default function Home() {
                     setRadioStatic(false)
                     setTimeout(() => setRadioChanging(false), 300)
                   }, 400)
-                  setTimeout(() => startRadioJingle(RADIO_STATIONS[prev].genreId), 500)
+                  setTimeout(() => playStationAudio(prev), 500)
                 }}
                 title="Previous Station"
               >
@@ -2352,7 +2410,7 @@ export default function Home() {
                     setRadioStatic(false)
                     setTimeout(() => setRadioChanging(false), 300)
                   }, 400)
-                  setTimeout(() => startRadioJingle(RADIO_STATIONS[next].genreId), 500)
+                  setTimeout(() => playStationAudio(next), 500)
                 }}
                 title="Next Station"
               >
@@ -2361,6 +2419,15 @@ export default function Home() {
             </div>
           </div>
         </div>
+      )}
+      {/* Hidden SoundCloud Widget iframe for real radio audio */}
+      {booted && (
+        <iframe
+          ref={scIframeRef}
+          title="SoundCloud Player"
+          style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0, pointerEvents: 'none' }}
+          src="https://w.soundcloud.com/player/?url=https://soundcloud.com/furtheram/sets/grand-theft-auto-san-andreas&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false"
+        />
       )}
       {/* Cosmetic Shop Modal */}
       {showShop && (() => {

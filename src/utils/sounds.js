@@ -691,7 +691,7 @@ export function startRadioJingle(genreId) {
     },
   }
 
-  const jingleFn = jingles[genreId]
+  const jingleFn = jingles[genreId] || jingles[genreId === 'alternative' ? 'rock' : genreId === 'talk' ? 'jazz' : genreId === 'soul' ? 'funk' : undefined]
   if (jingleFn) jingleFn()
 }
 
