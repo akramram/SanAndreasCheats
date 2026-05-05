@@ -1186,3 +1186,37 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 ### Next Iteration
 - **Iteration 20:** Enhanced history modal with session stats dashboard and visual flair
 - **Iteration 21:** Dynamic atmospheric effects — more variety in weather, ambient sounds
+
+---
+
+## Bugfix — Radio Station Resumes from Shared Global Progress (#22)
+**Date:** 2026-05-05
+**Branch:** visual-iterations → main
+**Commit:** fix(radio): resume stations from shared global progress instead of 0 (#22)
+
+### Problem
+- Every radio station restarted from duration 0 when played or changed
+- SoundCloud tracks always began at the start of the track
+- Synthesized jingles always started from pattern beat 0
+
+### Solution
+- Added `scPendingSeekRef` to queue a seek position before `widget.load()`
+- SC Widget `READY` handler now checks pending seek, calls `seekTo()` then `play()`
+- `playStationAudio()` sets `auto_play: false` on load and stores the station's current progress in `scPendingSeekRef`
+- For synthesized stations, `startRadioJingle()` now accepts `offsetMs` and jumps into the loop at the correct phase
+- All 11 stations continue advancing together via `stationProgressRef`; only the selected one outputs sound
+
+### Files Modified
+- `src/pages/Home.jsx` — pending seek ref, READY handler, `playStationAudio()` seek logic
+- `src/utils/sounds.js` — `startRadioJingle(genreId, offsetMs = 0)` with phase-aware delays for all 8 jingle patterns
+
+### What Improved
+- Switching stations now feels like tuning a real radio — you pick up mid-song
+- SoundCloud stations seek to the exact computed position within the virtual track
+- Jingles start from the correct beat/chord in their loop
+- No audio starts from 0 unexpectedly
+
+### Issues
+- Build passes cleanly
+- Lint: 3 pre-existing warnings (0 new)
+- All game logic untouched

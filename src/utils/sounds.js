@@ -414,9 +414,10 @@ export function playRadioTune() {
 /**
  * Play a short looping ambient jingle for a radio station.
  * Each genre has a unique chord/melody pattern using oscillators.
+ * `offsetMs` jumps into the pattern so switching stations resumes mid-track.
  * Returns a cleanup function to stop the jingle.
  */
-export function startRadioJingle(genreId) {
+export function startRadioJingle(genreId, offsetMs = 0) {
   stopRadioJingle()
   if (_muted) return
 
@@ -429,11 +430,14 @@ export function startRadioJingle(genreId) {
   const jingles = {
     // K-DST: Classic Rock — power chord drone E-B
     rock: () => {
+      const CYCLE = 2000
       const chords = [
         { notes: [164.81, 246.94], duration: 2 }, // E3, B3
         { notes: [196.00, 293.66], duration: 2 }, // G3, D4
       ]
-      let chordIndex = 0
+      let chordIndex = Math.floor(offsetMs / CYCLE) % chords.length
+      const phase = offsetMs % CYCLE
+      const delay = Math.max(0, CYCLE - phase)
       const playChord = () => {
         for (const freq of chords[chordIndex].notes) {
           const osc = ctx.createOscillator()
@@ -449,14 +453,17 @@ export function startRadioJingle(genreId) {
           radioOscillators.push(osc)
         }
         chordIndex = (chordIndex + 1) % chords.length
-        radioTimer = setTimeout(playChord, 2000)
+        radioTimer = setTimeout(playChord, CYCLE)
       }
-      playChord()
+      radioTimer = setTimeout(playChord, delay)
     },
     // Radio Los Santos: West Coast Hip Hop — 808-style sub bass + hi-hat rhythm
     hiphop: () => {
+      const CYCLE = 4000
       const bassNotes = [55, 55, 65.41, 55, 73.42, 65.41, 55, 55] // A1, C2, D2
-      let noteIndex = 0
+      let noteIndex = Math.floor(offsetMs / 500) % bassNotes.length
+      const phase = offsetMs % 500
+      const delay = Math.max(0, 500 - phase)
       const playBeat = () => {
         // Sub bass
         const osc = ctx.createOscillator()
@@ -489,15 +496,18 @@ export function startRadioJingle(genreId) {
         noteIndex = (noteIndex + 1) % bassNotes.length
         radioTimer = setTimeout(playBeat, 500)
       }
-      playBeat()
+      radioTimer = setTimeout(playBeat, delay)
     },
     // K-Rose: Country — twangy major chord arpeggios
     country: () => {
+      const CYCLE = 2500
       const chords = [
         [261.63, 329.63, 392.00], // C major
         [293.66, 369.99, 440.00], // D major
       ]
-      let chordIndex = 0
+      let chordIndex = Math.floor(offsetMs / CYCLE) % chords.length
+      const phase = offsetMs % CYCLE
+      const delay = Math.max(0, CYCLE - phase)
       const playArp = () => {
         const chord = chords[chordIndex]
         chord.forEach((freq, i) => {
@@ -516,19 +526,22 @@ export function startRadioJingle(genreId) {
           radioOscillators.push(osc)
         })
         chordIndex = (chordIndex + 1) % chords.length
-        radioTimer = setTimeout(playArp, 2500)
+        radioTimer = setTimeout(playArp, CYCLE)
       }
-      playArp()
+      radioTimer = setTimeout(playArp, delay)
     },
     // K-JAH: Reggae — offbeat skank rhythm with major chords
     reggae: () => {
+      const CYCLE = 1600
       const chords = [
         [261.63, 329.63], // C
         [220.00, 277.18], // Am
         [293.66, 369.99], // D
         [261.63, 329.63], // C
       ]
-      let chordIndex = 0
+      let chordIndex = Math.floor(offsetMs / 400) % chords.length
+      const phase = offsetMs % 400
+      const delay = Math.max(0, 400 - phase)
       const playSkank = () => {
         const chord = chords[chordIndex]
         for (const freq of chord) {
@@ -548,15 +561,18 @@ export function startRadioJingle(genreId) {
         chordIndex = (chordIndex + 1) % chords.length
         radioTimer = setTimeout(playSkank, 400)
       }
-      playSkank()
+      radioTimer = setTimeout(playSkank, delay)
     },
     // Master Sounds: Rare Groove — smooth jazz chord pad
     jazz: () => {
+      const CYCLE = 3000
       const chords = [
         [261.63, 329.63, 392.00, 493.88], // Cmaj7
         [293.66, 369.99, 440.00, 554.37], // Dm7
       ]
-      let chordIndex = 0
+      let chordIndex = Math.floor(offsetMs / CYCLE) % chords.length
+      const phase = offsetMs % CYCLE
+      const delay = Math.max(0, CYCLE - phase)
       const playPad = () => {
         const chord = chords[chordIndex]
         for (const freq of chord) {
@@ -575,14 +591,17 @@ export function startRadioJingle(genreId) {
           radioOscillators.push(osc)
         }
         chordIndex = (chordIndex + 1) % chords.length
-        radioTimer = setTimeout(playPad, 3000)
+        radioTimer = setTimeout(playPad, CYCLE)
       }
-      playPad()
+      radioTimer = setTimeout(playPad, delay)
     },
     // SF-UR: House Music — four-on-the-floor kick + synth stab
     house: () => {
+      const CYCLE = 1400
       const stabNotes = [523.25, 659.25, 783.99, 659.25] // C5, E5, G5, E5
-      let beatIndex = 0
+      let beatIndex = Math.floor(offsetMs / 350) % 4
+      const phase = offsetMs % 350
+      const delay = Math.max(0, 350 - phase)
       const playBeat = () => {
         // Kick drum (every beat)
         const kick = ctx.createOscillator()
@@ -620,12 +639,15 @@ export function startRadioJingle(genreId) {
         beatIndex = (beatIndex + 1) % 4
         radioTimer = setTimeout(playBeat, 350)
       }
-      playBeat()
+      radioTimer = setTimeout(playBeat, delay)
     },
     // Bounce FM: Funk — slap bass line
     funk: () => {
+      const CYCLE = 2400
       const bassLine = [82.41, 98.00, 110.00, 98.00, 82.41, 73.42, 82.41, 110.00] // E2, G2, A2
-      let noteIdx = 0
+      let noteIdx = Math.floor(offsetMs / 300) % bassLine.length
+      const phase = offsetMs % 300
+      const delay = Math.max(0, 300 - phase)
       const playBass = () => {
         const osc = ctx.createOscillator()
         const g = ctx.createGain()
@@ -647,13 +669,16 @@ export function startRadioJingle(genreId) {
         noteIdx = (noteIdx + 1) % bassLine.length
         radioTimer = setTimeout(playBass, 300)
       }
-      playBass()
+      radioTimer = setTimeout(playBass, delay)
     },
     // Playback FM: Old School Hip Hop — boom-bap drum pattern
     boomBap: () => {
+      const CYCLE = 2000
       const kickPattern = [1, 0, 0, 1, 0, 0, 1, 0] // 8-step pattern
       const snarePattern = [0, 0, 1, 0, 0, 0, 1, 0]
-      let step = 0
+      let step = Math.floor(offsetMs / 250) % 8
+      const phase = offsetMs % 250
+      const delay = Math.max(0, 250 - phase)
       const playStep = () => {
         // Kick
         if (kickPattern[step]) {
@@ -687,7 +712,7 @@ export function startRadioJingle(genreId) {
         step = (step + 1) % 8
         radioTimer = setTimeout(playStep, 250)
       }
-      playStep()
+      radioTimer = setTimeout(playStep, delay)
     },
   }
 

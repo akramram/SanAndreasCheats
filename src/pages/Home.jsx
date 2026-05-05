@@ -333,6 +333,7 @@ export default function Home() {
   // SoundCloud Widget refs
   const scIframeRef = useRef(null)
   const scWidgetRef = useRef(null)
+  const scPendingSeekRef = useRef(-1)
   const [scReady, setScReady] = useState(false)
 
   // Cheat Codex system
@@ -617,6 +618,13 @@ export default function Home() {
         scWidgetRef.current = widget
         widget.bind(window.SC.Widget.Events.READY, () => {
           setScReady(true)
+          const pending = scPendingSeekRef.current
+          if (pending >= 0 && RADIO_STATIONS[pending]?.scUrl) {
+            const progress = stationProgressRef.current[pending]
+            widget.seekTo(progress)
+            widget.play()
+            scPendingSeekRef.current = -1
+          }
         })
       }
     }
@@ -633,8 +641,9 @@ export default function Home() {
     if (!station) return
     if (station.scUrl && scReady && scWidgetRef.current) {
       stopRadioJingle()
+      scPendingSeekRef.current = stationIdx
       scWidgetRef.current.load(station.scUrl, {
-        auto_play: true,
+        auto_play: false,
         show_artwork: false,
         show_comments: false,
         show_user: false,
@@ -650,7 +659,7 @@ export default function Home() {
       if (scWidgetRef.current) {
         try { scWidgetRef.current.pause() } catch { /* ignore */ }
       }
-      startRadioJingle(station.genreId)
+      startRadioJingle(station.genreId, stationProgressRef.current[stationIdx])
     }
   }, [scReady])
 
