@@ -2963,6 +2963,17 @@
   text-shadow: none;
 }
 
+.radio-status-loading {
+  animation: radio-blink 0.5s ease-in-out infinite alternate;
+  color: #fbbf24;
+  text-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+}
+
+@keyframes radio-blink {
+  from { opacity: 1; }
+  to { opacity: 0.35; }
+}
+
 /* Track time display */
 .radio-time {
   font-family: 'VT323', monospace;

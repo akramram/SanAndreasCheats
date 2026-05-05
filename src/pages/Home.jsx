@@ -322,6 +322,7 @@ export default function Home() {
   const [radioStatic, setRadioStatic] = useState(false)
   const [radioPlaying, setRadioPlaying] = useState(true)
   const radioPlayingRef = useRef(true)
+  const radioBootedRef = useRef(false)
   const radioTimerRef = useRef(null)
   const vuAnimFrameRef = useRef(null)
   const prevStationRef = useRef(0)
@@ -334,7 +335,10 @@ export default function Home() {
   const scIframeRef = useRef(null)
   const scWidgetRef = useRef(null)
   const scPendingSeekRef = useRef(-1)
+  const scLoadedStationRef = useRef(-1)
   const [scReady, setScReady] = useState(false)
+  const [radioLoading, setRadioLoading] = useState(false)
+  const radioLoadTimeoutRef = useRef(null)
 
   // Cheat Codex system
   const [showCodex, setShowCodex] = useState(false)
@@ -623,6 +627,7 @@ export default function Home() {
             const progress = stationProgressRef.current[pending]
             widget.seekTo(progress)
             widget.play()
+            scLoadedStationRef.current = pending
             scPendingSeekRef.current = -1
           }
         })
@@ -641,20 +646,27 @@ export default function Home() {
     if (!station) return
     if (station.scUrl && scReady && scWidgetRef.current) {
       stopRadioJingle()
-      scPendingSeekRef.current = stationIdx
-      scWidgetRef.current.load(station.scUrl, {
-        auto_play: false,
-        show_artwork: false,
-        show_comments: false,
-        show_user: false,
-        show_reposts: false,
-        visual: false,
-        buying: false,
-        liking: false,
-        download: false,
-        sharing: false,
-        show_playcount: false,
-      })
+      const progress = stationProgressRef.current[stationIdx]
+      if (scLoadedStationRef.current === stationIdx) {
+        scWidgetRef.current.seekTo(progress)
+        scWidgetRef.current.play()
+      } else {
+        scPendingSeekRef.current = stationIdx
+        scWidgetRef.current.load(station.scUrl, {
+          auto_play: false,
+          show_artwork: false,
+          show_comments: false,
+          show_user: false,
+          show_reposts: false,
+          visual: false,
+          buying: false,
+          liking: false,
+          download: false,
+          sharing: false,
+          show_playcount: false,
+        })
+        scLoadedStationRef.current = stationIdx
+      }
     } else {
       if (scWidgetRef.current) {
         try { scWidgetRef.current.pause() } catch { /* ignore */ }
@@ -683,6 +695,11 @@ export default function Home() {
   // Change station helper (used by prev/next)
   const changeStation = useCallback((nextIdx) => {
     prevStationRef.current = nextIdx
+    if (radioLoadTimeoutRef.current) {
+      clearTimeout(radioLoadTimeoutRef.current)
+      radioLoadTimeoutRef.current = null
+    }
+    setRadioLoading(false)
     setRadioStatic(true)
     playRadioStatic()
     playRadioTune()
@@ -699,14 +716,19 @@ export default function Home() {
     }, 500)
   }, [playStationAudio])
 
+  // Initial boot audio — play once when booted becomes true
+  useEffect(() => {
+    if (!booted || radioBootedRef.current) return
+    radioBootedRef.current = true
+    const t = setTimeout(() => {
+      playStationAudio(currentStation)
+    }, 1500)
+    return () => clearTimeout(t)
+  }, [booted, currentStation, playStationAudio])
+
   // Radio station cycling & VU meter animation
   useEffect(() => {
     if (!booted) return
-
-    // Start initial station audio
-    const initialDelay = setTimeout(() => {
-      playStationAudio(currentStation)
-    }, 1500)
 
     // Auto-cycle only for stations without real SoundCloud audio (K-JAH)
     const cycleStations = () => {
@@ -759,12 +781,33 @@ export default function Home() {
     vuAnimFrameRef.current = requestAnimationFrame(animateVU)
 
     return () => {
-      clearTimeout(initialDelay)
       if (radioTimerRef.current) clearTimeout(radioTimerRef.current)
       if (vuAnimFrameRef.current) cancelAnimationFrame(vuAnimFrameRef.current)
       stopRadioJingle()
     }
   }, [booted, currentStation, playStationAudio])
+
+  // Suppress SoundCloud Web Audio API errors and trigger fallback
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.message && e.message.includes("Failed to execute 'connect' on 'AudioNode'")) {
+        e.preventDefault()
+        // Trigger fallback if currently loading
+        if (radioLoadTimeoutRef.current) {
+          clearTimeout(radioLoadTimeoutRef.current)
+          radioLoadTimeoutRef.current = null
+        }
+        setRadioLoading(false)
+        // Fall back to jingle for current station
+        const station = RADIO_STATIONS[currentStation]
+        if (station && radioPlayingRef.current) {
+          startRadioJingle(station.genreId, stationProgressRef.current[currentStation])
+        }
+      }
+    }
+    window.addEventListener('error', handler)
+    return () => window.removeEventListener('error', handler)
+  }, [currentStation])
 
   // Global station progress — always runs independently, loops indefinitely per station
   useEffect(() => {
@@ -2434,8 +2477,8 @@ export default function Home() {
                 <div className="radio-genre">
                   {RADIO_STATIONS[currentStation]?.genre || ''}
                 </div>
-                <div className={`radio-status ${radioPlaying ? 'radio-status-playing' : 'radio-status-paused'}`}>
-                  {radioPlaying ? '▶ PLAYING' : '❚❚ PAUSED'}
+                <div className={`radio-status ${radioPlaying ? 'radio-status-playing' : 'radio-status-paused'} ${radioLoading ? 'radio-status-loading' : ''}`}>
+                  {radioLoading ? '◐ TUNING...' : radioPlaying ? '▶ PLAYING' : '❚❚ PAUSED'}
                 </div>
                 <div className="radio-time">
                   {radioTimeDisplay}
