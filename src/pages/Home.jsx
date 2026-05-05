@@ -305,6 +305,8 @@ export default function Home() {
   const [radioChanging, setRadioChanging] = useState(false)
   const [vuBarHeights, setVuBarHeights] = useState(Array(12).fill(3))
   const [radioStatic, setRadioStatic] = useState(false)
+  const [radioPlaying, setRadioPlaying] = useState(true)
+  const radioPlayingRef = useRef(true)
   const radioTimerRef = useRef(null)
   const vuAnimFrameRef = useRef(null)
   const prevStationRef = useRef(0)
@@ -606,6 +608,7 @@ export default function Home() {
 
   // Helper to play station audio (SoundCloud or synthesized jingle)
   const playStationAudio = useCallback((stationIdx) => {
+    if (!radioPlayingRef.current) return
     const station = RADIO_STATIONS[stationIdx]
     if (!station) return
     if (station.scUrl && scReady && scWidgetRef.current) {
@@ -630,6 +633,42 @@ export default function Home() {
       startRadioJingle(station.genreId)
     }
   }, [scReady])
+
+  // Toggle radio play/pause
+  const toggleRadioPlay = useCallback(() => {
+    setRadioPlaying(prev => {
+      const next = !prev
+      radioPlayingRef.current = next
+      if (next) {
+        playStationAudio(currentStation)
+      } else {
+        if (scWidgetRef.current) {
+          try { scWidgetRef.current.pause() } catch { /* ignore */ }
+        }
+        stopRadioJingle()
+      }
+      return next
+    })
+  }, [currentStation, playStationAudio])
+
+  // Change station helper (used by prev/next)
+  const changeStation = useCallback((nextIdx) => {
+    prevStationRef.current = nextIdx
+    setRadioStatic(true)
+    playRadioStatic()
+    playRadioTune()
+    setRadioChanging(true)
+    setTimeout(() => {
+      setCurrentStation(nextIdx)
+      setRadioStatic(false)
+      setTimeout(() => setRadioChanging(false), 300)
+    }, 400)
+    setTimeout(() => {
+      if (radioPlayingRef.current) {
+        playStationAudio(nextIdx)
+      }
+    }, 500)
+  }, [playStationAudio])
 
   // Radio station cycling & VU meter animation
   useEffect(() => {
@@ -674,6 +713,11 @@ export default function Home() {
 
     // VU meter animation — randomized bar heights for visual effect
     const animateVU = () => {
+      if (!radioPlayingRef.current) {
+        setVuBarHeights(Array(12).fill(2))
+        vuAnimFrameRef.current = requestAnimationFrame(animateVU)
+        return
+      }
       const baseHeight = currentStreak >= 3 ? 8 : currentStreak >= 1 ? 6 : 4
       const maxDeviation = currentStreak >= 3 ? 8 : 5
       setVuBarHeights(prev => prev.map((_, i) => {
@@ -720,22 +764,8 @@ export default function Home() {
     }
     if (stationIdx === currentStation) return
 
-    prevStationRef.current = stationIdx
-    setRadioStatic(true)
-    playRadioStatic()
-    playRadioTune()
-    setRadioChanging(true)
-
-    setTimeout(() => {
-      setCurrentStation(stationIdx)
-      setRadioStatic(false)
-      setTimeout(() => setRadioChanging(false), 300)
-    }, 400)
-
-    setTimeout(() => {
-      playStationAudio(stationIdx)
-    }, 500)
-  }, [currentStation, playStationAudio])
+    changeStation(stationIdx)
+  }, [currentStation, changeStation])
 
   // Wanted level system — reacts to streak changes
   useEffect(() => {
@@ -2336,7 +2366,7 @@ export default function Home() {
 
       {/* GTA SA Radio Station Tuner */}
       {booted && (
-        <div className={`radio-panel ${radioChanging ? 'station-changing' : ''} ${currentStreak >= 4 ? 'combo-fire' : currentStreak >= 2 ? 'combo-hot' : ''}`}>
+        <div className={`radio-panel ${radioChanging ? 'station-changing' : ''} ${currentStreak >= 4 ? 'combo-fire' : currentStreak >= 2 ? 'combo-hot' : ''} ${!radioPlaying ? 'radio-paused' : ''}`}>
           <div className="radio-panel-inner">
             {/* LCD Display */}
             <div className="radio-lcd">
@@ -2351,12 +2381,15 @@ export default function Home() {
                 <div className="radio-genre">
                   {RADIO_STATIONS[currentStation]?.genre || ''}
                 </div>
+                <div className={`radio-status ${radioPlaying ? 'radio-status-playing' : 'radio-status-paused'}`}>
+                  {radioPlaying ? '▶ PLAYING' : '❚❚ PAUSED'}
+                </div>
               </div>
               <div className="radio-lcd-scanlines" />
             </div>
 
             {/* VU Meter */}
-            <div className="radio-vu-meter">
+            <div className={`radio-vu-meter ${radioPlaying ? '' : 'radio-vu-paused'}`}>
               {vuBarHeights.map((h, i) => (
                 <div
                   key={i}
@@ -2372,21 +2405,18 @@ export default function Home() {
                 className="radio-knob radio-knob-prev"
                 onClick={() => {
                   const prev = (prevStationRef.current - 1 + RADIO_STATIONS.length) % RADIO_STATIONS.length
-                  prevStationRef.current = prev
-                  setRadioStatic(true)
-                  playRadioStatic()
-                  playRadioTune()
-                  setRadioChanging(true)
-                  setTimeout(() => {
-                    setCurrentStation(prev)
-                    setRadioStatic(false)
-                    setTimeout(() => setRadioChanging(false), 300)
-                  }, 400)
-                  setTimeout(() => playStationAudio(prev), 500)
+                  changeStation(prev)
                 }}
                 title="Previous Station"
               >
                 ◀
+              </button>
+              <button
+                className={`radio-knob radio-knob-play ${radioPlaying ? 'radio-knob-active' : ''}`}
+                onClick={toggleRadioPlay}
+                title={radioPlaying ? 'Pause' : 'Play'}
+              >
+                {radioPlaying ? '❚❚' : '▶'}
               </button>
               <div className="radio-station-dots">
                 {RADIO_STATIONS.map((_, i) => (
@@ -2400,17 +2430,7 @@ export default function Home() {
                 className="radio-knob radio-knob-next"
                 onClick={() => {
                   const next = (prevStationRef.current + 1) % RADIO_STATIONS.length
-                  prevStationRef.current = next
-                  setRadioStatic(true)
-                  playRadioStatic()
-                  playRadioTune()
-                  setRadioChanging(true)
-                  setTimeout(() => {
-                    setCurrentStation(next)
-                    setRadioStatic(false)
-                    setTimeout(() => setRadioChanging(false), 300)
-                  }, 400)
-                  setTimeout(() => playStationAudio(next), 500)
+                  changeStation(next)
                 }}
                 title="Next Station"
               >

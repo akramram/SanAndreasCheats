@@ -1128,3 +1128,61 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 ### Next Iteration
 - **Iteration 19:** Enhanced history modal with session stats dashboard and visual flair
 - **Iteration 20:** Dynamic atmospheric effects — more variety in weather, ambient sounds
+
+---
+
+## Iteration 19 — Interactive Radio with Manual Play/Pause & Station Controls
+**Date:** 2026-05-05
+**Branch:** visual-iterations
+**GitHub Issue:** no-issue (token masked)
+
+### Planned
+- Add manual play/pause button to the radio panel so users can start/stop songs
+- Ensure prev/next station buttons properly switch songs when radio is playing
+- Add playing/paused status indicator in the LCD display
+- VU meter animation should freeze when paused
+- Keep radio panel at bottom-left of screen
+
+### What Changed (Files Modified)
+- **src/pages/Home.jsx**:
+  - Added `radioPlaying` state and `radioPlayingRef` to track play/pause status
+  - Added `toggleRadioPlay` callback:
+    - Play → calls `playStationAudio(currentStation)` to resume current station
+    - Pause → pauses SoundCloud widget, stops synthesized jingle via `stopRadioJingle()`
+  - Added `changeStation(nextIdx)` helper:
+    - Centralizes station change logic (static effect, tune sound, LCD update)
+    - Only calls `playStationAudio` if `radioPlayingRef.current` is true
+  - Replaced inline prev/next button handlers with `changeStation()` calls
+  - Updated `changeStationOnMatch` to use `changeStation()` for consistency
+  - Modified VU meter animation to freeze at minimal height when paused
+  - Updated radio panel JSX:
+    - Added `▶ PLAYING` / `❚❚ PAUSED` status text in LCD
+    - Added play/pause button between prev and next knobs
+    - Added `radio-paused` class to panel when paused
+    - Added `radio-vu-paused` class to VU meter when paused
+
+- **src/App.css**:
+  - Added `.radio-panel.radio-paused` — dims panel and changes border color
+  - Added `.radio-status`, `.radio-status-playing`, `.radio-status-paused` — LCD status text styling
+  - Added `.radio-knob-play` — larger play/pause button with green accent
+  - Added `.radio-knob-play.radio-knob-active` — active play state styling
+  - Added `.radio-vu-paused .vu-bar` — greyed-out flat bars when paused
+
+### What Improved
+- Users can now manually pause and resume radio playback with a dedicated play/pause button
+- Changing stations while playing automatically starts the new station's audio
+- Changing stations while paused only updates the display without starting audio
+- VU meter visually reflects the paused state (flat grey bars)
+- LCD clearly shows ▶ PLAYING or ❚❚ PAUSED status
+- Radio panel dims slightly when paused for immediate visual feedback
+- All station switching logic is now centralized in `changeStation()` for cleaner code
+
+### Issues
+- Build passes cleanly (343KB JS, 90KB CSS)
+- Lint: 3 pre-existing warnings (0 new)
+- All game logic untouched
+- No breaking changes to existing radio auto-play on boot
+
+### Next Iteration
+- **Iteration 20:** Enhanced history modal with session stats dashboard and visual flair
+- **Iteration 21:** Dynamic atmospheric effects — more variety in weather, ambient sounds

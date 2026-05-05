@@ -2933,6 +2933,65 @@
   width: 100%;
 }
 
+/* Paused state — dim the panel */
+.radio-panel.radio-paused {
+  opacity: 0.85;
+  border-color: #444;
+}
+
+.radio-panel.radio-paused .radio-lcd {
+  border-color: #1a2a1a;
+}
+
+/* Status text in LCD */
+.radio-status {
+  font-family: 'VT323', monospace;
+  font-size: 12px;
+  margin-top: 2px;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.radio-status-playing {
+  color: #33ff33;
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.4);
+}
+
+.radio-status-paused {
+  color: #666;
+  text-shadow: none;
+}
+
+/* Play/pause knob */
+.radio-knob-play {
+  width: 36px;
+  height: 36px;
+  font-size: 12px;
+  border-color: rgba(57, 255, 20, 0.25);
+  color: rgba(57, 255, 20, 0.8);
+}
+
+.radio-knob-play:hover {
+  border-color: #39ff14;
+  color: #39ff14;
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.radio-knob-play.radio-knob-active {
+  background: linear-gradient(145deg, #1a3a1a, #0a1a0a);
+  border-color: #39ff14;
+  color: #39ff14;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* VU meter paused state */
+.radio-vu-paused .vu-bar {
+  background: #333 !important;
+  box-shadow: none !important;
+  transition: height 0.3s ease;
+}
+
 /* LCD content wrapper */
 .radio-lcd-content {
   position: relative;
