@@ -110,6 +110,21 @@ const RADIO_STATIONS = [
   { id: 10, name: 'CSR 103.9', freq: '103.9', genre: 'Contemporary Soul', genreId: 'soul', song: 'Grand Theft Auto San Andreas CSR 103.9 Contemporary Soul Radio', scUrl: 'https://soundcloud.com/furtheram11/grand-theft-auto-san-andreas-1' },
 ]
 
+// Virtual track duration for each station (ms) — durations keep running even when paused/changed
+const STATION_TRACK_DURATIONS = [
+  180000, // K-DST: 3:00
+  210000, // Radio Los Santos: 3:30
+  165000, // K-ROSE: 2:45
+  195000, // K-JAH: 3:15
+  240000, // Master Sounds: 4:00
+  225000, // SF-UR: 3:45
+  150000, // Bounce FM: 2:30
+  200000, // Playback FM: 3:20
+  175000, // Radio X: 2:55
+  270000, // WCTR: 4:30
+  185000, // CSR 103.9: 3:05
+]
+
 /* ── Cash Economy Constants ── */
 const CASH_BASE = 100       // Base payout per cheat
 const CASH_SPEED_BONUS = 50 // Bonus for <2s, extra for <1s
@@ -310,6 +325,11 @@ export default function Home() {
   const radioTimerRef = useRef(null)
   const vuAnimFrameRef = useRef(null)
   const prevStationRef = useRef(0)
+  // Station track progress — always runs, loops indefinitely per station
+  const stationProgressRef = useRef(Array(RADIO_STATIONS.length).fill(0))
+  const [radioTimeDisplay, setRadioTimeDisplay] = useState('00:00')
+  const [radioProgressPct, setRadioProgressPct] = useState(0)
+  const stationIntervalRef = useRef(null)
   // SoundCloud Widget refs
   const scIframeRef = useRef(null)
   const scWidgetRef = useRef(null)
@@ -736,6 +756,30 @@ export default function Home() {
       stopRadioJingle()
     }
   }, [booted, currentStation, playStationAudio])
+
+  // Global station progress — always runs independently, loops indefinitely per station
+  useEffect(() => {
+    if (!booted) return
+
+    stationIntervalRef.current = setInterval(() => {
+      const progresses = stationProgressRef.current
+      for (let i = 0; i < RADIO_STATIONS.length; i++) {
+        progresses[i] = (progresses[i] + 100) % STATION_TRACK_DURATIONS[i]
+      }
+      // Update display for current station
+      const currentProgress = progresses[currentStation]
+      const currentDuration = STATION_TRACK_DURATIONS[currentStation]
+      const seconds = Math.floor(currentProgress / 1000)
+      const mins = Math.floor(seconds / 60)
+      const secs = seconds % 60
+      setRadioTimeDisplay(`${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`)
+      setRadioProgressPct(currentProgress / currentDuration)
+    }, 100)
+
+    return () => {
+      if (stationIntervalRef.current) clearInterval(stationIntervalRef.current)
+    }
+  }, [booted, currentStation])
 
   // Radio volume responds to weather
   useEffect(() => {
@@ -2383,6 +2427,12 @@ export default function Home() {
                 </div>
                 <div className={`radio-status ${radioPlaying ? 'radio-status-playing' : 'radio-status-paused'}`}>
                   {radioPlaying ? '▶ PLAYING' : '❚❚ PAUSED'}
+                </div>
+                <div className="radio-time">
+                  {radioTimeDisplay}
+                </div>
+                <div className="radio-track-progress">
+                  <div className="radio-track-progress-bar" style={{ width: `${radioProgressPct * 100}%` }} />
                 </div>
               </div>
               <div className="radio-lcd-scanlines" />

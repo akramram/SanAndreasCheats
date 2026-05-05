@@ -2963,6 +2963,34 @@
   text-shadow: none;
 }
 
+/* Track time display */
+.radio-time {
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: #33ff33;
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.4);
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+
+/* Track progress bar */
+.radio-track-progress {
+  width: 100%;
+  height: 3px;
+  background: rgba(51, 255, 51, 0.15);
+  border-radius: 1px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.radio-track-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(51, 255, 51, 0.6), rgba(51, 255, 51, 0.9));
+  border-radius: 1px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 4px rgba(51, 255, 51, 0.3);
+}
+
 /* Play/pause knob */
 .radio-knob-play {
   width: 36px;
