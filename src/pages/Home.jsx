@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import cheatsData from '../assets/cheats_v2.json'
 import {
-  playKeyClick, playGamepadPress, playComboHit,
+  playKeyClick, playGamepadPress,
   playFailSound, playAchievementSound, playBootBeep, playBootReady,
   playResetSound, playPowerOn, isMuted, toggleMute,
   playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust,
@@ -1116,8 +1116,6 @@ export default function Home() {
           } else {
             setComboAnim('bump')
             setTimeout(() => setComboAnim(null), 250)
-            // Extra combo hit sound at 2+
-            playComboHit(newStreak)
           }
 
           // Escalate fireworks based on combo
