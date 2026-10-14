@@ -4099,6 +4099,28 @@
   display: flex;
   flex-direction: column;
 }
+.finder-content.finder-empty-query {
+  display: none;
+}
+.finder-no-result {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: rgba(251, 191, 36, 0.4);
+  text-align: center;
+  padding: 1rem 0;
+  letter-spacing: 1px;
+}
+.finder-hl {
+  color: #34d399;
+}
+.finder-sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
 .finder-result .codex-declassified-inner {
   display: flex;
   align-items: center;
@@ -4107,9 +4129,17 @@
 .finder-result-main {
   flex: 1;
   min-width: 0;
+  min-height: 44px;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  cursor: pointer;
+}
+.finder-result.active .finder-result-main,
+.finder-result-main:hover {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 .finder-result-main .codex-entry-code {
   word-break: break-word;
@@ -4130,17 +4160,22 @@
   font-family: 'Press Start 2P', monospace;
   font-size: 8px;
   letter-spacing: 1px;
-  color: #fbbf24;
-  background: rgba(0, 0, 0, 0.4);
+  color: rgba(251, 191, 36, 0.6);
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid #5c4a2e;
   border-radius: 2px;
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
   touch-action: manipulation;
 }
-.finder-copy-btn:hover {
+.finder-copy-btn:hover,
+.finder-copy-btn:focus-visible {
+  color: #fbbf24;
   border-color: #f59e0b;
-  color: #fde68a;
+}
+.finder-copy-btn:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
 }
 .finder-copy-btn:active {
   background: rgba(245, 158, 11, 0.12);
@@ -4148,16 +4183,12 @@
 .finder-copy-btn.copied {
   color: #34d399;
   border-color: #34d399;
-  background: rgba(52, 211, 153, 0.08);
+  background: rgba(52, 211, 153, 0.12);
 }
 .finder-copy-btn.error {
   color: #f87171;
   border-color: #f87171;
   background: rgba(248, 113, 113, 0.08);
-}
-.finder-copy-btn:focus-visible {
-  outline: 2px solid #fbbf24;
-  outline-offset: 2px;
 }
 @media (max-width: 480px) {
   .finder-result .codex-declassified-inner {

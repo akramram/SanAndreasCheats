@@ -352,8 +352,10 @@ export default function Home() {
   const [finderQuery, setFinderQuery] = useState('')
   const [finderCopiedId, setFinderCopiedId] = useState(null) // cheat id just copied
   const [finderCopyError, setFinderCopyError] = useState(null) // cheat id that failed
+  const [finderActiveIdx, setFinderActiveIdx] = useState(-1) // keyboard-active listbox option
   const finderInputRef = useRef(null)
   const finderToastTimerRef = useRef(null)
+  const finderStatusRef = useRef(null) // aria-live region
   const finderResults = useMemo(() => {
     if (!showFinder) return []
     return fuzzyFilter(cheatsData?.cheats || [], finderQuery, { keys: ['name', 'description', 'notes'], limit: 8 })
@@ -368,6 +370,15 @@ export default function Home() {
     return pcSeqs.filter(ch => ch !== '\n').join('')
   }, [])
 
+  // Announce copy results for screen readers (single polite region)
+  const announceCopy = useCallback((cheat, ok) => {
+    if (finderStatusRef.current) {
+      finderStatusRef.current.textContent = ok
+        ? `Kode ${cheat.name} dicopy`
+        : 'Copy gagal'
+    }
+  }, [])
+
   const copyCheatCode = useCallback(async (cheat) => {
     const text = getCheatCodeText(cheat)
     let ok = false
@@ -378,7 +389,7 @@ export default function Home() {
       }
     } catch { /* fall through to execCommand */ }
     if (!ok) {
-      // ponytail: execCommand fallback for older mobile browsers / non-secure contexts
+      // ponytail: execCommand fallback for older mobile browsers / non-secure contexts (consensus KUR-280 AC-4)
       const ta = document.createElement('textarea')
       ta.value = text
       ta.setAttribute('readonly', '')
@@ -390,22 +401,49 @@ export default function Home() {
     }
     setFinderCopiedId(ok ? cheat.id : null)
     setFinderCopyError(ok ? null : cheat.id)
+    announceCopy(cheat, ok)
+    if (ok && typeof navigator.vibrate === 'function') navigator.vibrate(30)
     if (finderToastTimerRef.current) clearTimeout(finderToastTimerRef.current)
     finderToastTimerRef.current = setTimeout(() => {
       setFinderCopiedId(null)
       setFinderCopyError(null)
-    }, 1800)
+    }, ok ? 1500 : 2000)
     return ok
-  }, [getCheatCodeText])
+  }, [getCheatCodeText, announceCopy])
 
   const openFinder = useCallback(() => {
     setShowFinder(true)
     setFinderQuery('')
+    setFinderActiveIdx(-1)
     setFinderCopiedId(null)
     setFinderCopyError(null)
   }, [])
 
   const closeFinder = useCallback(() => setShowFinder(false), [])
+
+  const onFinderInputKeyDown = useCallback((e) => {
+    const count = finderResults.length
+    if (e.key === 'Escape') { closeFinder(); return }
+    if (count === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setFinderActiveIdx(i => (i + 1) % count)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setFinderActiveIdx(i => (i <= 0 ? count - 1 : i - 1))
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      const hit = finderResults[finderActiveIdx >= 0 ? finderActiveIdx : 0]
+      if (hit) copyCheatCode(hit.item)
+    }
+  }, [finderResults, finderActiveIdx, closeFinder, copyCheatCode])
+
+  // Scroll active option into view (keyboard nav)
+  useEffect(() => {
+    if (finderActiveIdx < 0) return
+    const el = document.querySelector(`.finder-copy-btn[data-cheat-id="${finderResults[finderActiveIdx]?.item.id}"]`)
+    el?.scrollIntoView({ block: 'nearest' })
+  }, [finderActiveIdx]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Focus finder input when opened
   useEffect(() => {
@@ -2362,7 +2400,7 @@ export default function Home() {
               <div className="codex-overview">
                 <div>
                   <div className="codex-title">FINDER</div>
-                  <div className="codex-subtitle">Fuzzy search — every cheat decoded</div>
+                  <div className="codex-subtitle">Fuzzy search, semua cheat terbuka</div>
                 </div>
               </div>
               <div className="codex-search">
@@ -2370,36 +2408,62 @@ export default function Home() {
                 <input
                   ref={finderInputRef}
                   type="text"
+                  role="combobox"
+                  aria-expanded={finderResults.length > 0}
+                  aria-controls="finder-listbox"
+                  aria-autocomplete="list"
                   inputMode="search"
+                  enterKeyHint="search"
                   autoComplete="off"
                   autoCorrect="off"
                   autoCapitalize="off"
                   spellCheck="false"
-                  placeholder="Type to search cheats… (name, effect, code)"
+                  placeholder="Ketik nama cheat, efek, atau kodenya"
                   value={finderQuery}
-                  onChange={(e) => setFinderQuery(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Escape') closeFinder() }}
+                  onChange={(e) => { setFinderQuery(e.target.value); setFinderActiveIdx(-1) }}
+                  onKeyDown={onFinderInputKeyDown}
                   aria-label="Search cheat codes"
                 />
               </div>
             </div>
-            <div className="codex-content finder-content" role="listbox" aria-label="Cheat search results">
-              {finderResults.length === 0 && (
-                <div className="codex-empty">
-                  <div className="codex-empty-icon">🔒</div>
-                  No cheats matching &ldquo;{finderQuery}&rdquo;
-                </div>
+            <div
+              id="finder-listbox"
+              className={`codex-content finder-content ${finderQuery.trim() === '' ? 'finder-empty-query' : ''}`}
+              role="listbox"
+              aria-label="Cheat search results"
+            >
+              {finderQuery.trim() !== '' && finderResults.length === 0 && (
+                <div className="finder-no-result">NO CHEAT DITEMUKAN</div>
               )}
-              {finderResults.map(({ item: cheat }) => {
+              {finderResults.map(({ item: cheat, indices, matchedKey }, idx) => {
                 const catInfo = CATEGORIES[cheat.category || 'misc'] || CATEGORIES.misc
                 const codeText = getCheatCodeText(cheat)
                 const copied = finderCopiedId === cheat.id
                 const failed = finderCopyError === cheat.id
+                const isActive = finderActiveIdx === idx
+                // Highlight matched chars green — only when match came from name (fallback rule: never fake highlight)
+                const showNameHighlight = matchedKey === 'name' && Array.isArray(indices)
+                const nameLower = (cheat.name || '').toLowerCase()
+                let nameNode = cheat.name
+                if (showNameHighlight) {
+                  const set = new Set(indices.filter(i => i < nameLower.length))
+                  nameNode = cheat.name.split('').map((ch, i) => (
+                    set.has(i) ? <span key={i} className="finder-hl">{ch}</span> : ch
+                  ))
+                }
                 return (
-                  <div key={cheat.id} className="codex-entry declassified finder-result">
+                  <div
+                    key={cheat.id}
+                    role="option"
+                    aria-selected={isActive}
+                    className={`codex-entry declassified finder-result ${isActive ? 'active' : ''}`}
+                  >
                     <div className="codex-declassified-inner">
-                      <div className="finder-result-main">
-                        <div className="codex-entry-name">{cheat.name}</div>
+                      <div
+                        className="finder-result-main"
+                        onClick={() => copyCheatCode(cheat)}
+                      >
+                        <div className="codex-entry-name">{nameNode}</div>
                         {cheat.description && (
                           <div className="codex-entry-desc">{cheat.description}</div>
                         )}
@@ -2417,17 +2481,18 @@ export default function Home() {
                       </div>
                       <button
                         className={`finder-copy-btn ${copied ? 'copied' : ''} ${failed ? 'error' : ''}`}
+                        data-cheat-id={cheat.id}
                         onClick={() => copyCheatCode(cheat)}
-                        aria-label={`Copy code for ${cheat.name}`}
-                        aria-live="polite"
+                        aria-label={`Copy ${cheat.name}`}
                       >
-                        {copied ? '✓ COPIED' : failed ? '✗ FAILED' : '⧉ COPY'}
+                        {copied ? 'COPIED' : failed ? 'GAGAL' : 'COPY'}
                       </button>
                     </div>
                   </div>
                 )
               })}
             </div>
+            <div ref={finderStatusRef} role="status" aria-live="polite" className="finder-sr-status" />
           </div>
         </div>
       )}
