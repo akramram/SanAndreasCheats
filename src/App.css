@@ -4144,6 +4144,11 @@
 .finder-result-main .codex-entry-code {
   word-break: break-word;
 }
+.finder-result-main .codex-entry-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .finder-result-main .codex-entry-category-tag {
   align-self: flex-start;
   font-size: 9px;
