@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { fuzzyFilter } from '../utils/fuzzy'
 import cheatsData from '../assets/cheats_v2.json'
 import {
   playKeyClick, playGamepadPress,
@@ -345,6 +346,111 @@ export default function Home() {
   const [codexTab, setCodexTab] = useState('ALL')
   const [codexSearch, setCodexSearch] = useState('')
   const [codexDiscoveryToast, setCodexDiscoveryToast] = useState(null) // { id, name } or null
+
+  // Cheat Finder (KUR-13): fuzzy search + copy-to-clipboard
+  const [showFinder, setShowFinder] = useState(false)
+  const [finderQuery, setFinderQuery] = useState('')
+  const [finderCopiedId, setFinderCopiedId] = useState(null) // cheat id just copied
+  const [finderCopyError, setFinderCopyError] = useState(null) // cheat id that failed
+  const [finderActiveIdx, setFinderActiveIdx] = useState(-1) // keyboard-active listbox option
+  const finderInputRef = useRef(null)
+  const finderToastTimerRef = useRef(null)
+  const finderStatusRef = useRef(null) // aria-live region
+  const finderResults = useMemo(() => {
+    if (!showFinder) return []
+    return fuzzyFilter(cheatsData?.cheats || [], finderQuery, { keys: ['name', 'description', 'notes'], limit: 8 })
+  }, [showFinder, finderQuery])
+
+  const getCheatCodeText = useCallback((cheat) => {
+    const pcSeqs = cheat.pcSequence || []
+    if (pcSeqs.length === 0) return (cheat.psSequence || []).join(' ')
+    if (Array.isArray(pcSeqs[0])) {
+      return pcSeqs.map(seq => seq.filter(ch => ch !== '\n').join('')).join(' / ')
+    }
+    return pcSeqs.filter(ch => ch !== '\n').join('')
+  }, [])
+
+  // Announce copy results for screen readers (single polite region)
+  const announceCopy = useCallback((cheat, ok) => {
+    if (finderStatusRef.current) {
+      finderStatusRef.current.textContent = ok
+        ? `Kode ${cheat.name} dicopy`
+        : 'Copy gagal'
+    }
+  }, [])
+
+  const copyCheatCode = useCallback(async (cheat) => {
+    const text = getCheatCodeText(cheat)
+    let ok = false
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text)
+        ok = true
+      }
+    } catch { /* fall through to execCommand */ }
+    if (!ok) {
+      // ponytail: execCommand fallback for older mobile browsers / non-secure contexts (consensus KUR-280 AC-4)
+      const ta = document.createElement('textarea')
+      ta.value = text
+      ta.setAttribute('readonly', '')
+      ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0'
+      document.body.appendChild(ta)
+      ta.select()
+      try { ok = document.execCommand('copy') } catch { ok = false }
+      document.body.removeChild(ta)
+    }
+    setFinderCopiedId(ok ? cheat.id : null)
+    setFinderCopyError(ok ? null : cheat.id)
+    announceCopy(cheat, ok)
+    if (ok && typeof navigator.vibrate === 'function') navigator.vibrate(30)
+    if (finderToastTimerRef.current) clearTimeout(finderToastTimerRef.current)
+    finderToastTimerRef.current = setTimeout(() => {
+      setFinderCopiedId(null)
+      setFinderCopyError(null)
+    }, ok ? 1500 : 2000)
+    return ok
+  }, [getCheatCodeText, announceCopy])
+
+  const openFinder = useCallback(() => {
+    setShowFinder(true)
+    setFinderQuery('')
+    setFinderActiveIdx(-1)
+    setFinderCopiedId(null)
+    setFinderCopyError(null)
+  }, [])
+
+  const closeFinder = useCallback(() => setShowFinder(false), [])
+
+  const onFinderInputKeyDown = useCallback((e) => {
+    const count = finderResults.length
+    if (e.key === 'Escape') { closeFinder(); return }
+    if (count === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setFinderActiveIdx(i => (i + 1) % count)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setFinderActiveIdx(i => (i <= 0 ? count - 1 : i - 1))
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      const hit = finderResults[finderActiveIdx >= 0 ? finderActiveIdx : 0]
+      if (hit) copyCheatCode(hit.item)
+    }
+  }, [finderResults, finderActiveIdx, closeFinder, copyCheatCode])
+
+  // Scroll active option into view (keyboard nav)
+  useEffect(() => {
+    if (finderActiveIdx < 0) return
+    const el = document.querySelector(`.finder-copy-btn[data-cheat-id="${finderResults[finderActiveIdx]?.item.id}"]`)
+    el?.scrollIntoView({ block: 'nearest' })
+  }, [finderActiveIdx]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Focus finder input when opened
+  useEffect(() => {
+    if (showFinder && finderInputRef.current) {
+      finderInputRef.current.focus()
+    }
+  }, [showFinder])
   const codexDiscoveryTimerRef = useRef(null)
   const prevUniqueCountRef = useRef(0)
 
@@ -1429,6 +1535,9 @@ export default function Home() {
 
     // Keyboard input handling for PC cheat codes
     const handleKeyDown = (event) => {
+      // Don't feed the game buffer while typing in a text input (Cheat Finder / Codex search)
+      const target = event.target
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return
       // Only capture letter keys A-Z
       if (event.key.length === 1 && /[A-Za-z]/.test(event.key)) {
         const letter = event.key.toUpperCase()
@@ -1964,6 +2073,16 @@ export default function Home() {
         )}
       </button>
 
+      {/* Cheat Finder Button (KUR-13) */}
+      <button
+        onClick={openFinder}
+        className="absolute top-4 right-72 text-amber-200 hover:text-amber-400 finder-btn cursor-pointer z-10 relative"
+        aria-label="Cheat Finder — fuzzy search & copy"
+        title="Cheat Finder"
+      >
+        <span className="text-xl">🔎</span>
+      </button>
+
       {/* CJ Avatar with reactive animations */}
       <div className="text-2xl font-semibold tracking-tight text-center relative z-10">
         {cjSpeech && (
@@ -2268,6 +2387,112 @@ export default function Home() {
               <div className="codex-discovery-toast-label">NEW DISCOVERY</div>
               <div className="codex-discovery-toast-name">{codexDiscoveryToast.name}</div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cheat Finder Modal (KUR-13) — fuzzy autocomplete + copy */}
+      {showFinder && (
+        <div className="codex-modal" onClick={closeFinder}>
+          <div className="codex-panel finder-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="codex-panel-header">
+              <button className="codex-close" onClick={closeFinder} aria-label="Close Cheat Finder">[X]</button>
+              <div className="codex-overview">
+                <div>
+                  <div className="codex-title">FINDER</div>
+                  <div className="codex-subtitle">Fuzzy search, semua cheat terbuka</div>
+                </div>
+              </div>
+              <div className="codex-search">
+                <span className="codex-search-icon">🔍</span>
+                <input
+                  ref={finderInputRef}
+                  type="text"
+                  role="combobox"
+                  aria-expanded={finderResults.length > 0}
+                  aria-controls="finder-listbox"
+                  aria-autocomplete="list"
+                  inputMode="search"
+                  enterKeyHint="search"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck="false"
+                  placeholder="Ketik nama cheat, efek, atau kodenya"
+                  value={finderQuery}
+                  onChange={(e) => { setFinderQuery(e.target.value); setFinderActiveIdx(-1) }}
+                  onKeyDown={onFinderInputKeyDown}
+                  aria-label="Search cheat codes"
+                />
+              </div>
+            </div>
+            <div
+              id="finder-listbox"
+              className={`codex-content finder-content ${finderQuery.trim() === '' ? 'finder-empty-query' : ''}`}
+              role="listbox"
+              aria-label="Cheat search results"
+            >
+              {finderQuery.trim() !== '' && finderResults.length === 0 && (
+                <div className="finder-no-result">NO CHEAT DITEMUKAN</div>
+              )}
+              {finderResults.map(({ item: cheat, indices, matchedKey }, idx) => {
+                const catInfo = CATEGORIES[cheat.category || 'misc'] || CATEGORIES.misc
+                const codeText = getCheatCodeText(cheat)
+                const copied = finderCopiedId === cheat.id
+                const failed = finderCopyError === cheat.id
+                const isActive = finderActiveIdx === idx
+                // Highlight matched chars green — only when match came from name (fallback rule: never fake highlight)
+                const showNameHighlight = matchedKey === 'name' && Array.isArray(indices)
+                const nameLower = (cheat.name || '').toLowerCase()
+                let nameNode = cheat.name
+                if (showNameHighlight) {
+                  const set = new Set(indices.filter(i => i < nameLower.length))
+                  nameNode = cheat.name.split('').map((ch, i) => (
+                    set.has(i) ? <span key={i} className="finder-hl">{ch}</span> : ch
+                  ))
+                }
+                return (
+                  <div
+                    key={cheat.id}
+                    role="option"
+                    aria-selected={isActive}
+                    className={`codex-entry declassified finder-result ${isActive ? 'active' : ''}`}
+                  >
+                    <div className="codex-declassified-inner">
+                      <div
+                        className="finder-result-main"
+                        onClick={() => copyCheatCode(cheat)}
+                      >
+                        <div className="codex-entry-name">{nameNode}</div>
+                        {cheat.description && (
+                          <div className="codex-entry-desc">{cheat.description}</div>
+                        )}
+                        <div className="codex-entry-code">{codeText}</div>
+                        <div
+                          className="codex-entry-category-tag"
+                          style={{
+                            color: catInfo.color,
+                            background: `${catInfo.color}15`,
+                            border: `1px solid ${catInfo.color}30`,
+                          }}
+                        >
+                          {catInfo.label}
+                        </div>
+                      </div>
+                      <button
+                        className={`finder-copy-btn ${copied ? 'copied' : ''} ${failed ? 'error' : ''}`}
+                        data-cheat-id={cheat.id}
+                        onClick={() => copyCheatCode(cheat)}
+                        aria-label={`Copy ${cheat.name}`}
+                      >
+                        {copied ? 'COPIED' : failed ? 'GAGAL' : 'COPY'}
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div ref={finderStatusRef} role="status" aria-live="polite" className="finder-sr-status" />
           </div>
         </div>
       )}
