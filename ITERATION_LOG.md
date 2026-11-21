@@ -1220,3 +1220,26 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 - Build passes cleanly
 - Lint: 3 pre-existing warnings (0 new)
 - All game logic untouched
+
+## Iteration 20 — Daily Contract: Cheat-of-the-Day Mission (#26)
+**Date:** 2026-11-22
+**Branch:** feat/iter-20-daily-contract → PR → main
+
+### Planned
+- Date-seeded daily mission card with a one-time cash bonus and a day streak.
+
+### Changed
+- `src/utils/dailyContract.js` (new) — pure helpers: local day key, FNV-1a seeded `pickDailyCheat`, streak math (`completeContract`, `activeStreak`, `previousDayKey`), defensive storage parsing.
+- `src/pages/Home.jsx` — contract state + payout effect that only *observes* `matchedCheat` (matching/input/gamepad logic untouched); pixel card under the WANTED panel; "CONTRACT COMPLETE" toast.
+- `src/App.css` — `.contract-card` / `.contract-toast` (Press Start 2P, amber → green when done, steps() entrance, reduced-motion fallback, mobile hides description).
+
+### Improved
+- A reason to come back daily: same contract for everyone on a given local day, +$5,000 once per day, streak breaks if a day is skipped.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 3 pre-existing warnings (0 new)
+- Helpers: deterministic per day, month/year rollover, idempotent completion, 57 unique contracts over 60 days.
+- Headless Chromium on `vite preview`: typing today's PC code (UZUMYMW) → toast shown, cash 0 → 5200 (5000 bonus + 200 base), retyping does not pay twice; no horizontal overflow at 375px / 1280px.
+
+### Next
+- Show contract completion in the Codex / achievement gallery.
