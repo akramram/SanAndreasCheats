@@ -1398,3 +1398,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Profile style recalculation (ambient CSS animations) on low-end phones.
+
+## Iteration 29 — Global prefers-reduced-motion Fallback (#44)
+**Date:** 2026-11-22
+**Branch:** feat/iter-29-reduced-motion → PR → main
+
+### Found
+- ~100 `@keyframes` (strobe and lightning flashes, screen shake, ambient loops); with the OS asking for reduced motion, 90 animations were still running (headless `reducedMotion: 'reduce'`). Only two small reduce rules existed (from iterations 20/24).
+
+### Changed (`src/App.css`)
+- Global `@media (prefers-reduced-motion: reduce)` block at the end of the file: every animation/transition collapses to its end state (0.01 ms, one iteration, no delay); infinite loops therefore stop. Purely decorative drifting layers (`.float-text`, `.ambient-dust`) are hidden because they would otherwise freeze across the middle of the screen.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless: running animations 92 (default) vs **0** (reduce); HUD, contract card, radio, WANTED panel, header buttons and CJ all visible under reduce; HESOYAM still registers and its match panel shows; screenshot reviewed (first pass showed frozen ambient cheat names mid-screen → hidden).
+
+### Next
+- The transient WANTED toast overlaps the contract card (top-left) while it is shown — move the toast or the card.
