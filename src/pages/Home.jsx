@@ -13,7 +13,8 @@ import {
   playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust,
   playWantedStar, playWantedLost, startSiren, stopSiren,
   playRadioStatic, playRadioTune, startRadioJingle, stopRadioJingle, setRadioVolume,
-  playCashRegister, playCoinPickup, playPurchaseSound, playCantAffordSound
+  playCashRegister, playCoinPickup, playPurchaseSound, playCantAffordSound,
+  playContractComplete, playHeistComplete
 } from '../utils/sounds'
 
 /* ── Weather System Constants ── */
@@ -505,6 +506,13 @@ export default function Home() {
     })
     setContractToast({ streak: next.streak })
   }, [matchedCheat, dailyCheat, contractDone, contractState, contractDay])
+
+  // Completion cue after the match sound has had its moment (~0.6s), cancelled on unmount.
+  useEffect(() => {
+    if (!contractToast) return
+    const t = setTimeout(contractToast.heist ? playHeistComplete : playContractComplete, 600)
+    return () => clearTimeout(t)
+  }, [contractToast])
 
   // Weekly Heist payout: observes the match result only
   useEffect(() => {

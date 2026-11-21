@@ -1322,3 +1322,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Sound cue for contract completion distinct from the normal match chime.
+
+## Iteration 25 — Contract & Heist Completion Sound Cues (#36)
+**Date:** 2026-11-22
+**Branch:** feat/iter-25-contract-sounds → PR → main
+
+### Planned
+- Distinct audio reward for contracts (Iteration 24 "Next").
+
+### Changed
+- `src/utils/sounds.js` — `playContractComplete()` (original G-major → C-major square-wave stab + triangle bass) and `playHeistComplete()` (existing cash register, rising E-major arpeggio, E2 triangle thump + noise). Both respect mute.
+- `src/pages/Home.jsx` — effect on `contractToast` plays the matching cue 600 ms after the match (so `cheat_activated.mp3` is not drowned out); timer cleared on unmount. Matching/input logic untouched.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 3 pre-existing warnings
+- Headless Chromium with an `AudioParam.value` spy (frequencies actually scheduled ≥ 400 ms after the match): daily contract → all six chord tones (392/494/587, 523/659/784) present, no heist tones; weekly heist → full arpeggio (330…988) + 82 Hz thump; muted via the Mute button → none of the contract tones.
+
+### Next
+- Settings toggle for contract cards (hide for minimal UI).

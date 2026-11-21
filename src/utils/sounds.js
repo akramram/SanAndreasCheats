@@ -871,3 +871,30 @@ export function playWindGust() {
   noise.start(ctx.currentTime)
   noise.stop(ctx.currentTime + 1.5)
 }
+
+/** Daily contract complete — original two-chord stab (G major → C major) with bass. */
+export function playContractComplete() {
+  if (_muted) return
+  const chords = [
+    [392, 494, 587], // G4 B4 D5
+    [523, 659, 784], // C5 E5 G5
+  ]
+  chords.forEach((chord, i) => {
+    setTimeout(() => {
+      chord.forEach((f) => playTone(f, i === 1 ? 0.45 : 0.18, 'square', 0.09))
+      playTone(chord[0] / 2, i === 1 ? 0.5 : 0.2, 'triangle', 0.14)
+    }, i * 190)
+  })
+}
+
+/** Weekly heist complete — register ka-ching, rising arpeggio, low thump. */
+export function playHeistComplete() {
+  if (_muted) return
+  playCashRegister()
+  const arp = [330, 415, 494, 659, 831, 988] // E4 G#4 B4 E5 G#5 B5
+  arp.forEach((f, i) => setTimeout(() => playTone(f, 0.12, 'square', 0.12), 260 + i * 70))
+  setTimeout(() => {
+    playTone(82, 0.5, 'triangle', 0.25) // E2 thump
+    playNoise(0.25, 0.05)
+  }, 260 + arp.length * 70)
+}
