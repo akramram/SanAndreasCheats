@@ -1359,3 +1359,23 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Return focus to the opening button when a modal closes; trap Tab inside open dialogs.
+
+## Iteration 27 — Dialog Focus Management (#40)
+**Date:** 2026-11-22
+**Branch:** feat/iter-27-dialog-focus → PR → main
+
+### Planned
+- Iteration 26 "Next": focus return + Tab trap.
+
+### Changed (`src/pages/Home.jsx`)
+- On open: focus moves to the first focusable element in the open `role="dialog"` (Codex/Finder inputs that autofocus keep focus).
+- Tab / Shift+Tab cycle inside the dialog (never reach the page behind).
+- On close (Escape, ✕, backdrop): focus returns to the opener. The opener is tracked with a `focusin` listener (last focused element outside any dialog) because Codex/Finder inputs autofocus during commit, before the effect runs — the first attempt using `document.activeElement` failed for those two.
+- Same single effect as the Escape handler from iteration 26; cleanup cancels the rAF and listener.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 3 pre-existing warnings
+- Headless Chromium, keyboard only (focus opener → Enter): all 5 dialogs → focus inside = true, 25 Tab/Shift+Tab presses → 0 escapes, Escape → focus back on the opener = true. Iteration 26 Escape audit still 5/5 closed. HESOYAM registers afterwards.
+
+### Next
+- Contract cards hide toggle in the shop/settings.

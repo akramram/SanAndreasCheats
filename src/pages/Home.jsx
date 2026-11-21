@@ -539,18 +539,61 @@ export default function Home() {
   // Escape closes whichever overlay is open. The cheat buffer only reads A–Z,
   // so this never touches cheat input (keyboard or gamepad).
   const anyModalOpen = showShop || isHistoryModalOpen || showAchievementGallery || showCodex || showFinder
+  // Focus management (iteration 27): move focus into the dialog, trap Tab inside
+  // it, and hand focus back to the button that opened it on close.
+  // Last focused element outside any dialog = the opener. (Codex/Finder inputs
+  // autofocus during commit, so document.activeElement in the effect is too late.)
+  const lastOutsideFocusRef = useRef(null)
+  useEffect(() => {
+    const onFocusIn = (e) => {
+      if (e.target instanceof HTMLElement && !e.target.closest('[role="dialog"]')) lastOutsideFocusRef.current = e.target
+    }
+    document.addEventListener('focusin', onFocusIn)
+    return () => document.removeEventListener('focusin', onFocusIn)
+  }, [])
   useEffect(() => {
     if (!anyModalOpen) return
+    const opener = lastOutsideFocusRef.current
+    const openDialog = () => document.querySelector('[role="dialog"][aria-modal="true"]')
+    const focusables = (root) => [...root.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )].filter((el) => !el.disabled && el.offsetParent !== null)
+    // After the dialog renders; Codex/Finder inputs that already took focus keep it.
+    const raf = requestAnimationFrame(() => {
+      const d = openDialog()
+      if (d && !d.contains(document.activeElement)) focusables(d)[0]?.focus()
+    })
     const onKey = (e) => {
-      if (e.key !== 'Escape') return
-      setShowShop(false)
-      setIsHistoryModalOpen(false)
-      setShowAchievementGallery(false)
-      setShowCodex(false)
-      setShowFinder(false)
+      if (e.key === 'Escape') {
+        setShowShop(false)
+        setIsHistoryModalOpen(false)
+        setShowAchievementGallery(false)
+        setShowCodex(false)
+        setShowFinder(false)
+        return
+      }
+      if (e.key !== 'Tab') return
+      const d = openDialog()
+      if (!d) return
+      const items = focusables(d)
+      if (items.length === 0) { e.preventDefault(); return }
+      const first = items[0]
+      const last = items[items.length - 1]
+      const inside = d.contains(document.activeElement)
+      if (e.shiftKey && (!inside || document.activeElement === first)) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && (!inside || document.activeElement === last)) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('keydown', onKey)
+      if (opener instanceof HTMLElement && document.contains(opener)) opener.focus()
+    }
   }, [anyModalOpen])
   const [shopTab, setShopTab] = useState('all')
   const [ownedItems, setOwnedItems] = useState(() => {
