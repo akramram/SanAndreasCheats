@@ -535,6 +535,23 @@ export default function Home() {
   }, [contractToast])
 
   const [showShop, setShowShop] = useState(false)
+
+  // Escape closes whichever overlay is open. The cheat buffer only reads A–Z,
+  // so this never touches cheat input (keyboard or gamepad).
+  const anyModalOpen = showShop || isHistoryModalOpen || showAchievementGallery || showCodex || showFinder
+  useEffect(() => {
+    if (!anyModalOpen) return
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return
+      setShowShop(false)
+      setIsHistoryModalOpen(false)
+      setShowAchievementGallery(false)
+      setShowCodex(false)
+      setShowFinder(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [anyModalOpen])
   const [shopTab, setShopTab] = useState('all')
   const [ownedItems, setOwnedItems] = useState(() => {
     try {
@@ -2335,7 +2352,7 @@ export default function Home() {
       {/* History Modal — pixel styled */}
       {isHistoryModalOpen && (
         <div className="fixed inset-0 pixel-modal-backdrop flex items-center justify-center z-[200] p-4">
-          <div className="pixel-modal max-w-2xl w-full max-h-[80vh] flex flex-col">
+          <div className="pixel-modal max-w-2xl w-full max-h-[80vh] flex flex-col" role="dialog" aria-modal="true" aria-label="Cheat history">
             {/* Modal Header */}
             <div className="pixel-modal-header flex justify-between items-center p-5">
               <h2 className="font-pixel text-sm text-amber-200 tracking-wider">CHEAT HISTORY</h2>
@@ -2453,7 +2470,7 @@ export default function Home() {
       {/* Achievement Gallery Modal */}
       {showAchievementGallery && (
         <div className="achievement-gallery" onClick={() => setShowAchievementGallery(false)}>
-          <div className="achievement-gallery-panel" onClick={(e) => e.stopPropagation()}>
+          <div className="achievement-gallery-panel" role="dialog" aria-modal="true" aria-label="Achievements" onClick={(e) => e.stopPropagation()}>
             {/* Header */}
             <div className="achievement-gallery-header">
               <div>
@@ -2525,7 +2542,7 @@ export default function Home() {
       {/* Cheat Finder Modal (KUR-13) — fuzzy autocomplete + copy */}
       {showFinder && (
         <div className="codex-modal" onClick={closeFinder}>
-          <div className="codex-panel finder-panel" onClick={(e) => e.stopPropagation()}>
+          <div className="codex-panel finder-panel" role="dialog" aria-modal="true" aria-label="Cheat finder" onClick={(e) => e.stopPropagation()}>
             <div className="codex-panel-header">
               <button className="codex-close" onClick={closeFinder} aria-label="Close Cheat Finder">[X]</button>
               <div className="codex-overview">
@@ -2678,7 +2695,7 @@ export default function Home() {
 
         return (
           <div className="codex-modal" onClick={() => setShowCodex(false)}>
-            <div className="codex-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="codex-panel" role="dialog" aria-modal="true" aria-label="Cheat codex" onClick={(e) => e.stopPropagation()}>
               {/* Header */}
               <div className="codex-panel-header">
                 <button className="codex-close" onClick={() => setShowCodex(false)}>[X]</button>
@@ -2912,7 +2929,7 @@ export default function Home() {
         const filteredItems = shopTab === 'all' ? SHOP_ITEMS : SHOP_ITEMS.filter(i => i.cat === shopTab)
         return (
           <div className="shop-modal-backdrop" onClick={() => setShowShop(false)}>
-            <div className="shop-panel" onClick={e => e.stopPropagation()}>
+            <div className="shop-panel" role="dialog" aria-modal="true" aria-label="Cosmetic shop" onClick={e => e.stopPropagation()}>
               <div className="shop-header">
                 <div>
                   <div className="shop-title">🛒 BINCO SHOP</div>

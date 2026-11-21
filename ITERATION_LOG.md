@@ -1340,3 +1340,22 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Settings toggle for contract cards (hide for minimal UI).
+
+## Iteration 26 — Escape Closes Every Modal + Dialog Semantics (#38)
+**Date:** 2026-11-22
+**Branch:** feat/iter-26-escape-modals → PR → main
+
+### Found (headless audit)
+- Shop, History, Achievements, Codex did **not** close on Escape; Finder only did while its input had focus. None of the five panels had `role="dialog"`.
+
+### Changed (`src/pages/Home.jsx`)
+- One effect, attached only while an overlay is open: Escape closes Shop / History / Achievements / Codex / Finder. The cheat buffer only reads A–Z, so cheat input (keyboard + gamepad) is untouched.
+- `role="dialog"` + `aria-modal="true"` + `aria-label` on all five panels.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 3 pre-existing warnings
+- Headless Chromium, per modal: open via its button → 1 visible `role=dialog` → Escape → 0 overlays (before: Shop/History/Achievements/Codex stayed open).
+- After closing Achievements with Escape, typing HESOYAM still registers (CHEATS counter 1).
+
+### Next
+- Return focus to the opening button when a modal closes; trap Tab inside open dialogs.
