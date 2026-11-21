@@ -94,10 +94,15 @@ const ACHIEVEMENTS = [
   { id: 'legend', name: 'LEGEND', desc: 'Activate 100 cheats total', icon: '🌟', category: 'Volume', check: (s) => s.totalCheats >= 100 },
   { id: 'myth', name: 'MYTH', desc: 'Activate 500 cheats total', icon: '💫', category: 'Volume', check: (s) => s.totalCheats >= 500 },
   // Exploration
-  { id: 'world-curious', name: 'CURIIOUS', desc: 'Discover 5 unique cheats', icon: '🗺️', category: 'Exploration', check: (s) => s.uniqueCheats >= 5 },
+  { id: 'world-curious', name: 'CURIOUS', desc: 'Discover 5 unique cheats', icon: '🗺️', category: 'Exploration', check: (s) => s.uniqueCheats >= 5 },
   { id: 'world-traveler', name: 'WELL TRAVELED', desc: 'Discover 15 unique cheats', icon: '✈️', category: 'Exploration', check: (s) => s.uniqueCheats >= 15 },
   { id: 'completionist', name: 'COMPLETIONIST', desc: 'Discover 30 unique cheats', icon: '🧩', category: 'Exploration', check: (s) => s.uniqueCheats >= 30 },
   { id: 'collector', name: 'COLLECTOR', desc: 'Discover all unique cheats', icon: '🏅', category: 'Exploration', check: (s) => s.totalAvailable > 0 && s.uniqueCheats >= s.totalAvailable },
+  // Contracts (daily contract, iteration 21)
+  { id: 'contract-first', name: 'ON THE PAYROLL', desc: 'Complete your first daily contract', icon: '📋', category: 'Contracts', check: (s) => s.contractsTotal >= 1 },
+  { id: 'contract-streak-3', name: 'RELIABLE', desc: 'Complete contracts 3 days in a row', icon: '📆', category: 'Contracts', check: (s) => s.contractBestStreak >= 3 },
+  { id: 'contract-streak-7', name: 'FULL-TIME HUSTLER', desc: 'Complete contracts 7 days in a row', icon: '🗓️', category: 'Contracts', check: (s) => s.contractBestStreak >= 7 },
+  { id: 'contract-10', name: 'MADE MAN', desc: 'Complete 10 daily contracts', icon: '💼', category: 'Contracts', check: (s) => s.contractsTotal >= 10 },
 ]
 
 /* ── Radio Station Definitions ── */
@@ -659,6 +664,8 @@ export default function Home() {
       bestTime,
       uniqueCheats: uniqueCheatIdsRef.current.size,
       totalAvailable,
+      contractsTotal: contractState.total,
+      contractBestStreak: contractState.bestStreak,
     }
     const newlyUnlocked = []
     for (const ach of ACHIEVEMENTS) {
@@ -689,7 +696,7 @@ export default function Home() {
       }
       showNext(0)
     }
-  }, [totalCheats, bestStreak, bestTime, unlockedAchievements])
+  }, [totalCheats, bestStreak, bestTime, unlockedAchievements, contractState])
 
   // Check achievements whenever stats change
   useEffect(() => {
@@ -1954,7 +1961,10 @@ export default function Home() {
         >
           <div className="contract-head">
             <span className="contract-tag">DAILY CONTRACT</span>
-            {contractStreak > 0 && <span className="contract-streak">{contractStreak}D STREAK</span>}
+            <span className="contract-meta">
+              {contractStreak > 0 && <span className="contract-streak">{contractStreak}D STREAK</span>}
+              {contractState.total > 0 && <span className="contract-total">#{contractState.total}</span>}
+            </span>
           </div>
           <div className="contract-target">{dailyCheat.name}</div>
           <div className="contract-desc">{dailyCheat.description}</div>
@@ -2410,7 +2420,7 @@ export default function Home() {
 
             {/* Achievement Grid */}
             <div className="achievement-grid">
-              {['Speed', 'Streaks', 'Volume', 'Exploration'].map((category) => {
+              {['Speed', 'Streaks', 'Volume', 'Exploration', 'Contracts'].map((category) => {
                 const catAchievements = ACHIEVEMENTS.filter(a => a.category === category)
                 return (
                   <div key={category}>
