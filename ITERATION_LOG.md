@@ -1263,3 +1263,23 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Weekly "big score" contract (harder cheat, bigger payout).
+
+## Iteration 22 — Weekly Heist: Rare-Cheat Weekly Contract (#30)
+**Date:** 2026-11-22
+**Branch:** feat/iter-22-weekly-heist → PR → main
+
+### Planned
+- Weekly "big score" from Iteration 21 "Next".
+
+### Changed
+- `src/utils/dailyContract.js` — `localWeekKey` (local Monday), `isHeistEligible` (PS sequence ≥ 10 and has a PC code: 58 of 101 cheats), `pickWeeklyHeist` (FNV-1a seeded per week), `parseHeistState` / `completeHeist` (idempotent per week).
+- `src/pages/Home.jsx` — heist state + payout effect (observes `matchedCheat` only), WEEKLY HEIST section on the contract card, HEIST COMPLETE toast variant, achievement SCORE OF THE WEEK (Contracts category).
+- `src/App.css` — dashed divider, red heist tag, green when scored.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 3 pre-existing warnings
+- Helpers: Sunday 22 Nov and Monday 16 Nov share week key 2026-11-16; completion idempotent.
+- Headless Chromium: this week's heist "Maximum sex appeal" (HELLOLADIES) → toast HEIST COMPLETE +$25,000, cash 0 → 25,400, `heist-first` unlocked; retyping pays base cash only (no second $25,000); card flips to "SCORED · NEW HEIST MONDAY".
+
+### Next
+- Contract history in the Codex (which days/weeks were completed).
