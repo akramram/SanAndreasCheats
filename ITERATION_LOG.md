@@ -1379,3 +1379,22 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Contract cards hide toggle in the shop/settings.
+
+## Iteration 28 — Radio No Longer Re-renders the Whole Page (#42)
+**Date:** 2026-11-22
+**Branch:** perf/iter-28-radio-rerenders → PR → main
+
+### Found (headless idle profile, 10 s)
+- The VU meter called `setVuBarHeights` on **every animation frame** (≈60×/s, also while paused — a fresh array each frame), and the station clock called two setters every 100 ms. Each call re-rendered the entire ~3000-line `Home` component.
+
+### Changed
+- `src/components/RadioWidgets.jsx` (new, presentational): `RadioVuMeter` owns its bar state, animates at ~15 fps, and runs no loop at all while paused; `RadioClock` reads the shared `stationProgressRef` every 250 ms and skips no-op updates.
+- `src/pages/Home.jsx`: VU state/rAF and clock state removed; the 100 ms interval still advances every station's virtual progress (ref only, no setState). Markup/classes unchanged. Cheat input untouched.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, **2** warnings (was 3: the radio effect's missing `currentStreak` dependency is gone with the VU code)
+- Idle 10 s, before → after (two runs): script 401 → 117/125 ms, layout 77 → 41 ms, DOM mutations 8,746 → 2,166/2,136; style recalc ~unchanged (CSS animations dominate).
+- Live: clock 00:00 → 00:02 and progress bar grows over 2 s, VU heights change; after Pause the VU is static at 2 px while the virtual clock keeps running (same as before).
+
+### Next
+- Profile style recalculation (ambient CSS animations) on low-end phones.
