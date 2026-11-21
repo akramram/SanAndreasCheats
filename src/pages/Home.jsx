@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { fuzzyFilter } from '../utils/fuzzy'
+import {
+  DAILY_CONTRACT_BONUS, DAILY_CONTRACT_STORAGE_KEY, localDayKey, pickDailyCheat,
+  parseContractState, activeStreak, completeContract
+} from '../utils/dailyContract'
 import cheatsData from '../assets/cheats_v2.json'
 import {
   playKeyClick, playGamepadPress,
@@ -459,7 +463,37 @@ export default function Home() {
     return parseInt(localStorage.getItem('gtaCash') || '0', 10)
   })
   const [cashPopups, setCashPopups] = useState([]) // { id, amount, x, y }
+
+  // Daily Contract — date-seeded cheat-of-the-day, one bonus per local day
+  const [contractDay] = useState(() => localDayKey())
+  const dailyCheat = useMemo(() => pickDailyCheat(cheatsData?.cheats || [], contractDay), [contractDay])
+  const [contractState, setContractState] = useState(() => {
+    try { return parseContractState(localStorage.getItem(DAILY_CONTRACT_STORAGE_KEY)) } catch { return parseContractState(null) }
+  })
+  const [contractToast, setContractToast] = useState(null) // { streak } or null
+  const contractDone = contractState.lastCompleted === contractDay
+  const contractStreak = activeStreak(contractState, contractDay)
   const [cashBills, setCashBills] = useState([]) // floating bill particles
+  // Daily Contract payout: observes the match result only, never touches matching logic
+  useEffect(() => {
+    if (!matchedCheat || !dailyCheat || matchedCheat.id !== dailyCheat.id || contractDone) return
+    const next = completeContract(contractState, contractDay)
+    setContractState(next)
+    try { localStorage.setItem(DAILY_CONTRACT_STORAGE_KEY, JSON.stringify(next)) } catch { /* storage blocked */ }
+    setCash(prev => {
+      const newCash = prev + DAILY_CONTRACT_BONUS
+      try { localStorage.setItem('gtaCash', String(newCash)) } catch { /* storage blocked */ }
+      return newCash
+    })
+    setContractToast({ streak: next.streak })
+  }, [matchedCheat, dailyCheat, contractDone, contractState, contractDay])
+
+  useEffect(() => {
+    if (!contractToast) return
+    const t = setTimeout(() => setContractToast(null), 4000)
+    return () => clearTimeout(t)
+  }, [contractToast])
+
   const [showShop, setShowShop] = useState(false)
   const [shopTab, setShopTab] = useState('all')
   const [ownedItems, setOwnedItems] = useState(() => {
@@ -1911,6 +1945,33 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      {/* Daily Contract card */}
+      {dailyCheat && (
+        <section
+          className={`contract-card ${booted ? 'hud-enter' : ''} ${contractDone ? 'contract-done' : ''}`}
+          aria-label="Daily contract"
+        >
+          <div className="contract-head">
+            <span className="contract-tag">DAILY CONTRACT</span>
+            {contractStreak > 0 && <span className="contract-streak">{contractStreak}D STREAK</span>}
+          </div>
+          <div className="contract-target">{dailyCheat.name}</div>
+          <div className="contract-desc">{dailyCheat.description}</div>
+          <div className="contract-reward">
+            {contractDone ? 'COMPLETE · COME BACK TOMORROW' : `REWARD $${DAILY_CONTRACT_BONUS.toLocaleString('en-US')}`}
+          </div>
+        </section>
+      )}
+
+      {contractToast && (
+        <div className="contract-toast" role="status">
+          <div className="contract-toast-title">CONTRACT COMPLETE</div>
+          <div className="contract-toast-sub">
+            +${DAILY_CONTRACT_BONUS.toLocaleString('en-US')} · {contractToast.streak}D STREAK
+          </div>
+        </div>
+      )}
 
       {/* Combo Counter (right side) */}
       {currentStreak > 0 && (
