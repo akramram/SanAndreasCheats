@@ -4331,3 +4331,82 @@
 .heist-done .contract-reward {
   color: #34d399;
 }
+
+/* ── Compact radio on small screens (Iteration 23) ──
+   The full panel (~245px tall) covered the cheat prompt and input box at 375x740.
+   Collapse to a car-radio strip: station + frequency + prev/play/next. */
+@media (max-width: 480px) {
+  .radio-panel {
+    bottom: 8px;
+    left: 8px;
+    min-width: 0;
+    max-width: 188px;
+    padding: 5px 6px;
+  }
+  .radio-lcd {
+    padding: 4px 6px;
+    margin-bottom: 4px;
+  }
+  .radio-lcd-content {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .radio-frequency {
+    font-size: 13px;
+  }
+  .radio-genre,
+  .radio-time,
+  .radio-track-progress,
+  .radio-lcd-scanlines,
+  .radio-vu-meter,
+  .radio-station-dots {
+    display: none;
+  }
+  .radio-controls {
+    justify-content: space-between;
+    gap: 6px;
+  }
+}
+
+/* Contract card was covering the Achievements button on phones (iterations 20/22):
+   collapse it to two one-line targets with icon prefixes. */
+@media (max-width: 480px) {
+  .contract-card {
+    width: 172px;
+    padding: 5px 7px;
+  }
+  .contract-head,
+  .contract-reward,
+  .contract-desc,
+  .heist-tag {
+    display: none;
+  }
+  .contract-target {
+    font-size: 7px;
+  }
+  .contract-target::before {
+    content: '📋 ';
+  }
+  .heist-section {
+    margin-top: 4px;
+    padding-top: 4px;
+  }
+  .heist-section .contract-target::before {
+    content: '💰 ';
+  }
+  .contract-done > .contract-target,
+  .heist-done .contract-target {
+    color: #34d399;
+  }
+}
+
+/* Header icon buttons use relative + right-14/44/72 offsets (a diagonal on desktop).
+   At 375px that pushed Finder to x=-111 (unreachable) and clipped Codex at the edge.
+   Keep the diagonal but centre it within the viewport on phones. */
+@media (max-width: 480px) {
+  .achievement-btn { right: 64px; }
+  .codex-btn { right: 0; }
+  .finder-btn { right: -64px; }
+}

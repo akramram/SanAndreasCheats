@@ -1283,3 +1283,22 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Contract history in the Codex (which days/weeks were completed).
+
+## Iteration 23 — Phone Layout Pass: Compact Radio, Reachable Finder, Slim Contract Card (#32)
+**Date:** 2026-11-22
+**Branch:** feat/iter-23-compact-mobile-radio → PR → main
+
+### Planned
+- Stop the radio covering the cheat prompt on phones.
+
+### Changed (`src/App.css` only, all inside `@media (max-width: 480px)`)
+- **Compact radio:** station + frequency + prev/play/next only (genre, time, progress, scanlines, VU meter, dots hidden). Panel height 248 → 138px; at 375×740 its top moved 480 → 595px, so the input box and "ENTER CHEAT CODE" prompt are no longer covered (they were in the before-screenshot).
+- **Finder button reachable (pre-existing bug):** the header buttons use `relative` + `right-14/44/72`; at 375px Finder sat at x = −111px (off-screen, untappable) and Codex was clipped at x = 1. Phone offsets now 64/0/−64px → Achievements 113–135, Codex 177–199, Finder 241–263. Desktop unchanged (573/453/341).
+- **Slim contract card (regression from iterations 20/22):** card covered the Achievements button on phones; now two one-line targets with 📋 / 💰 prefixes (172px wide), tags/rewards/description hidden on phones only.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 3 pre-existing warnings
+- Headless Chromium before/after at 375×740, 360×640, 1280×800: element rects measured (above), no horizontal overflow (scrollWidth = viewport), screenshots reviewed.
+
+### Next
+- Contract history in the Codex.
