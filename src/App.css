@@ -4316,3 +4316,18 @@
   font-size: 7px;
   color: #a8a29e;
 }
+
+/* ── Weekly Heist (Iteration 22) ── */
+.heist-section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 2px dashed rgba(245, 158, 11, 0.45);
+}
+.heist-tag {
+  color: #f87171;
+  margin-bottom: 4px;
+}
+.heist-done .heist-tag,
+.heist-done .contract-reward {
+  color: #34d399;
+}

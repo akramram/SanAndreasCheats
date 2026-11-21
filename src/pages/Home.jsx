@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { fuzzyFilter } from '../utils/fuzzy'
 import {
   DAILY_CONTRACT_BONUS, DAILY_CONTRACT_STORAGE_KEY, localDayKey, pickDailyCheat,
-  parseContractState, activeStreak, completeContract
+  parseContractState, activeStreak, completeContract,
+  WEEKLY_HEIST_BONUS, WEEKLY_HEIST_STORAGE_KEY, localWeekKey, pickWeeklyHeist, parseHeistState, completeHeist
 } from '../utils/dailyContract'
 import cheatsData from '../assets/cheats_v2.json'
 import {
@@ -103,6 +104,7 @@ const ACHIEVEMENTS = [
   { id: 'contract-streak-3', name: 'RELIABLE', desc: 'Complete contracts 3 days in a row', icon: '📆', category: 'Contracts', check: (s) => s.contractBestStreak >= 3 },
   { id: 'contract-streak-7', name: 'FULL-TIME HUSTLER', desc: 'Complete contracts 7 days in a row', icon: '🗓️', category: 'Contracts', check: (s) => s.contractBestStreak >= 7 },
   { id: 'contract-10', name: 'MADE MAN', desc: 'Complete 10 daily contracts', icon: '💼', category: 'Contracts', check: (s) => s.contractsTotal >= 10 },
+  { id: 'heist-first', name: 'SCORE OF THE WEEK', desc: 'Pull off a weekly heist', icon: '💰', category: 'Contracts', check: (s) => s.heistsTotal >= 1 },
 ]
 
 /* ── Radio Station Definitions ── */
@@ -475,7 +477,14 @@ export default function Home() {
   const [contractState, setContractState] = useState(() => {
     try { return parseContractState(localStorage.getItem(DAILY_CONTRACT_STORAGE_KEY)) } catch { return parseContractState(null) }
   })
-  const [contractToast, setContractToast] = useState(null) // { streak } or null
+  const [contractToast, setContractToast] = useState(null) // { streak } or { heist: true }
+  // Weekly Heist — rare cheat per local week, one payout per week
+  const [heistWeek] = useState(() => localWeekKey())
+  const weeklyHeist = useMemo(() => pickWeeklyHeist(cheatsData?.cheats || [], heistWeek), [heistWeek])
+  const [heistState, setHeistState] = useState(() => {
+    try { return parseHeistState(localStorage.getItem(WEEKLY_HEIST_STORAGE_KEY)) } catch { return parseHeistState(null) }
+  })
+  const heistDone = heistState.lastCompletedWeek === heistWeek
   const contractDone = contractState.lastCompleted === contractDay
   const contractStreak = activeStreak(contractState, contractDay)
   const [cashBills, setCashBills] = useState([]) // floating bill particles
@@ -492,6 +501,20 @@ export default function Home() {
     })
     setContractToast({ streak: next.streak })
   }, [matchedCheat, dailyCheat, contractDone, contractState, contractDay])
+
+  // Weekly Heist payout: observes the match result only
+  useEffect(() => {
+    if (!matchedCheat || !weeklyHeist || matchedCheat.id !== weeklyHeist.id || heistDone) return
+    const next = completeHeist(heistState, heistWeek)
+    setHeistState(next)
+    try { localStorage.setItem(WEEKLY_HEIST_STORAGE_KEY, JSON.stringify(next)) } catch { /* storage blocked */ }
+    setCash(prev => {
+      const newCash = prev + WEEKLY_HEIST_BONUS
+      try { localStorage.setItem('gtaCash', String(newCash)) } catch { /* storage blocked */ }
+      return newCash
+    })
+    setContractToast({ heist: true })
+  }, [matchedCheat, weeklyHeist, heistDone, heistState, heistWeek])
 
   useEffect(() => {
     if (!contractToast) return
@@ -666,6 +689,7 @@ export default function Home() {
       totalAvailable,
       contractsTotal: contractState.total,
       contractBestStreak: contractState.bestStreak,
+      heistsTotal: heistState.total,
     }
     const newlyUnlocked = []
     for (const ach of ACHIEVEMENTS) {
@@ -696,7 +720,7 @@ export default function Home() {
       }
       showNext(0)
     }
-  }, [totalCheats, bestStreak, bestTime, unlockedAchievements, contractState])
+  }, [totalCheats, bestStreak, bestTime, unlockedAchievements, contractState, heistState])
 
   // Check achievements whenever stats change
   useEffect(() => {
@@ -1971,14 +1995,25 @@ export default function Home() {
           <div className="contract-reward">
             {contractDone ? 'COMPLETE · COME BACK TOMORROW' : `REWARD $${DAILY_CONTRACT_BONUS.toLocaleString('en-US')}`}
           </div>
+          {weeklyHeist && (
+            <div className={`heist-section ${heistDone ? 'heist-done' : ''}`}>
+              <div className="contract-tag heist-tag">WEEKLY HEIST</div>
+              <div className="contract-target">{weeklyHeist.name}</div>
+              <div className="contract-reward">
+                {heistDone ? 'SCORED · NEW HEIST MONDAY' : `PAYOUT $${WEEKLY_HEIST_BONUS.toLocaleString('en-US')}`}
+              </div>
+            </div>
+          )}
         </section>
       )}
 
       {contractToast && (
         <div className="contract-toast" role="status">
-          <div className="contract-toast-title">CONTRACT COMPLETE</div>
+          <div className="contract-toast-title">{contractToast.heist ? 'HEIST COMPLETE' : 'CONTRACT COMPLETE'}</div>
           <div className="contract-toast-sub">
-            +${DAILY_CONTRACT_BONUS.toLocaleString('en-US')} · {contractToast.streak}D STREAK
+            {contractToast.heist
+              ? `+$${WEEKLY_HEIST_BONUS.toLocaleString('en-US')} · RARE SCORE`
+              : `+$${DAILY_CONTRACT_BONUS.toLocaleString('en-US')} · ${contractToast.streak}D STREAK`}
           </div>
         </div>
       )}

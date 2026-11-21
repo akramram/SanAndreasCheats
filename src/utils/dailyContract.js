@@ -70,3 +70,47 @@ export function completeContract(state, dayKey) {
     bestStreak: Math.max(state.bestStreak || 0, streak),
   }
 }
+
+// ── Weekly Heist (iteration 22) ──
+export const WEEKLY_HEIST_BONUS = 25000
+export const WEEKLY_HEIST_STORAGE_KEY = 'gtaWeeklyHeist'
+export const HEIST_MIN_SEQUENCE = 10
+
+/** Local week key: YYYY-MM-DD of that week's Monday. */
+export function localWeekKey(date = new Date()) {
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  const offset = (d.getDay() + 6) % 7 // Mon=0 … Sun=6
+  d.setDate(d.getDate() - offset)
+  return localDayKey(d)
+}
+
+/** Rare = long PS sequence and typable on keyboard (has a PC code). */
+export function isHeistEligible(cheat) {
+  return (cheat?.psSequence?.length || 0) >= HEIST_MIN_SEQUENCE && Array.isArray(cheat?.pcSequence) && cheat.pcSequence.length > 0
+}
+
+/** Pick this week's heist cheat among rare cheats. Same week key → same cheat. */
+export function pickWeeklyHeist(cheats, weekKey) {
+  const pool = Array.isArray(cheats) ? cheats.filter(isHeistEligible) : []
+  if (pool.length === 0) return null
+  return pool[hashString(`sa-heist-${weekKey}`) % pool.length]
+}
+
+/** Normalise stored heist state into { lastCompletedWeek, total }. */
+export function parseHeistState(raw) {
+  try {
+    const parsed = JSON.parse(raw || '{}')
+    return {
+      lastCompletedWeek: typeof parsed.lastCompletedWeek === 'string' ? parsed.lastCompletedWeek : null,
+      total: Number.isFinite(parsed.total) && parsed.total > 0 ? Math.floor(parsed.total) : 0,
+    }
+  } catch {
+    return { lastCompletedWeek: null, total: 0 }
+  }
+}
+
+/** State after completing this week's heist. Idempotent within the same week. */
+export function completeHeist(state, weekKey) {
+  if (state.lastCompletedWeek === weekKey) return state
+  return { lastCompletedWeek: weekKey, total: state.total + 1 }
+}
