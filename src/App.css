@@ -4305,3 +4305,14 @@
 @media (prefers-reduced-motion: reduce) {
   .contract-toast { animation: none; }
 }
+
+/* ── Contract counter (Iteration 21) ── */
+.contract-meta {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+.contract-total {
+  font-size: 7px;
+  color: #a8a29e;
+}

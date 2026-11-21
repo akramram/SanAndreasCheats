@@ -1243,3 +1243,23 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Show contract completion in the Codex / achievement gallery.
+
+## Iteration 21 — Contract Achievements + Lifetime Contract Counter (#28)
+**Date:** 2026-11-22
+**Branch:** feat/iter-21-contract-achievements → PR → main
+
+### Planned
+- Achievements for the Daily Contract (from Iteration 20 "Next"), lifetime counter, typo fix.
+
+### Changed
+- `src/utils/dailyContract.js` — state now `{ lastCompleted, streak, total, bestStreak }`; legacy saves from iteration 20 migrate on read (completed save → total ≥ 1).
+- `src/pages/Home.jsx` — new CONTRACTS achievement category: ON THE PAYROLL (1st), RELIABLE (3-day streak), FULL-TIME HUSTLER (7-day), MADE MAN (10 total). `checkAchievements` reads contract stats; gallery renders the 5th category. Contract card shows `#N` lifetime counter. Typo `CURIIOUS` → `CURIOUS` (id unchanged, saves intact).
+- `src/App.css` — `.contract-meta` / `.contract-total`.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 3 pre-existing warnings
+- Helpers: legacy migration, gap breaks streak but keeps bestStreak (seq 1,2,3,5 Nov → streak 1, best 3, total 4).
+- Headless Chromium: seeded yesterday streak 2 → typed today's code → state streak 3/total 3, unlocked `contract-first` + `contract-streak-3`, card shows `3D STREAK #3`.
+
+### Next
+- Weekly "big score" contract (harder cheat, bigger payout).

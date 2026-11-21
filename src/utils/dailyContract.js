@@ -34,16 +34,22 @@ export function previousDayKey(dayKey) {
   return localDayKey(new Date(y, m - 1, d - 1))
 }
 
-/** Normalise whatever is in storage into { lastCompleted, streak }. */
+/** Normalise whatever is in storage into { lastCompleted, streak, total, bestStreak }. */
 export function parseContractState(raw) {
   try {
     const parsed = JSON.parse(raw || '{}')
-    return {
-      lastCompleted: typeof parsed.lastCompleted === 'string' ? parsed.lastCompleted : null,
-      streak: Number.isFinite(parsed.streak) && parsed.streak > 0 ? Math.floor(parsed.streak) : 0,
-    }
+    const lastCompleted = typeof parsed.lastCompleted === 'string' ? parsed.lastCompleted : null
+    const streak = Number.isFinite(parsed.streak) && parsed.streak > 0 ? Math.floor(parsed.streak) : 0
+    // `total` was added in iteration 21; older saves with a completion count as at least 1.
+    const total = Number.isFinite(parsed.total) && parsed.total > 0
+      ? Math.floor(parsed.total)
+      : (lastCompleted ? Math.max(1, streak) : 0)
+    const bestStreak = Number.isFinite(parsed.bestStreak) && parsed.bestStreak > streak
+      ? Math.floor(parsed.bestStreak)
+      : streak
+    return { lastCompleted, streak, total, bestStreak }
   } catch {
-    return { lastCompleted: null, streak: 0 }
+    return { lastCompleted: null, streak: 0, total: 0, bestStreak: 0 }
   }
 }
 
@@ -57,5 +63,10 @@ export function activeStreak(state, dayKey) {
 export function completeContract(state, dayKey) {
   if (state.lastCompleted === dayKey) return state
   const streak = state.lastCompleted === previousDayKey(dayKey) ? state.streak + 1 : 1
-  return { lastCompleted: dayKey, streak }
+  return {
+    lastCompleted: dayKey,
+    streak,
+    total: (state.total || 0) + 1,
+    bestStreak: Math.max(state.bestStreak || 0, streak),
+  }
 }
