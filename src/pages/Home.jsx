@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { fuzzyFilter } from '../utils/fuzzy'
 import {
   DAILY_CONTRACT_BONUS, DAILY_CONTRACT_STORAGE_KEY, localDayKey, pickDailyCheat,
-  parseContractState, activeStreak, completeContract,
+  parseContractState, activeStreak, completeContract, lastNDays,
   WEEKLY_HEIST_BONUS, WEEKLY_HEIST_STORAGE_KEY, localWeekKey, pickWeeklyHeist, parseHeistState, completeHeist
 } from '../utils/dailyContract'
 import cheatsData from '../assets/cheats_v2.json'
@@ -487,6 +487,10 @@ export default function Home() {
   const heistDone = heistState.lastCompletedWeek === heistWeek
   const contractDone = contractState.lastCompleted === contractDay
   const contractStreak = activeStreak(contractState, contractDay)
+  const contractWeek = useMemo(() => {
+    const done = new Set(contractState.history)
+    return lastNDays(contractDay, 7).map((day) => ({ day, done: done.has(day), today: day === contractDay }))
+  }, [contractState.history, contractDay])
   const [cashBills, setCashBills] = useState([]) // floating bill particles
   // Daily Contract payout: observes the match result only, never touches matching logic
   useEffect(() => {
@@ -1994,6 +1998,19 @@ export default function Home() {
           <div className="contract-desc">{dailyCheat.description}</div>
           <div className="contract-reward">
             {contractDone ? 'COMPLETE · COME BACK TOMORROW' : `REWARD $${DAILY_CONTRACT_BONUS.toLocaleString('en-US')}`}
+          </div>
+          <div
+            className="contract-week"
+            role="img"
+            aria-label={`Contracts completed in the last 7 days: ${contractWeek.filter((d) => d.done).length} of 7`}
+          >
+            {contractWeek.map(({ day, done, today }) => (
+              <span
+                key={day}
+                className={`contract-week-day ${done ? 'is-done' : ''} ${today && !done ? 'is-today' : ''}`}
+                title={day}
+              />
+            ))}
           </div>
           {weeklyHeist && (
             <div className={`heist-section ${heistDone ? 'heist-done' : ''}`}>

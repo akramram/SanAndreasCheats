@@ -4410,3 +4410,34 @@
   .codex-btn { right: 0; }
   .finder-btn { right: -64px; }
 }
+
+/* ── 7-day contract history strip (Iteration 24) ── */
+.contract-week {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+.contract-week-day {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #57534e;
+  background: transparent;
+  image-rendering: pixelated;
+}
+.contract-week-day.is-done {
+  border-color: #34d399;
+  background: #34d399;
+}
+.contract-week-day.is-today {
+  border-color: #fbbf24;
+  animation: contract-today-blink 1s steps(2) infinite;
+}
+@keyframes contract-today-blink {
+  50% { border-color: #57534e; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contract-week-day.is-today { animation: none; }
+}
+@media (max-width: 480px) {
+  .contract-week { display: none; }
+}
