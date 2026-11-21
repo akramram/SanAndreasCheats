@@ -4441,3 +4441,25 @@
 @media (max-width: 480px) {
   .contract-week { display: none; }
 }
+
+/* ── Global reduced-motion fallback (Iteration 29) ──
+   ~100 keyframe animations (strobe/lightning flashes, screen shake, ambient loops)
+   ran even when the OS asks for reduced motion. Collapse every animation and
+   transition to its end state; infinite ambient loops run once (instantly). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  /* Purely decorative drifting layers would freeze mid-screen: hide them. */
+  .float-text,
+  .ambient-dust {
+    display: none !important;
+  }
+}
