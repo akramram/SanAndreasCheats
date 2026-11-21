@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { fuzzyFilter } from '../utils/fuzzy'
+import { RadioVuMeter, RadioClock } from '../components/RadioWidgets'
 import {
   DAILY_CONTRACT_BONUS, DAILY_CONTRACT_STORAGE_KEY, localDayKey, pickDailyCheat,
   parseContractState, activeStreak, completeContract, lastNDays,
@@ -331,18 +332,14 @@ export default function Home() {
   // Radio station system
   const [currentStation, setCurrentStation] = useState(0)
   const [radioChanging, setRadioChanging] = useState(false)
-  const [vuBarHeights, setVuBarHeights] = useState(Array(12).fill(3))
   const [radioStatic, setRadioStatic] = useState(false)
   const [radioPlaying, setRadioPlaying] = useState(true)
   const radioPlayingRef = useRef(true)
   const radioBootedRef = useRef(false)
   const radioTimerRef = useRef(null)
-  const vuAnimFrameRef = useRef(null)
   const prevStationRef = useRef(0)
   // Station track progress — always runs, loops indefinitely per station
   const stationProgressRef = useRef(Array(RADIO_STATIONS.length).fill(0))
-  const [radioTimeDisplay, setRadioTimeDisplay] = useState('00:00')
-  const [radioProgressPct, setRadioProgressPct] = useState(0)
   const stationIntervalRef = useRef(null)
   // SoundCloud Widget refs
   const scIframeRef = useRef(null)
@@ -1005,27 +1002,11 @@ export default function Home() {
       radioTimerRef.current = setTimeout(cycleStations, 25000)
     }
 
-    // VU meter animation — randomized bar heights for visual effect
-    const animateVU = () => {
-      if (!radioPlayingRef.current) {
-        setVuBarHeights(Array(12).fill(2))
-        vuAnimFrameRef.current = requestAnimationFrame(animateVU)
-        return
-      }
-      const baseHeight = currentStreak >= 3 ? 8 : currentStreak >= 1 ? 6 : 4
-      const maxDeviation = currentStreak >= 3 ? 8 : 5
-      setVuBarHeights(prev => prev.map((_, i) => {
-        const center = baseHeight + Math.sin(Date.now() / 200 + i * 0.8) * 3
-        const random = Math.random() * maxDeviation
-        return Math.max(2, Math.min(18, center + random))
-      }))
-      vuAnimFrameRef.current = requestAnimationFrame(animateVU)
-    }
-    vuAnimFrameRef.current = requestAnimationFrame(animateVU)
+    // VU meter animation moved to <RadioVuMeter> (iteration 28): it used to
+    // setState every frame here, re-rendering the whole page 60×/s.
 
     return () => {
       if (radioTimerRef.current) clearTimeout(radioTimerRef.current)
-      if (vuAnimFrameRef.current) cancelAnimationFrame(vuAnimFrameRef.current)
       stopRadioJingle()
     }
   }, [booted, currentStation, playStationAudio])
@@ -1061,14 +1042,8 @@ export default function Home() {
       for (let i = 0; i < RADIO_STATIONS.length; i++) {
         progresses[i] = (progresses[i] + 100) % STATION_TRACK_DURATIONS[i]
       }
-      // Update display for current station
-      const currentProgress = progresses[currentStation]
-      const currentDuration = STATION_TRACK_DURATIONS[currentStation]
-      const seconds = Math.floor(currentProgress / 1000)
-      const mins = Math.floor(seconds / 60)
-      const secs = seconds % 60
-      setRadioTimeDisplay(`${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`)
-      setRadioProgressPct(currentProgress / currentDuration)
+      // Display is read from this ref by <RadioClock> (iteration 28); no setState
+      // here, so the page no longer re-renders 10×/s.
     }, 100)
 
     return () => {
@@ -2896,26 +2871,13 @@ export default function Home() {
                 <div className={`radio-status ${radioPlaying ? 'radio-status-playing' : 'radio-status-paused'} ${radioLoading ? 'radio-status-loading' : ''}`}>
                   {radioLoading ? '◐ TUNING...' : radioPlaying ? '▶ PLAYING' : '❚❚ PAUSED'}
                 </div>
-                <div className="radio-time">
-                  {radioTimeDisplay}
-                </div>
-                <div className="radio-track-progress">
-                  <div className="radio-track-progress-bar" style={{ width: `${radioProgressPct * 100}%` }} />
-                </div>
+                <RadioClock progressRef={stationProgressRef} station={currentStation} durations={STATION_TRACK_DURATIONS} />
               </div>
               <div className="radio-lcd-scanlines" />
             </div>
 
             {/* VU Meter */}
-            <div className={`radio-vu-meter ${radioPlaying ? '' : 'radio-vu-paused'}`}>
-              {vuBarHeights.map((h, i) => (
-                <div
-                  key={i}
-                  className={`vu-bar ${h >= 14 ? 'vu-red' : h >= 9 ? 'vu-yellow' : 'vu-green'}`}
-                  style={{ height: `${h}px` }}
-                />
-              ))}
-            </div>
+            <RadioVuMeter playing={radioPlaying} streak={currentStreak} />
 
             {/* Controls */}
             <div className="radio-controls">
