@@ -1302,3 +1302,23 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Contract history in the Codex.
+
+## Iteration 24 — 7-Day Contract History Strip (#34)
+**Date:** 2026-11-22
+**Branch:** feat/iter-24-contract-history → PR → main
+
+### Planned
+- Contract history (Iteration 22/23 "Next"), kept small: a 7-day strip on the contract card.
+
+### Changed
+- `src/utils/dailyContract.js` — daily state gains `history` (completed day keys, oldest first, deduped, capped at 30); older saves migrate from `lastCompleted`; junk entries dropped. `lastNDays(dayKey, n)` handles month/year rollover.
+- `src/pages/Home.jsx` — 7 pixel squares under the reward line: green = completed, amber blinking (steps) = today still open, grey outline = missed; `role="img"` + aria-label "Contracts completed in the last 7 days: N of 7".
+- `src/App.css` — strip styles, reduced-motion fallback, hidden on phones (card stays compact from iteration 23).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 3 pre-existing warnings
+- Helpers: `lastNDays('2026-03-02', 7)` → 24 Feb … 2 Mar; legacy save → history [lastCompleted]; 40 completions capped to 30.
+- Headless Chromium: seeded history 18/20/21 Nov → strip `..X.XXT` (3 of 7); typed today's code → `..X.XXX` (4 of 7), RELIABLE toast fired.
+
+### Next
+- Sound cue for contract completion distinct from the normal match chime.

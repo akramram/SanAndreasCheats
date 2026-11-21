@@ -34,6 +34,15 @@ export function previousDayKey(dayKey) {
   return localDayKey(new Date(y, m - 1, d - 1))
 }
 
+const DAY_KEY_RE = /^\d{4}-\d{2}-\d{2}$/
+export const CONTRACT_HISTORY_DAYS = 30
+
+/** The `n` local day keys ending at `dayKey`, oldest first. */
+export function lastNDays(dayKey, n) {
+  const [y, m, d] = dayKey.split('-').map(Number)
+  return Array.from({ length: n }, (_, i) => localDayKey(new Date(y, m - 1, d - (n - 1 - i))))
+}
+
 /** Normalise whatever is in storage into { lastCompleted, streak, total, bestStreak }. */
 export function parseContractState(raw) {
   try {
@@ -47,9 +56,14 @@ export function parseContractState(raw) {
     const bestStreak = Number.isFinite(parsed.bestStreak) && parsed.bestStreak > streak
       ? Math.floor(parsed.bestStreak)
       : streak
-    return { lastCompleted, streak, total, bestStreak }
+    // `history` (iteration 24): completed day keys, oldest first, capped.
+    const rawHistory = Array.isArray(parsed.history)
+      ? parsed.history.filter((d) => typeof d === 'string' && DAY_KEY_RE.test(d))
+      : (lastCompleted ? [lastCompleted] : [])
+    const history = [...new Set(rawHistory)].sort().slice(-CONTRACT_HISTORY_DAYS)
+    return { lastCompleted, streak, total, bestStreak, history }
   } catch {
-    return { lastCompleted: null, streak: 0, total: 0, bestStreak: 0 }
+    return { lastCompleted: null, streak: 0, total: 0, bestStreak: 0, history: [] }
   }
 }
 
@@ -68,6 +82,7 @@ export function completeContract(state, dayKey) {
     streak,
     total: (state.total || 0) + 1,
     bestStreak: Math.max(state.bestStreak || 0, streak),
+    history: [...(state.history || []).filter((d) => d !== dayKey), dayKey].slice(-CONTRACT_HISTORY_DAYS),
   }
 }
 
