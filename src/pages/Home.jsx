@@ -509,6 +509,8 @@ export default function Home() {
   }
   // Iteration 43 — Konami code easter egg (observed keys, never cheat input)
   const [konamiFlash, setKonamiFlash] = useState(false)
+  // Iteration 47 — gamepad connected indicator
+  const [gamepadOn, setGamepadOn] = useState(false)
   const [konamiBonus, setKonamiBonus] = useState(false)
   const [cashPopups, setCashPopups] = useState([]) // { id, amount, x, y }
 
@@ -608,6 +610,25 @@ export default function Home() {
       sprintTimerRef.current = null
     }, SPRINT_MS)
   }
+  // Iteration 47 — gamepad connected indicator (display only)
+  useEffect(() => {
+    const sync = () => {
+      try {
+        const pads = navigator.getGamepads ? navigator.getGamepads() : []
+        setGamepadOn(Array.from(pads).some(p => p && p.connected))
+      } catch { /* API unavailable */ }
+    }
+    sync()
+    const onConnect = () => setGamepadOn(true)
+    const onDisconnect = () => setTimeout(sync, 0) // remap after the pad leaves
+    window.addEventListener('gamepadconnected', onConnect)
+    window.addEventListener('gamepaddisconnected', onDisconnect)
+    return () => {
+      window.removeEventListener('gamepadconnected', onConnect)
+      window.removeEventListener('gamepaddisconnected', onDisconnect)
+    }
+  }, [])
+
   // Counts each match exactly once (matchedCheat identity changes per match)
   useEffect(() => {
     if (!matchedCheat) return
@@ -2574,7 +2595,11 @@ export default function Home() {
         )}
       </div>
 
-      {/* Random target roulette (iteration 45) */}
+      {/* Gamepad connected indicator (iteration 47) */}
+      {gamepadOn && (
+        <div className="gamepad-chip" role="status">🎮 GAMEPAD CONNECTED</div>
+      )}
+
       <div className="roulette-bar">
         {roulette ? (
           <>

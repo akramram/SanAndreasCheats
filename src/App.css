@@ -4784,3 +4784,18 @@ html.perf-lite .ambient-dust {
 .memory-mode .finder .codex-entry-code {
   visibility: hidden;
 }
+
+/* Iteration 47 — gamepad connected indicator */
+.gamepad-chip {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #34d399;
+  background: rgba(10, 10, 10, 0.85);
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  padding: 6px 10px;
+  z-index: 12;
+}
