@@ -7,12 +7,19 @@
 let audioCtx = null
 let masterGain = null
 let _muted = false
+// Iteration 53 — persisted SFX volume (0-1); base master gain × volume
+let _volume = (() => {
+  try {
+    const v = parseFloat(localStorage.getItem('sfxVolume'))
+    return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 1
+  } catch { return 1 }
+})()
 
 function getCtx() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)()
     masterGain = audioCtx.createGain()
-    masterGain.gain.value = 0.3
+    masterGain.gain.value = _muted ? 0 : 0.3 * _volume
     masterGain.connect(audioCtx.destination)
   }
   if (audioCtx.state === 'suspended') {
@@ -30,7 +37,7 @@ function getMaster() {
 export function setMuted(muted) {
   _muted = muted
   if (masterGain) {
-    masterGain.gain.setTargetAtTime(muted ? 0 : 0.3, audioCtx.currentTime, 0.05)
+    masterGain.gain.setTargetAtTime(muted ? 0 : 0.3 * _volume, audioCtx.currentTime, 0.05)
   }
 }
 
@@ -41,6 +48,20 @@ export function isMuted() {
 export function toggleMute() {
   setMuted(!_muted)
   return !_muted
+}
+
+// Iteration 53 — SFX volume control, persisted in localStorage
+export function getVolume() {
+  return _volume
+}
+
+export function setVolume(vol) {
+  _volume = Math.min(1, Math.max(0, Number.isFinite(vol) ? vol : _volume))
+  try { localStorage.setItem('sfxVolume', String(_volume)) } catch { /* storage blocked */ }
+  if (masterGain && !_muted) {
+    masterGain.gain.setTargetAtTime(0.3 * _volume, audioCtx.currentTime, 0.05)
+  }
+  return _volume
 }
 
 // ── Basic Waveform Helpers ──
