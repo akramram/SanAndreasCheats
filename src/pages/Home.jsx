@@ -1731,6 +1731,33 @@ export default function Home() {
     }
   }, [inputs])
 
+  // Runtime perf-lite: weak devices get ambient animations disabled (no re-render —
+  // a class on <html>, read by CSS). Hardware hints apply instantly; otherwise a 2 s
+  // FPS sample after boot decides. Complements the prefers-reduced-motion fallback.
+  useEffect(() => {
+    if (!booted) return
+    const root = document.documentElement
+    const weakHint =
+      (navigator.hardwareConcurrency || 8) <= 2 || (navigator.deviceMemory || 8) <= 2
+    if (weakHint) {
+      root.classList.add('perf-lite')
+      return
+    }
+    let frames = 0
+    let raf = 0
+    const t0 = performance.now()
+    const tick = () => {
+      frames++
+      if (performance.now() - t0 < 2000) {
+        raf = requestAnimationFrame(tick)
+      } else if (frames / 2 < 30) {
+        root.classList.add('perf-lite') // < 30 fps over the sample window
+      }
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [booted])
+
   return (
     <>
       {/* CRT Boot Screen */}

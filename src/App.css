@@ -4491,3 +4491,21 @@
     display: none !important;
   }
 }
+
+/* ── Runtime perf-lite (Iteration 31) ──
+   Same ambient-kill as the reduce block, applied at runtime by JS on weak devices
+   (low fps sample / hardware hints) via a class on <html>. */
+html.perf-lite *,
+html.perf-lite *::before,
+html.perf-lite *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0s !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}
+html.perf-lite .float-text,
+html.perf-lite .ambient-dust {
+  display: none !important;
+}

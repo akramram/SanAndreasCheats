@@ -1399,6 +1399,26 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 ### Next
 - Profile style recalculation (ambient CSS animations) on low-end phones.
 
+## Iteration 31 — Runtime perf-lite Mode for Weak Devices (#48)
+**Date:** 2026-11-25
+**Branch:** perf/iter-31-perf-lite → PR → main
+
+### Planned
+- Pending item from iterations 28/29: recalculate/disable ambient CSS animations at runtime on low-end phones, complementing the OS-level `prefers-reduced-motion` fallback.
+
+### Changed
+- `src/pages/Home.jsx` — one boot-gated effect: weak hardware hints (`hardwareConcurrency <= 2` or `deviceMemory <= 2`) add `perf-lite` on `<html>` instantly; otherwise a 2 s rAF FPS sample after boot adds it below 30 fps. No React state, no re-render of Home. rAF cancelled on unmount.
+- `src/App.css` — `html.perf-lite` block mirroring the iteration 29 reduce block: all animations/transitions collapse to end state, drifting decorative layers (`.float-text`, `.ambient-dust`) hidden.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (software raster, ~14 fps on this page — the exact target scenario): fps sample → `perf-lite` applied, float-text `display:none`, animation-duration `1e-05s`. Fast branch exercised end-to-end by mocking `performance.now` to 1/10 speed (sample collects ~20 s of frames as "2 s" ≈ 140 fps) → `perf-lite` NOT applied. Hint branch: `hardwareConcurrency` overridden to 2 → applied right after boot, no sample wait.
+- Under `perf-lite`: HESOYAM registers (CHEATS 1), pop, contract card and CJ all visible. `prefers-reduced-motion: reduce` regression: no CSS animations running (only the VU meter's transient 0.01 ms height transitions, cost-free).
+- Env caveat: this headless setup never reaches 30 fps even unthrottled (software rendering), so on-device the threshold only fires on genuinely struggling renderers; worst case is the already-shipped reduced-motion look.
+
+### Next
+- Move the transient WANTED toast — it overlaps the contract card while shown (iteration 29 finding).
+
 ## Iteration 30 — Contract Card Hide Toggle in Shop (#46)
 **Date:** 2026-11-25
 **Branch:** feat/iter-30-contract-hide-toggle → PR → main
