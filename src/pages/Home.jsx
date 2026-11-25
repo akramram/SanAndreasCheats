@@ -288,6 +288,7 @@ export default function Home() {
   const [showFail, setShowFail] = useState(false)
   const hadInputRef = useRef(false) // mirrors hadInputSinceMatch for timers with stale closures
   const matchedRef = useRef(null)
+  const inputsRef = useRef([]) // mirrors inputs for the miss-timer closure (iteration 35)
   const timeoutMessageRef = useRef(null)
   // Combo/streak system
   const [currentStreak, setCurrentStreak] = useState(0)
@@ -469,6 +470,9 @@ export default function Home() {
   // Refs mirroring match state for timers created inside the mount effect (stale closures)
   useEffect(() => { hadInputRef.current = hadInputSinceMatch }, [hadInputSinceMatch])
   useEffect(() => { matchedRef.current = matchedCheat }, [matchedCheat])
+  useEffect(() => { inputsRef.current = inputs }, [inputs])
+  // Closest-cheat hint shown with the MISSED overlay (iteration 35)
+  const [missSuggest, setMissSuggest] = useState(null)
 
   // Cash economy system
   const [cash, setCash] = useState(() => {
@@ -1465,12 +1469,25 @@ export default function Home() {
         // Miss detection lives here: the 2s clear always beat the 3.5s inactivity
         // timer, so resetOnInactivity's fail branch was unreachable (iteration 33).
         const missed = !matchedRef.current && hadInputRef.current
+        const typed = (inputsRef.current || []).filter(c => /^[A-Z]$/i.test(c)) // snapshot before the clear (iteration 35 hint)
         setInputs([])
         setMatchedCheat(null)
         setStartTime(null)
         setElapsedTime(null)
         clearTimerRef.current = null
         if (missed) {
+          // Closest real cheat by longest shared keyboard prefix (no hint for garbage)
+          let bestSeq = null
+          let bestLen = 0
+          for (const cheat of cheatsData.cheats || []) {
+            const seqs = cheat.pcSequence || []
+            for (const s of Array.isArray(seqs[0]) ? seqs : [seqs]) {
+              let i = 0
+              while (i < typed.length && i < s.length && typed[i] === s[i]) i++
+              if (i > bestLen) { bestLen = i; bestSeq = s }
+            }
+          }
+          setMissSuggest(bestLen > 0 ? bestSeq.join('') : null)
           setShowFail(true)
           setCjMood('disappoint')
           setCurrentStreak(0)
@@ -1488,6 +1505,7 @@ export default function Home() {
     const scheduleTimeoutMessage = () => {
       // Clear existing timeout message timer
       if (timeoutMessageRef.current) clearTimeout(timeoutMessageRef.current)
+      setMissSuggest(null) // fresh attempt clears the miss hint (iteration 35)
       // Hide message immediately when there's input
       setShowTimeoutMessage(false)
       // Show timeout message after 5 seconds of no input
@@ -2209,6 +2227,7 @@ export default function Home() {
         <>
           <div className="fail-overlay" />
           <div className="wasted-text">MISSED</div>
+          {missSuggest && <div className="wasted-hint">CLOSEST: {missSuggest}</div>}
         </>
       )}
 

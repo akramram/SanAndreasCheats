@@ -628,6 +628,21 @@
   animation: wasted-text 1.2s ease-out forwards;
   image-rendering: pixelated;
 }
+/* Closest-cheat hint under MISSED (iteration 35) */
+.wasted-hint {
+  position: fixed;
+  top: 53%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 155;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(9px, 2.4vw, 14px);
+  letter-spacing: 0.15em;
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+  pointer-events: none;
+  animation: wasted-text 1.2s ease-out forwards;
+}
 
 /* ── CJ disappointment ── */
 @keyframes cj-disappoint {
