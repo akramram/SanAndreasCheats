@@ -1961,3 +1961,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 60 — UNTRIED Marker in the Codex (#107)
+**Date:** 2026-11-26
+**Branch:** feat/iter-60-codex-untried → PR → main
+
+### Planned
+- With attempt counters in place (iteration 57), decoded cheats that were never typed deserved a visible nudge. Add a dim `UNTRIED` chip.
+
+### Changed
+- `src/pages/Home.jsx` — declassified codex entries with 0 attempts render a `.codex-untried` chip; it is replaced by the `×N TRIED` counter once the cheat is matched. Render-only, no storage.
+- `src/App.css` — `.codex-untried` dim amber pixel styling.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (seeded discovered HESOYAM entry, no attempts): chip visible → HESOYAM match → chip gone, `×1 TRIED` present. Browser closed after the probe.
+
+### Next
+- Free choice.

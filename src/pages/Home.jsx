@@ -3341,6 +3341,9 @@ export default function Home() {
                                 {(cheatAttempts[cheat.id] || 0) > 0 && (
                                   <div className="codex-attempts">×{cheatAttempts[cheat.id]} TRIED</div>
                                 )}
+                                {(cheatAttempts[cheat.id] || 0) === 0 && (
+                                  <div className="codex-untried">UNTRIED</div>
+                                )}
                                 {/* Iteration 59 — copy PC code straight from the codex */}
                                 <button
                                   type="button"
