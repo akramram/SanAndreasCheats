@@ -285,6 +285,8 @@ export default function Home() {
   const [cjSpeech, setCjSpeech] = useState(null)
   const [speechFading, setSpeechFading] = useState(false)
   const [showFail, setShowFail] = useState(false)
+  const hadInputRef = useRef(false) // mirrors hadInputSinceMatch for timers with stale closures
+  const matchedRef = useRef(null)
   const timeoutMessageRef = useRef(null)
   // Combo/streak system
   const [currentStreak, setCurrentStreak] = useState(0)
@@ -463,6 +465,10 @@ export default function Home() {
   const codexDiscoveryTimerRef = useRef(null)
   const prevUniqueCountRef = useRef(0)
 
+  // Refs mirroring match state for timers created inside the mount effect (stale closures)
+  useEffect(() => { hadInputRef.current = hadInputSinceMatch }, [hadInputSinceMatch])
+  useEffect(() => { matchedRef.current = matchedCheat }, [matchedCheat])
+
   // Cash economy system
   const [cash, setCash] = useState(() => {
     return parseInt(localStorage.getItem('gtaCash') || '0', 10)
@@ -510,6 +516,30 @@ export default function Home() {
     const t = setTimeout(contractToast.heist ? playHeistComplete : playContractComplete, 600)
     return () => clearTimeout(t)
   }, [contractToast])
+
+  // Gamepad rumble feedback on match (short thump) and miss (long shudder). Honors
+  // mute and the perf-lite / prefers-reduced-motion fallbacks from iterations
+  // 29/31 — haptics count as feedback motion, not essential output. Observer only:
+  // reads the match/fail results, never touches input handling. Silent no-op
+  // without a gamepad.
+  useEffect(() => {
+    if (!matchedCheat && !showFail) return
+    if (isMuted()) return
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced || document.documentElement.classList.contains('perf-lite')) return
+    try {
+      const pads = navigator.getGamepads ? navigator.getGamepads() : []
+      for (const pad of pads) {
+        const actuator = pad && pad.vibrationActuator
+        if (actuator && actuator.playEffect) {
+          actuator.playEffect('dual-rumble', matchedCheat
+            ? { startDelay: 0, duration: 90, weakMagnitude: 0.4, strongMagnitude: 0.9 } // victory thump
+            : { startDelay: 0, duration: 220, weakMagnitude: 0.9, strongMagnitude: 0.2 } // miss shudder
+          ).catch(() => {})
+        }
+      }
+    } catch { /* gamepad API unavailable */ }
+  }, [matchedCheat, showFail])
 
   // Weekly Heist payout: observes the match result only
   useEffect(() => {
@@ -1393,11 +1423,26 @@ export default function Home() {
     const scheduleClear = () => {
       if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
       clearTimerRef.current = setTimeout(() => {
+        // Miss detection lives here: the 2s clear always beat the 3.5s inactivity
+        // timer, so resetOnInactivity's fail branch was unreachable (iteration 33).
+        const missed = !matchedRef.current && hadInputRef.current
         setInputs([])
         setMatchedCheat(null)
         setStartTime(null)
         setElapsedTime(null)
         clearTimerRef.current = null
+        if (missed) {
+          setShowFail(true)
+          setCjMood('disappoint')
+          setCurrentStreak(0)
+          setComboAnim(null)
+          stopSiren()
+          setSirenActive(false)
+          playFailSound()
+          setTimeout(() => setShowFail(false), 1200)
+          setTimeout(() => setCjMood('idle'), 800)
+          setHadInputSinceMatch(false)
+        }
       }, 2000)
     }
 
