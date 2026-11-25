@@ -4955,3 +4955,29 @@ html.perf-lite .ambient-dust {
   margin-top: 4px;
   letter-spacing: 1px;
 }
+
+/* Iteration 61 — recent finder searches */
+.finder-recents {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 10px;
+}
+.finder-recents-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: rgba(245, 158, 11, 0.6);
+}
+.finder-recent-chip {
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 1px 8px;
+  cursor: pointer;
+}
+.finder-recent-chip:hover {
+  background: rgba(245, 158, 11, 0.18);
+}

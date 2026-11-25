@@ -1979,3 +1979,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 61 — Recent Searches in the Cheat Finder (#109)
+**Date:** 2026-11-26
+**Branch:** feat/iter-61-finder-recents → PR → main
+
+### Planned
+- The Cheat Finder forgot every query. Persist the last 5 and offer one-click restore.
+
+### Changed
+- `src/pages/Home.jsx` — `finderRecents` state persisted as `finderRecents` (max 5, newest first, case-insensitive dedupe); `rememberFinderQuery` fires on Enter in the finder input; `RECENT:` chip row under the finder header only while the query box is empty; chip click restores the query and results. Rides save export/import.
+- `src/App.css` — `.finder-recents` row + amber pixel chips.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (7 queries typed with Enter): storage capped at 5 newest-first (`police, bikes, rockets, weather, guns`); clearing the box shows 5 chips; clicking `bikes` restores query + results; chips survive reload; HESOYAM still MATCHED. Browser closed after the probe.
+
+### Next
+- Free choice.
