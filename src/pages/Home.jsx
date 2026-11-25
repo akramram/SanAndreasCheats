@@ -2269,7 +2269,7 @@ export default function Home() {
         </div>
         <div className="hud-stat">
           <span className="hud-label">STREAK</span>
-          <span className={`hud-value ${currentStreak >= 3 ? 'streak-hot' : ''}`}>{currentStreak}</span>
+          <span className={`hud-value ${currentStreak >= 3 ? 'streak-hot' : ''} ${currentStreak >= 5 ? 'streak-fire' : ''}`}>{currentStreak >= 5 ? '🔥' : ''}{currentStreak}</span>
         </div>
         <div className="hud-stat">
           <span className="hud-label">BEST</span>
