@@ -265,6 +265,15 @@ function BootScreen({ onBooted }) {
 export default function Home() {
   const [inputs, setInputs] = useState([])
   const [matchedCheat, setMatchedCheat] = useState(null)
+  // Screen-reader announcer: match / miss / sprint results are pushed to a single
+  // aria-live region (observer only — never touches input handling).
+  const [announce, setAnnounce] = useState('')
+  const announceTimerRef = useRef(null)
+  const announceEvent = (msg) => {
+    if (announceTimerRef.current) clearTimeout(announceTimerRef.current)
+    setAnnounce('') // clear first so identical consecutive messages re-announce
+    announceTimerRef.current = setTimeout(() => setAnnounce(msg), 60)
+  }
   const [particles, setParticles] = useState([])
   const [confettiPieces, setConfettiPieces] = useState([])
   const [bannerKey, setBannerKey] = useState(0)
@@ -580,7 +589,17 @@ export default function Home() {
   useEffect(() => {
     if (!matchedCheat) return
     setSprint(prev => (prev ? { ...prev, score: prev.score + 1 } : prev))
+    announceEvent(`Cheat activated: ${matchedCheat.name}`)
   }, [matchedCheat])
+
+  // Sprint results for screen readers (separate from the rumble effect, which is
+  // muted/reduced-motion gated and therefore skips SR users too).
+  useEffect(() => {
+    if (!sprintResult) return
+    announceEvent(sprintResult.isNewBest
+      ? `Sprint over — new record, ${sprintResult.score} cheats`
+      : `Sprint over — ${sprintResult.score} cheats`)
+  }, [sprintResult])
 
   // Gamepad rumble feedback on match (short thump), miss (long shudder) and sprint
   // end (soft thump; double pulse on a new record — iteration 37). Honors mute and
@@ -1513,6 +1532,7 @@ export default function Home() {
           stopSiren()
           setSirenActive(false)
           playFailSound()
+          announceEvent('Missed — cheat buffer cleared')
           setTimeout(() => setShowFail(false), 1200)
           setTimeout(() => setCjMood('idle'), 800)
           setHadInputSinceMatch(false)
@@ -2460,6 +2480,9 @@ export default function Home() {
       )}
 
       {/* Cheat match display */}
+      {/* Screen-reader live region for match / miss / sprint announcements */}
+      <div className="sr-announcer" role="status" aria-live="assertive">{announce}</div>
+
       {matchedCheat && (
         <div key={matchedCheat.id} className={`text-center cheat-pop fireworks max-w-2xl mx-auto flex flex-col gap-3 relative z-10 px-6 py-4 pixel-border ${shakeActive ? 'screen-shake' : ''}`}>
           {elapsedTime !== null && (
