@@ -4946,3 +4946,12 @@ html.perf-lite .ambient-dust {
   margin-top: 6px;
   align-self: flex-start;
 }
+
+/* Iteration 60 — UNTRIED marker for discovered-but-never-typed entries */
+.codex-untried {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: rgba(245, 158, 11, 0.45);
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
