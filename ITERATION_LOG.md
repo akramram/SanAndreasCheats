@@ -1399,6 +1399,24 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 ### Next
 - Profile style recalculation (ambient CSS animations) on low-end phones.
 
+## Iteration 30 — Contract Card Hide Toggle in Shop (#46)
+**Date:** 2026-11-25
+**Branch:** feat/iter-30-contract-hide-toggle → PR → main
+
+### Planned
+- Pending item from iterations 25/27: a settings/shop toggle to hide the contract cards, saved with the save.
+
+### Changed
+- `src/pages/Home.jsx` — `hideContracts` state persisted in localStorage (`hideContractCards`, `'1'/'0'`); `toggleHideContracts` writes through. The daily contract card (with the weekly heist section inside it) renders only when the toggle is off; the payout effect and `contractToast` are untouched, so contracts still pay out while hidden. New always-visible "⚙ OPTIONS" section at the bottom of the shop content: one `aria-pressed` button, CONTRACT CARDS — SHOWN/HIDDEN.
+- `src/App.css` — `.shop-option-row` (+ `.off` state, hover, reduced-motion covered by the global block from iteration 29).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: card visible by default → shop toggle → HIDDEN + `aria-pressed=true` + `hideContractCards='1'` + card gone; reload → card still hidden (persisted); toggle back → SHOWN, card back, `'0'`. HESOYAM after all of it: CHEATS 1, pop shown — core input intact. Escape still closes the shop.
+
+### Next
+- Runtime perf-lite mode: disable ambient CSS animations on weak devices (complements `prefers-reduced-motion`).
+
 ## Iteration 29 — Global prefers-reduced-motion Fallback (#44)
 **Date:** 2026-11-22
 **Branch:** feat/iter-29-reduced-motion → PR → main
