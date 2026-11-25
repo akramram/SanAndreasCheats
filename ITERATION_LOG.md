@@ -1471,3 +1471,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - The transient WANTED toast overlaps the contract card (top-left) while it is shown — move the toast or the card.
+
+## Iteration 33 — Gamepad Rumble Feedback on Match & Miss (#52)
+**Date:** 2026-11-25
+**Branch:** feat/iter-33-gamepad-rumble → PR → main
+
+### Planned
+- Resumed the round-1 WIP stash (39 lines in `Home.jsx`): dual-rumble haptics on match and miss.
+
+### Changed (`src/pages/Home.jsx`)
+- Rumble effect: on match a 90 ms victory thump (strong-biased), on miss a 220 ms shudder (weak-biased). Reads connected gamepads' `vibrationActuator` only — input handling untouched; silent no-op without a gamepad or the actuator API. Honors mute and the iteration 29/31 fallbacks: skipped under `prefers-reduced-motion: reduce` or `perf-lite`.
+- Miss detection made reachable: `resetOnInactivity`'s fail branch was dead code — the 2 s input-clear timer always emptied the buffer before the 3.5 s inactivity timer ran, so `inputs.length > 0` never held. The miss branch (MISSED overlay, fail sound, streak break, CJ disappoint) now lives in the 2 s clear itself, gated by refs mirroring `hadInputSinceMatch`/`matchedCheat` (timers inside the mount effect would otherwise see stale state).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium with a mocked gamepad `vibrationActuator`: HESOYAM → `dual-rumble` 90 ms/0.4/0.9 + CHEAT ACTIVATED; unmatched input (QWQ) idle 2 s → MISSED overlay + 220 ms/0.9/0.2 shudder; a second match rumbles again; clearing after a match never false-triggers the miss. Muted match → no rumble; `perf-lite` on `<html>` → no rumble (match UI unaffected); forced `prefers-reduced-motion` → no rumble. HESOYAM still registers in every scenario (core keyboard input intact).
+
+### Next
+- Free choice.
