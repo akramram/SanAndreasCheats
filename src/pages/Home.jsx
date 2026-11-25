@@ -325,6 +325,10 @@ export default function Home() {
   const [cheatBestTimes, setCheatBestTimes] = useState(() => {
     try { return JSON.parse(localStorage.getItem('cheatBestTimes') || '{}') } catch { return {} }
   })
+  // Iteration 57 — per-cheat attempt counters (id → hits) for codex chips
+  const [cheatAttempts, setCheatAttempts] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('cheatAttempts') || '{}') } catch { return {} }
+  })
   // Iteration 50 — lifetime accuracy (hits vs missed attempts), persisted
   const [accuracy, setAccuracy] = useState(() => {
     try { return JSON.parse(localStorage.getItem('accuracyStats') || 'null') || { hits: 0, misses: 0 } } catch { return { hits: 0, misses: 0 } }
@@ -1854,6 +1858,16 @@ export default function Home() {
             }
           }
 
+          // Iteration 57 — per-cheat attempt counter for codex chips
+          if (found?.id) {
+            try {
+              const att = JSON.parse(localStorage.getItem('cheatAttempts') || '{}')
+              att[found.id] = (att[found.id] || 0) + 1
+              localStorage.setItem('cheatAttempts', JSON.stringify(att))
+              setCheatAttempts(att)
+            } catch { /* storage blocked */ }
+          }
+
           // Combo animation
           if (newStreak === 1) {
             setComboAnim('enter')
@@ -3316,6 +3330,9 @@ export default function Home() {
                                 </div>
                                 {cheatBestTimes[cheat.id] != null && (
                                   <div className="codex-best-time">BEST {(cheatBestTimes[cheat.id] / 1000).toFixed(2)}s</div>
+                                )}
+                                {(cheatAttempts[cheat.id] || 0) > 0 && (
+                                  <div className="codex-attempts">×{cheatAttempts[cheat.id]} TRIED</div>
                                 )}
                               </div>
                             ) : (
