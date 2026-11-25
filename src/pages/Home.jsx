@@ -506,6 +506,7 @@ export default function Home() {
       c = all[Math.floor(Math.random() * all.length)]
     }
     setRoulette({ id: c.id, name: c.name, hits: rouletteRef.current?.hits || 0 })
+    announceEvent(`New target: ${c.name}`) // iteration 49 — SR users otherwise never learn the target
   }
   // Iteration 43 — Konami code easter egg (observed keys, never cheat input)
   const [konamiFlash, setKonamiFlash] = useState(false)
@@ -2330,7 +2331,7 @@ export default function Home() {
         </div>
         <div className="hud-stat">
           <span className="hud-label">STREAK</span>
-          <span className={`hud-value ${currentStreak >= 3 ? 'streak-hot' : ''} ${currentStreak >= 5 ? 'streak-fire' : ''}`}>{currentStreak >= 5 ? '🔥' : ''}{currentStreak}</span>
+          <span className={`hud-value ${currentStreak >= 3 ? 'streak-hot' : ''} ${currentStreak >= 5 ? 'streak-fire' : ''}`}>{currentStreak >= 5 ? <span aria-hidden="true">🔥</span> : ''}{currentStreak}</span>
         </div>
         <div className="hud-stat">
           <span className="hud-label">BEST</span>
@@ -2595,10 +2596,9 @@ export default function Home() {
         )}
       </div>
 
-      {/* Gamepad connected indicator (iteration 47) */}
-      {gamepadOn && (
-        <div className="gamepad-chip" role="status">🎮 GAMEPAD CONNECTED</div>
-      )}
+      {/* Gamepad connected indicator (iteration 47; iteration 49 — persistent live
+          region: a conditionally-mounted role=status may never be announced) */}
+      <div className="gamepad-chip" role="status" hidden={!gamepadOn}>🎮 GAMEPAD CONNECTED</div>
 
       <div className="roulette-bar">
         {roulette ? (

@@ -4803,6 +4803,7 @@ html.perf-lite .ambient-dust {
 }
 
 /* Iteration 47 — gamepad connected indicator */
+.gamepad-chip[hidden] { display: none; }
 .gamepad-chip {
   position: fixed;
   top: 12px;
