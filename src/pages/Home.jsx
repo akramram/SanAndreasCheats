@@ -1334,6 +1334,13 @@ export default function Home() {
   const openHistoryModal = () => setIsHistoryModalOpen(true)
   const closeHistoryModal = () => setIsHistoryModalOpen(false)
 
+  // Top cheats strip (iteration 36): derived from the stored history — no new storage
+  const topCheats = useMemo(() => {
+    const counts = new Map()
+    for (const e of cheatHistory) counts.set(e.name, (counts.get(e.name) || 0) + 1)
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)
+  }, [cheatHistory])
+
   // Function to reset input and counter on inactivity
   const resetOnInactivity = () => {
     // If there was input but no match — that's a fail
@@ -2546,6 +2553,14 @@ export default function Home() {
 
             {/* Modal Content */}
             <div className="flex-1 overflow-y-auto p-5 space-y-2">
+              {cheatHistory.length > 0 && topCheats.length > 0 && (
+                <div className="top-cheats" aria-label="Most used cheats">
+                  <span className="top-cheats-title">TOP CHEATS</span>
+                  {topCheats.map(([name, count]) => (
+                    <span key={name} className="top-cheat-chip">{name} ×{count}</span>
+                  ))}
+                </div>
+              )}
               {cheatHistory.length === 0 ? (
                 <p className="font-vt text-xl text-amber-400/50 text-center py-8">No cheats activated yet.</p>
               ) : (

@@ -4576,3 +4576,30 @@ html.perf-lite .ambient-dust {
   .sprint-clock { font-size: 12px; }
   .sprint-btn { font-size: 9px; }
 }
+
+/* TOP CHEATS strip in history modal (iteration 36) */
+.top-cheats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  border-bottom: 2px solid rgba(245, 158, 11, 0.3);
+}
+.top-cheats-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: #fde68a;
+  margin-right: 4px;
+}
+.top-cheat-chip {
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  padding: 2px 8px;
+}
