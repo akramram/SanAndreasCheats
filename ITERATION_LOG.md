@@ -1907,3 +1907,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 57 — Per-Cheat Attempt Counters in the Codex (#101)
+**Date:** 2026-11-26
+**Branch:** feat/iter-57-codex-attempts → PR → main
+
+### Planned
+- Codex stamps the best time per cheat but not how often each was used. Add a persisted `×N TRIED` chip.
+
+### Changed
+- `src/pages/Home.jsx` — `cheatAttempts` state persisted as `cheatAttempts` (id → hits); incremented observer-side right after a match (outside the timer branch, so untimed matches count too, matching logic untouched); green `×N TRIED` chip under the BEST stamp in codex entries. Rides save export/import automatically.
+- `src/App.css` — `.codex-attempts` chip styling.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (seeded discovered HESOYAM entry): no chip before any match → 2× HESOYAM → `cheatAttempts` hits=2 → codex chip `×2 TRIED` → survives reload. Browser closed after the probe.
+
+### Next
+- Free choice.
