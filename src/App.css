@@ -4778,3 +4778,9 @@ html.perf-lite .ambient-dust {
 }
 .roulette-btn:hover { background: rgba(52, 211, 153, 0.2); }
 .roulette-close { color: #f87171; border-color: rgba(248, 113, 113, 0.45); background: rgba(248, 113, 113, 0.08); }
+
+/* Iteration 46 — memory mode: hide reference sequences, keep match reveal */
+.memory-mode .codex-entry-code,
+.memory-mode .finder .codex-entry-code {
+  visibility: hidden;
+}

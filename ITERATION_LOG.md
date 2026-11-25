@@ -1711,3 +1711,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 46 — Memory Mode: Hide Reference Sequences (#78)
+**Date:** 2026-11-25
+**Branch:** feat/iter-46-memory-mode → PR → main
+
+### Planned
+- Players who want to type from memory had no way to hide the answer key. Add a persisted 🧠 MEMORY MODE toggle that hides reference sequences in the codex and finder; the post-match reveal stays visible as learning feedback.
+
+### Changed
+- `src/pages/Home.jsx` — `memoryMode` state persisted in localStorage (`memoryMode`, `'1'/'0'`); `toggleMemoryMode` writes through; 🧠 MEMORY MODE row (aria-pressed, ON/OFF) in the shop ⚙ OPTIONS under CONTRACT CARDS; `memory-mode` class on `<main>`. No input changes.
+- `src/App.css` — `.memory-mode .codex-entry-code` (and finder variant) → `visibility: hidden`. No animations.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: codex code visible by default → toggle on (`aria-pressed=true`, `memoryMode='1'`) → declassified entry code `visibility: hidden` → match reveal panel still `visible` → HESOYAM re-match intact.
+
+### Next
+- Free choice.
