@@ -4719,3 +4719,17 @@ html.perf-lite .ambient-dust {
   60% { transform: scale(1.06); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+/* Iteration 44 — streak fire: HUD streak burns at 5+ */
+.hud-value.streak-fire {
+  color: #fb923c;
+  text-shadow:
+    0 0 8px rgba(251, 146, 60, 0.9),
+    0 0 18px rgba(248, 113, 113, 0.7),
+    0 0 30px rgba(245, 158, 11, 0.5);
+  animation: streak-fire-pulse 700ms ease-in-out infinite;
+}
+@keyframes streak-fire-pulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(251, 146, 60, 0.9), 0 0 18px rgba(248, 113, 113, 0.7), 0 0 30px rgba(245, 158, 11, 0.5); }
+  50% { text-shadow: 0 0 14px rgba(251, 146, 60, 1), 0 0 28px rgba(248, 113, 113, 0.9), 0 0 44px rgba(245, 158, 11, 0.7); }
+}

@@ -1675,3 +1675,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 44 — Streak Fire: HUD Streak Burns at 5+ (#74)
+**Date:** 2026-11-25
+**Branch:** feat/iter-44-streak-fire → PR → main
+
+### Planned
+- The HUD streak stat only had a flat red tint from streak 3 (`streak-hot`); momentum deserved an escalation.
+
+### Changed
+- `src/pages/Home.jsx` — streak ≥ 5 adds `streak-fire` class and a 🔥 mark before the number. Derived from `currentStreak` — no logic changes.
+- `src/App.css` — `.streak-fire`: layered orange/red/amber text-shadow glow with a 700 ms pulse (`streak-fire-pulse`; collapsed to end state by the iteration 29 reduced-motion block).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium, 5-match ladder (HESOYAM/BAGUVIX/AEZAKMI×): HUD progression `1, 2` plain → `3, 4` streak-hot → `🔥5` streak-fire+flame, exactly as designed; streak survives per-match auto-clears.
+
+### Next
+- Free choice.
