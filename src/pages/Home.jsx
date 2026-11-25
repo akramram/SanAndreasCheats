@@ -866,6 +866,23 @@ export default function Home() {
     try { localStorage.setItem('zenMode', next ? '1' : '0') } catch { /* storage blocked */ }
     return next
   })
+  // Iteration 62 — two-step reset of stat keys only (cash/cosmetics survive)
+  const [resetArmed, setResetArmed] = useState(false)
+  const resetArmedTimerRef = useRef(null)
+  const armResetStats = () => {
+    if (!resetArmed) {
+      setResetArmed(true)
+      if (resetArmedTimerRef.current) clearTimeout(resetArmedTimerRef.current)
+      resetArmedTimerRef.current = setTimeout(() => setResetArmed(false), 3000)
+      return
+    }
+    if (resetArmedTimerRef.current) clearTimeout(resetArmedTimerRef.current)
+    setResetArmed(false)
+    for (const k of ['cheatHistory', 'accuracyStats', 'cheatBestTimes', 'cheatAttempts', 'bestStreak', 'bestTime', 'sprintBest']) {
+      try { localStorage.removeItem(k) } catch { /* storage blocked */ }
+    }
+    window.location.reload()
+  }
   // Iteration 41 — save export/import (shop OPTIONS). Exports the whole
   // localStorage (this app owns it) as JSON; import writes back string-valued
   // keys only and reloads.
@@ -3668,6 +3685,14 @@ export default function Home() {
                 >
                   <span className="shop-option-label">🧘 ZEN MODE</span>
                   <span className="shop-option-state">{zenMode ? 'ON' : 'OFF'}</span>
+                </button>
+                <button
+                  type="button"
+                  className={`shop-option-row reset-stats-row ${resetArmed ? 'armed' : ''}`}
+                  onClick={armResetStats}
+                >
+                  <span className="shop-option-label">🗑 RESET STATS</span>
+                  <span className="shop-option-state">{resetArmed ? 'SURE?' : 'CLEAR'}</span>
                 </button>
 
                 {/* Iteration 41 — save export / import */}

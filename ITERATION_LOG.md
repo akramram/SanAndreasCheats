@@ -1997,3 +1997,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 62 — Two-Step RESET STATS in Shop Options (#111)
+**Date:** 2026-11-26
+**Branch:** feat/iter-62-reset-stats → PR → main
+
+### Planned
+- No way to clear accumulated stats without hand-editing saves. Add a guarded RESET STATS row: first click arms (3 s window), second click clears stat keys only and reloads.
+
+### Changed
+- `src/pages/Home.jsx` — `resetArmed` + `armResetStats` (two-step confirm, auto-disarm after 3 s); clears `cheatHistory`, `accuracyStats`, `cheatBestTimes`, `cheatAttempts`, `bestStreak`, `bestTime`, `sprintBest` then reloads. Cash, cosmetics, unlocks and unlocks-adjacent keys are untouched.
+- `src/App.css` — `.reset-stats-row` idle/armed (red) states.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (seeded stats + cash 4200): first click arms to `SURE?` without deleting → second click reloads with all stat keys gone and `gtaCash` intact. Browser closed after the probe.
+
+### Next
+- Free choice.
