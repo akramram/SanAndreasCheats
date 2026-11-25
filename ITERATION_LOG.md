@@ -1565,3 +1565,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Fix the stuck matchedCheat (#61); free choice otherwise.
+
+## Iteration 38 — Bugfix: Matched Cheat Auto-Clears Again (#61)
+**Date:** 2026-11-25
+**Branch:** fix/iter-38-stuck-match → PR → main
+
+### Found
+- #61 (pre-existing, surfaced in iteration 37): after a match the input effect re-subscribed (its deps include `matchedCheat`) and the cleanup cancelled the 2s auto-clear the match keystroke had scheduled — CHEAT ACTIVATED banner, `.screen-flash` and the match panel lingered until the next keystroke.
+
+### Changed (`src/pages/Home.jsx`)
+- Timer teardown moved out of the re-run cleanup into a new unmount-only effect (`[]` deps): `clearTimerRef` and `timeoutMessageRef` are now cancelled only when Home unmounts, never on effect re-subscription. Miss-branch semantics unchanged (`matchedRef` guard keeps it silent after a real match); the inactivity timer still resets normally.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium regression probe: HESOYAM → banner + `.screen-flash` shown, cleared ≤2.5s with no MISSED overlay; QWQ → MISSED still fires after 2s; HESOYAM re-match works after the miss; streak HUD intact.
+
+### Next
+- Free choice.
