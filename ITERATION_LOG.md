@@ -1729,3 +1729,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 47 — Gamepad Connected Indicator (#80)
+**Date:** 2026-11-25
+**Branch:** feat/iter-47-gamepad-chip → PR → main
+
+### Planned
+- No visible feedback when a controller connects or drops. Add a small persistent chip: hidden on keyboard, `🎮 GAMEPAD CONNECTED` while a pad is connected.
+
+### Changed
+- `src/pages/Home.jsx` — `gamepadOn` state; display-only effect syncing from `navigator.getGamepads()` at mount and on `gamepadconnected` / `gamepaddisconnected` (disconnect re-syncs on a timeout so the remap is read after the pad leaves). Chip is `role="status"` near the top center. No input changes.
+- `src/App.css` — `.gamepad-chip` pixel chip. No animations.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (synthetic `gamepadconnected`/`gamepaddisconnected` events): chip hidden idle → shown on connect → hidden after disconnect → HESOYAM still matches.
+
+### Next
+- Free choice.
