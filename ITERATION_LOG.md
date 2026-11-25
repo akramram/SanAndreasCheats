@@ -1747,3 +1747,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 48 — Mobile Polish: Roulette Bar & Gamepad Chip at 375px (#82)
+**Date:** 2026-11-25
+**Branch:** feat/iter-48-mobile-polish → PR → main
+
+### Planned
+- Rect-measuring the new HUD features at 375×740 found two real mobile bugs: the ACTIVE roulette bar overflowed the viewport (right edge 441px > 375px) and its idle spot (top:64px) was covered by the contract card (top:92px, z-index 89); the gamepad chip (fixed, top center, z-index 12) covered the mute button.
+
+### Changed
+- `src/App.css` only. `@media (max-width: 480px)`: `.roulette-bar` moves to top:48px (under the sprint bar, clearing the contract card), `max-width: calc(100vw - 24px)`, nowrap one-row layout with 7px type and the cheat name clamped to 96px. `.gamepad-chip` becomes in-flow (`position: static`, `display: table`, centered) above CJ so it can never cover the header icons. Desktop (1280px) untouched — all rules live inside the 480px media query.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium at 375×740: `scrollWidth` 375 idle / active / after match; chip at y=335 in-flow, zero intersection with the sound button; active bar y 48–87, right 306, bottom 87 ≤ contract top 92; HESOYAM still matches. Headless browser closed after the probe.
+
+### Next
+- Free choice.
