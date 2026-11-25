@@ -3341,6 +3341,15 @@ export default function Home() {
                                 {(cheatAttempts[cheat.id] || 0) > 0 && (
                                   <div className="codex-attempts">×{cheatAttempts[cheat.id]} TRIED</div>
                                 )}
+                                {/* Iteration 59 — copy PC code straight from the codex */}
+                                <button
+                                  type="button"
+                                  className={`finder-copy-btn codex-copy-btn ${finderCopiedId === cheat.id ? 'copied' : ''} ${finderCopyError === cheat.id ? 'error' : ''}`}
+                                  onClick={() => copyCheatCode(cheat)}
+                                  aria-label={`Copy ${cheat.name}`}
+                                >
+                                  {finderCopiedId === cheat.id ? 'COPIED' : finderCopyError === cheat.id ? 'GAGAL' : 'COPY'}
+                                </button>
                               </div>
                             ) : (
                               <div className="codex-classified-inner">
