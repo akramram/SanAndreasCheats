@@ -712,6 +712,32 @@ export default function Home() {
   })
   // Option: hide the daily contract card (shop toggle, persisted)
   const [hideContracts, setHideContracts] = useState(() => localStorage.getItem('hideContractCards') === '1')
+  // Iteration 41 — save export/import (shop OPTIONS). Exports the whole
+  // localStorage (this app owns it) as JSON; import writes back string-valued
+  // keys only and reloads.
+  const [saveIO, setSaveIO] = useState(null) // null | 'export' | 'import'
+  const [saveText, setSaveText] = useState('')
+  const [saveStatus, setSaveStatus] = useState(null)
+  const exportSave = () => {
+    let data = ''
+    try { data = JSON.stringify(Object.fromEntries(Object.entries(localStorage))) } catch { /* storage blocked */ }
+    setSaveText(data)
+    setSaveStatus(data ? null : 'STORAGE UNAVAILABLE')
+    setSaveIO('export')
+  }
+  const applyImportSave = () => {
+    try {
+      const obj = JSON.parse(saveText)
+      if (!obj || typeof obj !== 'object' || Array.isArray(obj)) throw new Error('not an object')
+      const entries = Object.entries(obj).filter(([, v]) => typeof v === 'string')
+      if (entries.length === 0) throw new Error('no keys')
+      for (const [k, v] of entries) localStorage.setItem(k, v)
+      setSaveStatus('SAVE RESTORED — RELOADING…')
+      setTimeout(() => window.location.reload(), 800)
+    } catch {
+      setSaveStatus('INVALID SAVE DATA')
+    }
+  }
   const toggleHideContracts = () => setHideContracts(prev => {
     const next = !prev
     try { localStorage.setItem('hideContractCards', next ? '1' : '0') } catch { /* storage blocked */ }
@@ -3325,6 +3351,30 @@ export default function Home() {
                   <span className="shop-option-label">📋 CONTRACT CARDS</span>
                   <span className="shop-option-state">{hideContracts ? 'HIDDEN' : 'SHOWN'}</span>
                 </button>
+
+                {/* Iteration 41 — save export / import */}
+                <div className="save-io">
+                  <div className="save-io-actions">
+                    <button type="button" className="save-io-btn" onClick={exportSave}>EXPORT SAVE</button>
+                    <button type="button" className="save-io-btn" onClick={() => { setSaveIO('import'); setSaveText(''); setSaveStatus(null) }}>IMPORT SAVE</button>
+                  </div>
+                  {saveIO && (
+                    <>
+                      <textarea
+                        className="save-io-text"
+                        value={saveText}
+                        onChange={e => { setSaveText(e.target.value); setSaveStatus(null) }}
+                        placeholder={saveIO === 'export' ? 'Your save JSON appears here — copy it somewhere safe.' : 'Paste your save JSON here, then APPLY.'}
+                        aria-label={saveIO === 'export' ? 'Exported save data' : 'Paste save data to import'}
+                        rows={4}
+                      />
+                      {saveIO === 'import' && (
+                        <button type="button" className="save-io-btn save-io-apply" onClick={applyImportSave}>APPLY</button>
+                      )}
+                    </>
+                  )}
+                  {saveStatus && <div className="save-io-status" role="status">{saveStatus}</div>}
+                </div>
               </div>
             </div>
           </div>
