@@ -1600,3 +1600,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 40 — Keyboard Heat Strip (#66)
+**Date:** 2026-11-25
+**Branch:** feat/iter-40-key-heat-strip → PR → main
+
+### Planned
+- A compact A–Z strip under the input display; tiles light up as keys are pressed in the current attempt, resetting on auto-clear — at-a-glance feedback for which letters are in the buffer.
+
+### Changed
+- `src/pages/Home.jsx` — `typedLetterSet` useMemo derived from `inputs` (no new state); 26 tiles rendered only while typing and unmatched, `aria-hidden="true"` (SR users are served by the iteration 39 announcer). Input handling untouched.
+- `src/App.css` — `.key-heat` / `.key-heat-tile` (+ `.key-hit` amber glow, 120ms transitions, ≤640px compaction).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: strip hidden idle → typing HE lights exactly H+E (sorted set compare; DOM order is A–Z) → completing HESOYAM hides the strip behind the match panel → 2s auto-clear resets it (hidden) → BAGUVIX re-match works. First probe run had a false negative (browser daemon hiccup, same as iteration 35 note); clean re-run on the identical bundle: ALL PASS.
+
+### Next
+- Free choice.
