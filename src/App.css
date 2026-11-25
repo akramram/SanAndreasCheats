@@ -4677,3 +4677,15 @@ html.perf-lite .ambient-dust {
   font-size: 8px;
   color: #f87171;
 }
+
+/* Iteration 42 — per-cheat best time stamp in the codex */
+.codex-best-time {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  padding: 4px 6px;
+  display: inline-block;
+  margin-top: 4px;
+}

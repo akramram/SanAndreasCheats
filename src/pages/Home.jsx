@@ -311,6 +311,10 @@ export default function Home() {
     return saved ? parseFloat(saved) : null
   })
   const [totalCheats, setTotalCheats] = useState(0)
+  // Iteration 42 — per-cheat best times (id → ms) for codex stamps
+  const [cheatBestTimes, setCheatBestTimes] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('cheatBestTimes') || '{}') } catch { return {} }
+  })
   const [comboAnim, setComboAnim] = useState(null) // null | 'enter' | 'bump'
   const [hadInputSinceMatch, setHadInputSinceMatch] = useState(false)
   const [booted, setBooted] = useState(false)
@@ -1686,6 +1690,17 @@ export default function Home() {
             if (bestTime === null || elapsed < bestTime) {
               setBestTime(elapsed)
               localStorage.setItem('bestTime', String(elapsed))
+            }
+            // Iteration 42 — per-cheat best time for codex stamps
+            if (found?.id) {
+              try {
+                const map = JSON.parse(localStorage.getItem('cheatBestTimes') || '{}')
+                if (!(found.id in map) || elapsed < map[found.id]) {
+                  map[found.id] = elapsed
+                  localStorage.setItem('cheatBestTimes', JSON.stringify(map))
+                  setCheatBestTimes(map)
+                }
+              } catch { /* storage blocked */ }
             }
           }
 
@@ -3083,6 +3098,9 @@ export default function Home() {
                                 >
                                   {catInfo.label}
                                 </div>
+                                {cheatBestTimes[cheat.id] != null && (
+                                  <div className="codex-best-time">BEST {(cheatBestTimes[cheat.id] / 1000).toFixed(2)}s</div>
+                                )}
                               </div>
                             ) : (
                               <div className="codex-classified-inner">

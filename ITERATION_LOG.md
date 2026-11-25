@@ -1636,3 +1636,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 42 — Per-Cheat Best Time Stamps in the Codex (#70)
+**Date:** 2026-11-25
+**Branch:** feat/iter-42-codex-best-times → PR → main
+
+### Planned
+- The HUD tracks one global best time; there is no per-cheat record. Record a best time per cheat and stamp it on its codex dossier.
+
+### Changed
+- `src/pages/Home.jsx` — `cheatBestTimes` state (localStorage `cheatBestTimes`, id → ms); the match block records `min(prev, elapsed)` per cheat next to the global best-time update. Declassified codex entries render a green `BEST X.XXs` stamp when a record exists; classified entries stay untouched.
+- `src/App.css` — `.codex-best-time` pixel stamp. No animations.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: HESOYAM ×2 → `cheatBestTimes` has one id with 0 < ms < 5000; codex shows `BEST 0.68s` on the declassified entry; stamp count ≤ declassified count (classified entries unstamped); Escape closes codex, BAGUVIX re-match intact.
+
+### Next
+- Free choice.
