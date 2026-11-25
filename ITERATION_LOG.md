@@ -1925,3 +1925,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 58 — Zen Mode: Decluttered Focus View (#103)
+**Date:** 2026-11-26
+**Branch:** feat/iter-58-zen-mode → PR → main
+
+### Planned
+- Power users typing long sequences had no way to silence the decoration layers (scanner radar, floating bills, radio widgets). Add a persisted ZEN MODE toggle.
+
+### Changed
+- `src/pages/Home.jsx` — `zenMode` state (localStorage `zenMode`), `🧘 ZEN MODE` option row in shop OPTIONS next to MEMORY MODE, `zen-active` class on the `<main>` shell. HUD, input buffer and cheat flow untouched.
+- `src/App.css` — `.zen-active` hides `.category-scanner`, `.cash-bill`, `.confetti-piece`, `.radio-vu-meter`, `.radio-time`, `.radio-track-progress` via `display:none`.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: OPTIONS row present → toggle ON → `zen-active` + scanner `display:none` → HESOYAM still MATCHED → reload keeps zen → toggle OFF → decorations return. Browser closed after the probe.
+
+### Next
+- Free choice.

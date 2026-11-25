@@ -845,6 +845,13 @@ export default function Home() {
     try { localStorage.setItem('memoryMode', next ? '1' : '0') } catch { /* storage blocked */ }
     return next
   })
+  // Iteration 58 — zen mode: hide decorative layers for a focus view
+  const [zenMode, setZenMode] = useState(() => localStorage.getItem('zenMode') === '1')
+  const toggleZenMode = () => setZenMode(prev => {
+    const next = !prev
+    try { localStorage.setItem('zenMode', next ? '1' : '0') } catch { /* storage blocked */ }
+    return next
+  })
   // Iteration 41 — save export/import (shop OPTIONS). Exports the whole
   // localStorage (this app owns it) as JSON; import writes back string-valued
   // keys only and reloads.
@@ -2114,7 +2121,7 @@ export default function Home() {
       {/* CRT Boot Screen */}
       {!booted && <BootScreen onBooted={() => setBooted(true)} />}
 
-      <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''} ${activeThemeClass} ${activeEffectClass} ${memoryMode ? 'memory-mode' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
+      <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''} ${activeThemeClass} ${activeEffectClass} ${memoryMode ? 'memory-mode' : ''} ${zenMode ? 'zen-active' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
         {/* Weather System Layers */}
       {booted && (
         <>
@@ -3610,6 +3617,15 @@ export default function Home() {
                 >
                   <span className="shop-option-label">🧠 MEMORY MODE</span>
                   <span className="shop-option-state">{memoryMode ? 'ON' : 'OFF'}</span>
+                </button>
+                <button
+                  type="button"
+                  className={`shop-option-row ${zenMode ? 'off' : ''}`}
+                  onClick={toggleZenMode}
+                  aria-pressed={zenMode}
+                >
+                  <span className="shop-option-label">🧘 ZEN MODE</span>
+                  <span className="shop-option-state">{zenMode ? 'ON' : 'OFF'}</span>
                 </button>
 
                 {/* Iteration 41 — save export / import */}
