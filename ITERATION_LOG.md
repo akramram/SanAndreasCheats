@@ -1764,3 +1764,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 49 — A11y Polish: Roulette Announcer, Streak Flame, Gamepad Chip (#84)
+**Date:** 2026-11-25
+**Branch:** feat/iter-49-a11y-polish → PR → main
+
+### Planned
+- Audit of the iteration 38–47 features: the roulette pick/skip never announced the NEW target name (SR users only heard "next target rolling"); the streak-fire 🔥 emoji was read as "fire" before the streak number; the gamepad chip's `role="status"` was conditionally mounted — a live region should persist so its state change is actually announced.
+
+### Changed
+- `src/pages/Home.jsx` — `pickRoulette` calls `announceEvent(`New target: ${c.name}`)` (covers pick and skip; the hit path already announces). Streak flame wrapped in `<span aria-hidden="true">` so SR reads just the number. Gamepad chip is now an always-mounted `<div role="status" hidden={!gamepadOn}>` (persistent live region). No input handling changes.
+- `src/App.css` — `.gamepad-chip[hidden] { display: none; }` (the mobile `display: table` rule would otherwise override the `hidden` attribute).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: chip exists but `hidden=true` idle → `hidden=false`, on-screen after synthetic connect → hidden again after disconnect; 🎲 pick announces "New target: Cars float away when hit" matching `.roulette-name`; SKIP announces a fresh name; 5× HESOYAM ladder → HUD `🔥5` with the flame inside `span[aria-hidden]`; browser closed after the probe.
+
+### Next
+- Free choice.
