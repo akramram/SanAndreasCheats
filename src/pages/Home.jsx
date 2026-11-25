@@ -315,6 +315,10 @@ export default function Home() {
   const [cheatBestTimes, setCheatBestTimes] = useState(() => {
     try { return JSON.parse(localStorage.getItem('cheatBestTimes') || '{}') } catch { return {} }
   })
+  // Iteration 50 — lifetime accuracy (hits vs missed attempts), persisted
+  const [accuracy, setAccuracy] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('accuracyStats') || 'null') || { hits: 0, misses: 0 } } catch { return { hits: 0, misses: 0 } }
+  })
   const [comboAnim, setComboAnim] = useState(null) // null | 'enter' | 'bump'
   const [hadInputSinceMatch, setHadInputSinceMatch] = useState(false)
   const [booted, setBooted] = useState(false)
@@ -1661,6 +1665,12 @@ export default function Home() {
           setCjMood('disappoint')
           setCurrentStreak(0)
           setComboAnim(null)
+          // Iteration 50 — count the missed attempt (observer only)
+          setAccuracy(a => {
+            const n = { hits: a.hits, misses: a.misses + 1 }
+            try { localStorage.setItem('accuracyStats', JSON.stringify(n)) } catch { /* storage blocked */ }
+            return n
+          })
           stopSiren()
           setSirenActive(false)
           playFailSound()
@@ -1778,6 +1788,12 @@ export default function Home() {
           // Update streak & combo
           setCurrentStreak(newStreak)
           setTotalCheats(t => t + 1)
+          // Iteration 50 — count the successful attempt (observer only)
+          setAccuracy(a => {
+            const n = { hits: a.hits + 1, misses: a.misses }
+            try { localStorage.setItem('accuracyStats', JSON.stringify(n)) } catch { /* storage blocked */ }
+            return n
+          })
           setHadInputSinceMatch(false)
           if (newStreak > bestStreak) {
             const newBest = newStreak
@@ -2768,6 +2784,15 @@ export default function Home() {
 
             {/* Modal Content */}
             <div className="flex-1 overflow-y-auto p-5 space-y-2">
+              {(accuracy.hits > 0 || accuracy.misses > 0) && (
+                <div className="accuracy-stat" aria-label="Lifetime accuracy">
+                  <span className="accuracy-title">LIFETIME ACCURACY</span>
+                  <span className="accuracy-value">
+                    {Math.round((accuracy.hits / (accuracy.hits + accuracy.misses)) * 100)}%
+                  </span>
+                  <span className="accuracy-detail">{accuracy.hits} HITS · {accuracy.misses} MISSES</span>
+                </div>
+              )}
               {cheatHistory.length > 0 && topCheats.length > 0 && (
                 <div className="top-cheats" aria-label="Most used cheats">
                   <span className="top-cheats-title">TOP CHEATS</span>

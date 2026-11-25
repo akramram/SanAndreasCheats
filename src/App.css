@@ -4604,6 +4604,34 @@ html.perf-lite .ambient-dust {
   padding: 2px 8px;
 }
 
+/* Iteration 50 — lifetime accuracy row at the top of the history modal */
+.accuracy-stat {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  background: rgba(52, 211, 153, 0.07);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+}
+.accuracy-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  color: #34d399;
+}
+.accuracy-value {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: #fde68a;
+}
+.accuracy-detail {
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  color: #a8a29e;
+}
+
 /* Iteration 39 — visually hidden screen-reader announcer */
 .sr-announcer {
   position: absolute;
