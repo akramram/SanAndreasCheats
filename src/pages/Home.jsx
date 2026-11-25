@@ -404,6 +404,19 @@ export default function Home() {
   // Cheat Finder (KUR-13): fuzzy search + copy-to-clipboard
   const [showFinder, setShowFinder] = useState(false)
   const [finderQuery, setFinderQuery] = useState('')
+  // Iteration 61 — recent finder queries, persisted, newest first, max 5
+  const [finderRecents, setFinderRecents] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('finderRecents') || '[]') } catch { return [] }
+  })
+  const rememberFinderQuery = useCallback((q) => {
+    const query = q.trim()
+    if (!query) return
+    setFinderRecents(prev => {
+      const next = [query, ...prev.filter(p => p.toLowerCase() !== query.toLowerCase())].slice(0, 5)
+      try { localStorage.setItem('finderRecents', JSON.stringify(next)) } catch { /* storage blocked */ }
+      return next
+    })
+  }, [])
   const [finderCopiedId, setFinderCopiedId] = useState(null) // cheat id just copied
   const [finderCopyError, setFinderCopyError] = useState(null) // cheat id that failed
   const [finderActiveIdx, setFinderActiveIdx] = useState(-1) // keyboard-active listbox option
@@ -487,10 +500,11 @@ export default function Home() {
       setFinderActiveIdx(i => (i <= 0 ? count - 1 : i - 1))
     } else if (e.key === 'Enter') {
       e.preventDefault()
+      rememberFinderQuery(finderQuery)
       const hit = finderResults[finderActiveIdx >= 0 ? finderActiveIdx : 0]
       if (hit) copyCheatCode(hit.item)
     }
-  }, [finderResults, finderActiveIdx, closeFinder, copyCheatCode])
+  }, [finderResults, finderActiveIdx, closeFinder, copyCheatCode, rememberFinderQuery, finderQuery])
 
   // Scroll active option into view (keyboard nav)
   useEffect(() => {
@@ -3095,6 +3109,22 @@ export default function Home() {
                 />
               </div>
             </div>
+            {/* Iteration 61 — recent searches */}
+            {finderQuery.trim() === '' && finderRecents.length > 0 && (
+              <div className="finder-recents" aria-label="Recent searches">
+                <span className="finder-recents-title">RECENT:</span>
+                {finderRecents.map(q => (
+                  <button
+                    key={q}
+                    type="button"
+                    className="finder-recent-chip"
+                    onClick={() => { setFinderQuery(q); setFinderActiveIdx(-1) }}
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
             <div
               id="finder-listbox"
               className={`codex-content finder-content ${finderQuery.trim() === '' ? 'finder-empty-query' : ''}`}
