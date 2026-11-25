@@ -4981,3 +4981,8 @@ html.perf-lite .ambient-dust {
 .finder-recent-chip:hover {
   background: rgba(245, 158, 11, 0.18);
 }
+
+/* Iteration 62 — two-step reset stats */
+.reset-stats-row .shop-option-state { color: #34d399; }
+.reset-stats-row.armed { border-color: #f87171; background: rgba(248, 113, 113, 0.12); }
+.reset-stats-row.armed .shop-option-state { color: #f87171; }
