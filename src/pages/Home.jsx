@@ -493,6 +493,20 @@ export default function Home() {
   const [cash, setCash] = useState(() => {
     return parseInt(localStorage.getItem('gtaCash') || '0', 10)
   })
+  // Iteration 45 — random target roulette (bonus per hit)
+  const [roulette, setRoulette] = useState(null) // { id, name, hits }
+  const rouletteRef = useRef(null)
+  useEffect(() => { rouletteRef.current = roulette }, [roulette])
+  const pickRoulette = () => {
+    const all = cheatsData?.cheats || []
+    if (all.length === 0) return
+    let c = all[Math.floor(Math.random() * all.length)]
+    let guard = 0
+    while (rouletteRef.current && c.id === rouletteRef.current.id && all.length > 1 && guard++ < 10) {
+      c = all[Math.floor(Math.random() * all.length)]
+    }
+    setRoulette({ id: c.id, name: c.name, hits: rouletteRef.current?.hits || 0 })
+  }
   // Iteration 43 — Konami code easter egg (observed keys, never cheat input)
   const [konamiFlash, setKonamiFlash] = useState(false)
   const [konamiBonus, setKonamiBonus] = useState(false)
@@ -599,6 +613,25 @@ export default function Home() {
     if (!matchedCheat) return
     setSprint(prev => (prev ? { ...prev, score: prev.score + 1 } : prev))
     announceEvent(`Cheat activated: ${matchedCheat.name}`)
+  }, [matchedCheat])
+
+  // Iteration 45 — random target roulette: matching the target pays +$50, rolls next
+  useEffect(() => {
+    const r = rouletteRef.current
+    if (!matchedCheat || !r || matchedCheat.id !== r.id) return
+    try {
+      const cur = parseInt(localStorage.getItem('gtaCash') || '0', 10)
+      localStorage.setItem('gtaCash', String(cur + 50))
+    } catch { /* storage blocked */ }
+    setCash(c => c + 50)
+    playCoinPickup()
+    announceEvent(`Target hit: ${r.name} — 50 dollars bonus, next target rolling`)
+    const all = cheatsData?.cheats || []
+    if (all.length === 0) return
+    let c = all[Math.floor(Math.random() * all.length)]
+    let guard = 0
+    while (c.id === r.id && all.length > 1 && guard++ < 10) c = all[Math.floor(Math.random() * all.length)]
+    setRoulette({ id: c.id, name: c.name, hits: r.hits + 1 })
   }, [matchedCheat])
 
   // Sprint results for screen readers (separate from the rumble effect, which is
@@ -2531,6 +2564,21 @@ export default function Home() {
             <button type="button" className="sprint-btn" onClick={startSprint} aria-label="Start 30 second sprint">⚡ START 30s SPRINT</button>
             {sprintBest > 0 && <span className="sprint-best">BEST {sprintBest}</span>}
           </>
+        )}
+      </div>
+
+      {/* Random target roulette (iteration 45) */}
+      <div className="roulette-bar">
+        {roulette ? (
+          <>
+            <span className="roulette-label">TARGET</span>
+            <span className="roulette-name">{roulette.name}</span>
+            <span className="roulette-hits">HITS {roulette.hits}</span>
+            <button type="button" className="roulette-btn" onClick={pickRoulette} aria-label="Skip current target">⏭ SKIP</button>
+            <button type="button" className="roulette-btn roulette-close" onClick={() => setRoulette(null)} aria-label="Close random target">✕</button>
+          </>
+        ) : (
+          <button type="button" className="roulette-btn" onClick={pickRoulette} aria-label="Pick a random target cheat">🎲 RANDOM TARGET</button>
         )}
       </div>
 
