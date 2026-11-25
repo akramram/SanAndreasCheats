@@ -1782,3 +1782,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 50 — Lifetime Accuracy Stat in the History Modal (#86)
+**Date:** 2026-11-25
+**Branch:** feat/iter-50-accuracy-stat → PR → main
+
+### Planned
+- The app counted total cheats but never missed attempts; players had no lifetime hit-rate. Add a persisted LIFETIME ACCURACY row (%, hits, misses) at the top of the history modal.
+
+### Changed
+- `src/pages/Home.jsx` — `accuracy` state (`{hits, misses}`, persisted `accuracyStats`); the hit counter increments exactly where `setTotalCheats` does, the miss counter in the existing miss branch of the 2s auto-clear (both observer-only — matching logic untouched); green pixel stat row rendered above TOP CHEATS when any attempt exists.
+- `src/App.css` — `.accuracy-stat` / `-title` / `-value` / `-detail`. No animations.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (boot click first): 5× HESOYAM + one XQ miss → `accuracyStats` `{hits:5, misses:1}`, HUD CHEATS 5, modal row "LIFETIME ACCURACY 83% 5 HITS · 1 MISSES"; row and storage survive reload. (First probe run miscounted 3/2 — the very first synthetic keydown is consumed by the boot screen; a clean run with a boot click matches reality exactly.) Browser closed after the probe.
+
+### Next
+- Free choice.
