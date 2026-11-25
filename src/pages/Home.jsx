@@ -1821,12 +1821,16 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('gamepadconnected', onConnect)
       window.removeEventListener('gamepaddisconnected', onDisconnect)
-      // clear pending auto-clear timer
-      if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
-      // clear pending timeout message timer
-      if (timeoutMessageRef.current) clearTimeout(timeoutMessageRef.current)
     }
   }, [buttonSymbols, isKeyboardInput, matchedCheat, saveCheatToHistory, startTime])
+
+  // Unmount-only timer teardown. Re-run cleanups must NOT cancel the pending 2s
+  // auto-clear: the effect re-subscribes right after a match (matchedCheat dep),
+  // and killing the timer there left matchedCheat set forever (#61).
+  useEffect(() => () => {
+    if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
+    if (timeoutMessageRef.current) clearTimeout(timeoutMessageRef.current)
+  }, [])
 
   // Inactivity timeout - reset after 3.5 seconds of no input
   useEffect(() => {
