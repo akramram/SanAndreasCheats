@@ -2550,11 +2550,11 @@
 /* "WANTED LEVEL UP" toast */
 @keyframes wanted-toast-in {
   0% {
-    transform: translateX(-100%) scale(0.8);
+    transform: translateX(100%) scale(0.8);
     opacity: 0;
   }
   60% {
-    transform: translateX(10px) scale(1.05);
+    transform: translateX(-10px) scale(1.05);
     opacity: 1;
   }
   100% {
@@ -2569,7 +2569,7 @@
     opacity: 1;
   }
   100% {
-    transform: translateX(-120%) scale(0.8);
+    transform: translateX(120%) scale(0.8);
     opacity: 0;
   }
 }
@@ -2577,7 +2577,7 @@
 .wanted-toast {
   position: fixed;
   top: 80px;
-  left: 12px;
+  right: 12px; /* was left:12px — overlapped the contract card (iteration 32) */
   z-index: 150;
   padding: 8px 14px;
   background: rgba(0, 0, 0, 0.85);
@@ -4468,6 +4468,15 @@
 }
 @media (max-width: 480px) {
   .contract-week { display: none; }
+  /* Compact WANTED toast clears the 172px contract card (iteration 32) */
+  .wanted-toast {
+    top: 92px;
+    right: 8px;
+    max-width: 164px;
+    padding: 5px 8px;
+  }
+  .wanted-toast-text { font-size: 7px; }
+  .wanted-toast-sub { font-size: 12px; }
 }
 
 /* ── Global reduced-motion fallback (Iteration 29) ──

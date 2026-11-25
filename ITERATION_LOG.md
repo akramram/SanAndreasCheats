@@ -1399,6 +1399,24 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 ### Next
 - Profile style recalculation (ambient CSS animations) on low-end phones.
 
+## Iteration 32 — WANTED Toast Cleared From the Contract Card (#50)
+**Date:** 2026-11-25
+**Branch:** fix/iter-32-wanted-toast-pos → PR → main
+
+### Found (iteration 29 note)
+- The transient WANTED toast (fixed `top:80px; left:12px`) sat exactly on the daily contract card (fixed `top:96px; left:12px`, z 150 vs 89) while shown.
+
+### Changed (`src/App.css`)
+- Toast moved to the top-right corner (`right:12px`), keyframes mirrored so it still slides in/out from its own edge. Combo counter sits at mid-height on the right — no conflict.
+- Phones (≤480px): toast dropped to `top:92px; right:8px` beside the compact 172px card, shrunk (`max-width:164px`, smaller fonts) so it never crosses the card edge.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium, settled toast vs card rects after a HESOYAM-triggered toast: 375×740 (209..367 vs card ..184), 360×640 (194..352), 768×1024 (568..756), 1280×800 (1080..1268) — zero intersection at every width; first phone pass at 375 (before the phone compaction) showed a 9px overlap and was fixed.
+
+### Next
+- Free choice.
+
 ## Iteration 31 — Runtime perf-lite Mode for Weak Devices (#48)
 **Date:** 2026-11-25
 **Branch:** perf/iter-31-perf-lite → PR → main
