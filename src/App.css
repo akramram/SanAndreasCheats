@@ -4940,3 +4940,9 @@ html.perf-lite .ambient-dust {
 .zen-active .radio-track-progress {
   display: none !important;
 }
+
+/* Iteration 59 — codex copy button */
+.codex-copy-btn {
+  margin-top: 6px;
+  align-self: flex-start;
+}

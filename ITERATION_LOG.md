@@ -1943,3 +1943,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 59 — Copy Button on Declassified Codex Entries (#105)
+**Date:** 2026-11-26
+**Branch:** feat/iter-59-codex-copy → PR → main
+
+### Planned
+- The Cheat Finder already copies codes with a COPY/COPIED button; the codex modal made players retype codes. Bring the same affordance to codex entries.
+
+### Changed
+- `src/pages/Home.jsx` — declassified codex entries get a `COPY` button reusing `copyCheatCode` (clipboard API + execCommand fallback, SR announce, vibrate). Label flips via the existing `finderCopiedId`/`finderCopyError` state — no new state.
+- `src/App.css` — `.codex-copy-btn` margin so it aligns under the stamps.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium with clipboard permissions (seeded discovered HESOYAM entry): button present → click → label `COPIED` → clipboard starts with `HESOYAM` → label restores to `COPY` after the toast window. Browser closed after the probe.
+
+### Next
+- Free choice.
