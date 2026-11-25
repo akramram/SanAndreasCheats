@@ -4613,3 +4613,33 @@ html.perf-lite .ambient-dust {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* Iteration 40 — keyboard heat strip */
+.key-heat {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3px;
+  max-width: 560px;
+  margin: 10px auto 0;
+}
+.key-heat-tile {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  line-height: 1;
+  padding: 5px 4px;
+  color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: color 120ms, background 120ms, border-color 120ms, text-shadow 120ms;
+}
+.key-heat-tile.key-hit {
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.55);
+  text-shadow: 0 0 6px rgba(245, 158, 11, 0.8);
+}
+@media (max-width: 640px) {
+  .key-heat { max-width: 92vw; }
+  .key-heat-tile { font-size: 7px; padding: 4px 3px; }
+}

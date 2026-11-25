@@ -283,6 +283,8 @@ export default function Home() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
   const [cheatHistory, setCheatHistory] = useState([])
   const MAX_INPUTS = 40
+  // Iteration 40 — letters typed in the current attempt (drives the key heat strip)
+  const typedLetterSet = useMemo(() => new Set((inputs || []).filter(c => /^[A-Z]$/i.test(c)).map(c => c.toUpperCase())), [inputs])
   const prevStateRef = useRef(new Map())
   const clearTimerRef = useRef(null)
   const audioRef = useRef(null)
@@ -2551,6 +2553,14 @@ export default function Home() {
             </div>
           )}
         </div>
+        {/* Iteration 40 — keyboard heat strip: typed letters light up, resets on clear */}
+        {inputs.length > 0 && !matchedCheat && (
+          <div className="key-heat" aria-hidden="true">
+            {'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(ch => (
+              <span key={ch} className={`key-heat-tile ${typedLetterSet.has(ch) ? 'key-hit' : ''}`}>{ch}</span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Prompt text */}
