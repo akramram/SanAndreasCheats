@@ -6,7 +6,10 @@
 
 let audioCtx = null
 let masterGain = null
-let _muted = false
+// Iteration 54 — persisted mute so the choice survives reloads
+let _muted = (() => {
+  try { return localStorage.getItem('soundMuted') === '1' } catch { return false }
+})()
 // Iteration 53 — persisted SFX volume (0-1); base master gain × volume
 let _volume = (() => {
   try {
@@ -36,6 +39,7 @@ function getMaster() {
 // ── Volume Control ──
 export function setMuted(muted) {
   _muted = muted
+  try { localStorage.setItem('soundMuted', muted ? '1' : '0') } catch { /* storage blocked */ }
   if (masterGain) {
     masterGain.gain.setTargetAtTime(muted ? 0 : 0.3 * _volume, audioCtx.currentTime, 0.05)
   }

@@ -1855,3 +1855,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 54 — Mute State Survives Reload (#95)
+**Date:** 2026-11-26
+**Branch:** feat/iter-54-persist-mute → PR → main
+
+### Planned
+- The mute toggle was module state only — every reload came back unmuted. Persist the choice.
+
+### Changed
+- `src/utils/sounds.js` — `_muted` initializes from localStorage `soundMuted` and `setMuted` writes it back. Nothing else touched; `soundEnabled` in Home already derives from `isMuted()` so the icon follows automatically. Both new keys ride the existing save export/import.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: fresh boot unmuted → mute → `soundMuted=1` + icon flips → reload → still muted → unmute → `soundMuted=0` → reload → unmuted; HESOYAM still MATCHED. Browser closed after the probe.
+
+### Next
+- Free choice.
