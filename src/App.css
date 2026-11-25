@@ -4865,3 +4865,24 @@ html.perf-lite .ambient-dust {
     padding: 5px 8px;
   }
 }
+
+/* Iteration 53 — SFX volume slider */
+.sfx-volume {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sfx-volume input[type="range"] {
+  width: 84px;
+  height: 14px;
+  accent-color: #f59e0b;
+  cursor: pointer;
+  image-rendering: pixelated;
+}
+.sfx-volume-value {
+  font-size: 9px;
+  color: #f59e0b;
+  min-width: 26px;
+  text-align: right;
+  text-shadow: 1px 1px 0 #000;
+}

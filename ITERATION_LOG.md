@@ -1836,3 +1836,22 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 53 — SFX Volume Slider (#93)
+**Date:** 2026-11-26
+**Branch:** feat/iter-53-sfx-volume → PR → main
+
+### Planned
+- Sound was all-or-nothing (mute toggle only). Add a 0-100% SFX volume control that persists across reloads and still respects mute.
+
+### Changed
+- `src/utils/sounds.js` — persisted `_volume` (localStorage `sfxVolume`, default 1, clamped 0-1); `setVolume`/`getVolume` exported; master gain is now `0.3 × volume` and `setMuted` forces 0 on top of any volume.
+- `src/pages/Home.jsx` — `sfxVolume` state + `changeSfxVolume`; pixel range slider with % readout next to the sound toggle; `cheat_activated.mp3` element volume now `0.85 × volume` (both at creation and on change). Matching logic untouched.
+- `src/App.css` — `.sfx-volume` slider + readout styling.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (boot click first): slider defaults 100 → set 30 → `sfxVolume=0.3` persisted + readout 30 → reload restores 30 → mute flips icon to Unmute → unmute keeps 30 → HESOYAM still MATCHED. Browser closed after the probe.
+
+### Next
+- Free choice.

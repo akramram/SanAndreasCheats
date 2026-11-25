@@ -12,7 +12,7 @@ import cheatsData from '../assets/cheats_v2.json'
 import {
   playKeyClick, playGamepadPress,
   playFailSound, playAchievementSound, playBootBeep, playBootReady,
-  playResetSound, playPowerOn, isMuted, toggleMute,
+  playResetSound, playPowerOn, isMuted, toggleMute, getVolume, setVolume,
   playThunder, startRainAmbient, stopRainAmbient, updateRainIntensity, playWindGust,
   playWantedStar, playWantedLost, startSiren, stopSiren,
   playRadioStatic, playRadioTune, startRadioJingle, stopRadioJingle, setRadioVolume,
@@ -333,6 +333,14 @@ export default function Home() {
   const [hadInputSinceMatch, setHadInputSinceMatch] = useState(false)
   const [booted, setBooted] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(() => !isMuted())
+  // Iteration 53 — SFX volume slider state (0-100), persisted via setVolume
+  const [sfxVolume, setSfxVolume] = useState(() => Math.round(getVolume() * 100))
+
+  const changeSfxVolume = (pct) => {
+    const vol = setVolume(pct / 100)
+    setSfxVolume(Math.round(vol * 100))
+    if (audioRef.current) audioRef.current.volume = 0.85 * vol
+  }
 
   // Achievement system
   const [unlockedAchievements, setUnlockedAchievements] = useState(() => {
@@ -1980,7 +1988,7 @@ export default function Home() {
       // Prepare audio on first user gesture for autoplay policies
       if (!audioRef.current) {
         audioRef.current = new Audio('cheat_activated.mp3')
-        audioRef.current.volume = 0.85
+        audioRef.current.volume = 0.85 * getVolume()
         // Try to unlock audio; ignore failures
         audioRef.current.play().then(() => {
           audioRef.current.pause()
@@ -2561,6 +2569,20 @@ export default function Home() {
           </svg>
         )}
       </button>
+
+      {/* SFX Volume Slider (iteration 53) */}
+      <div className="absolute top-5 right-48 z-10 sfx-volume" aria-label="SFX volume control">
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={sfxVolume}
+          onChange={(e) => changeSfxVolume(parseInt(e.target.value, 10))}
+          aria-label="SFX Volume"
+          title={`SFX Volume: ${sfxVolume}%`}
+        />
+        <span className="sfx-volume-value font-pixel">{sfxVolume}</span>
+      </div>
 
       {/* Achievement Trophy Button */}
       <button
