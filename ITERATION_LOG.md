@@ -1618,3 +1618,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 41 — Save Export / Import (#68)
+**Date:** 2026-11-25
+**Branch:** feat/iter-41-save-io → PR → main
+
+### Planned
+- No way to back up or move progress (stats, cash, cosmetics, history, sprint best). Add EXPORT SAVE / IMPORT SAVE in the shop ⚙ OPTIONS section.
+
+### Changed
+- `src/pages/Home.jsx` — `saveIO`/`saveText`/`saveStatus` state; export dumps the whole localStorage as JSON into a copyable textarea (this app owns its storage — deliberate ceiling: per-key filtering can come later); import validates JSON (object, ≥1 string-valued key), writes back only string values, shows "SAVE RESTORED — RELOADING…" and reloads. Invalid input → "INVALID SAVE DATA". Textarea typing is ignored by the cheat handler (existing INPUT/TEXTAREA guard).
+- `src/App.css` — `.save-io*` pixel-styled buttons, textarea, status line. No animations.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: EXPORT produces valid JSON containing `gtaCash`/`cheatHistory`; APPLY with `not json{` → INVALID SAVE DATA; APPLY with crafted save (1 BAGUVIX history entry, cash 500) → reload → `gtaCash='500'`, history restored; HESOYAM still matches after import+reload. (First probe run false-failed: React's value tracker swallows programmatic textarea value sets — probe now uses the native value setter; app behavior for real typing/pasting is unaffected.)
+
+### Next
+- Free choice.

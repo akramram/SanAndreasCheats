@@ -4643,3 +4643,37 @@ html.perf-lite .ambient-dust {
   .key-heat { max-width: 92vw; }
   .key-heat-tile { font-size: 7px; padding: 4px 3px; }
 }
+
+/* Iteration 41 — save export / import */
+.save-io {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.save-io-actions { display: flex; gap: 8px; }
+.save-io-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.save-io-btn:hover { background: rgba(245, 158, 11, 0.2); }
+.save-io-apply { color: #34d399; border-color: rgba(52, 211, 153, 0.5); background: rgba(52, 211, 153, 0.1); }
+.save-io-text {
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  color: #e5e7eb;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 6px;
+  word-break: break-all;
+}
+.save-io-status {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #f87171;
+}
