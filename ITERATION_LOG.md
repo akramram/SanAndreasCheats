@@ -1800,3 +1800,22 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 51 — Weekly Heist Countdown (#88)
+**Date:** 2026-11-25
+**Branch:** feat/iter-51-heist-countdown → PR → main
+
+### Planned
+- The heist card only said "NEW HEIST MONDAY" after scoring; while a heist was open there was no sense of how long it stays. Add a live "Xd Yh LEFT" countdown to next Monday 00:00 local on the WEEKLY HEIST section.
+
+### Changed
+- `src/components/HeistCountdown.jsx` (new) — presentational, self-ticking: owns a 60 s interval and re-renders only itself, never Home (the perf pattern from the brief). Formats days/hours/minutes down to "Mm LEFT".
+- `src/pages/Home.jsx` — rendered inside the heist reward line only while `!heistDone`; scored heists keep "SCORED · NEW HEIST MONDAY".
+- `src/App.css` — `.heist-countdown` red pixel chip. (Hidden on phones with the rest of `.contract-reward` per the existing ≤480px compaction.)
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: open heist shows "PAYOUT $25,000 · 4D 4H LEFT" — matches the locally computed time to Monday 00:00 from Wed 19:47 (probe string-compare failed only on float formatting in the probe itself); seeding `gtaWeeklyHeist` with the current week key → "SCORED · NEW HEIST MONDAY", no countdown; HESOYAM still MATCHED. Browser closed after the probe.
+
+### Next
+- Free choice.

@@ -4830,6 +4830,14 @@ html.perf-lite .ambient-dust {
   visibility: hidden;
 }
 
+/* Iteration 51 — weekly heist countdown */
+.heist-countdown {
+  color: #f87171;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  margin-left: 4px;
+}
+
 /* Iteration 47 — gamepad connected indicator */
 .gamepad-chip[hidden] { display: none; }
 .gamepad-chip {

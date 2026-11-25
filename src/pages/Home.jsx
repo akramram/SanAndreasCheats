@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { fuzzyFilter } from '../utils/fuzzy'
 import { RadioVuMeter, RadioClock } from '../components/RadioWidgets'
 import SprintTimer from '../components/SprintTimer'
+import HeistCountdown from '../components/HeistCountdown'
 import {
   DAILY_CONTRACT_BONUS, DAILY_CONTRACT_STORAGE_KEY, localDayKey, pickDailyCheat,
   parseContractState, activeStreak, completeContract, lastNDays,
@@ -2397,7 +2398,7 @@ export default function Home() {
               <div className="contract-tag heist-tag">WEEKLY HEIST</div>
               <div className="contract-target">{weeklyHeist.name}</div>
               <div className="contract-reward">
-                {heistDone ? 'SCORED · NEW HEIST MONDAY' : `PAYOUT $${WEEKLY_HEIST_BONUS.toLocaleString('en-US')}`}
+                {heistDone ? 'SCORED · NEW HEIST MONDAY' : <>PAYOUT ${WEEKLY_HEIST_BONUS.toLocaleString('en-US')} <HeistCountdown /></>}
               </div>
             </div>
           )}
