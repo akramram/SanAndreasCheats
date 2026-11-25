@@ -1489,3 +1489,22 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 34 — 30-Second Cheat Sprint Mode (#54)
+**Date:** 2026-11-25
+**Branch:** feat/iter-34-sprint-mode → PR → main
+
+### Planned
+- New optional game mode: a 30 s time attack — enter as many correct cheats as possible; live countdown + score, result card, personal best persisted.
+
+### Changed
+- `src/components/SprintTimer.jsx` (new, presentational): self-owned 250 ms tick, `role="timer"`; the clock never re-renders the ~3000-line Home tree (iteration 28 lesson).
+- `src/pages/Home.jsx` — `sprint`/`sprintResult`/`sprintBest` (localStorage `sprintBest`); `startSprint` schedules one timeout and reads the score through a ref (no stale closure); matches counted by a `matchedCheat` observer effect, so cheat input handling is untouched. Sprint bar lives top-left above the contract card: START 30s SPRINT (+ BEST n) → SPRINT clock + SCORE n → SPRINT OVER / NEW RECORD! card with RETRY and ✕ (best persists across reload).
+- `src/App.css` — `.sprint-bar` pixel-panel styling (amber border, hard shadow), match-state and ✕ button styles, ≤480px compaction. No animations → nothing for reduced-motion/perf-lite to collapse.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: idle bar (no clock, no BEST) → start → `0:29` ticking + SCORE 0 → HESOYAM + BAGUVIX inside the sprint → SCORE 2, CHEAT ACTIVATED; expiry → NEW RECORD!, "2 cheats · best 2", RETRY; ✕ → back to START with BEST 2; `localStorage.sprintBest = '2'`; reload → BEST 2 still shown. HESOYAM outside a sprint still matches (banner) and leaves the sprint bar idle — core input intact.
+
+### Next
+- Free choice.

@@ -4518,3 +4518,46 @@ html.perf-lite .float-text,
 html.perf-lite .ambient-dust {
   display: none !important;
 }
+
+/* Sprint mode (iteration 34) — compact bar, top-left above the contract card */
+.sprint-bar {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: rgba(10, 10, 10, 0.85);
+  border: 2px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
+  z-index: 40;
+  max-width: calc(100vw - 24px);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #fbbf24;
+}
+.sprint-label { color: #fbbf24; }
+.sprint-clock { font-size: 13px; font-weight: bold; color: #f87171; }
+.sprint-score { color: #34d399; }
+.sprint-best { opacity: 0.75; }
+.sprint-record { color: #fde68a; text-shadow: 0 0 6px rgba(253, 230, 138, 0.8); }
+.sprint-result { opacity: 0.9; }
+.sprint-btn {
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #0a0a0a;
+  background: #f59e0b;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.sprint-btn:hover { background: #fbbf24; }
+.sprint-close { background: #333; color: #fbbf24; padding: 4px 6px; }
+.sprint-close:hover { background: #444; }
+@media (max-width: 480px) {
+  .sprint-bar { font-size: 9px; padding: 5px 8px; }
+  .sprint-clock { font-size: 12px; }
+  .sprint-btn { font-size: 9px; }
+}
