@@ -1508,3 +1508,22 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 35 — Closest-Cheat Hint on Miss (#56)
+**Date:** 2026-11-25
+**Branch:** fix/iter-35-miss-hint → PR → main
+
+### Planned
+- After a miss, show the closest real cheat by longest shared keyboard prefix ("CLOSEST: HESOYAM" under MISSED); no hint for garbage input; hint resets on the next keystroke.
+
+### Changed
+- `src/pages/Home.jsx` — `missSuggest` state; the iteration 33 miss branch now snapshots the typed letters (new `inputsRef` mirror, A–Z filtered) before clearing and scans `cheatsData.cheats` pcSequences for the longest shared prefix; `scheduleTimeoutMessage` clears the hint on every new input. Additive — input handling untouched.
+- `src/App.css` — `.wasted-hint`: Press Start 2P amber line under the MISSED text (same 1.2s fade, z 155), scaled down on small screens via `clamp`.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (puppeteer-core + chrome-headless-shell): HESOL → MISSED + "CLOSEST: HESOYAM"; QWQ → MISSED with no hint; HESOYAM after a miss → CHEAT ACTIVATED, overlay and hint gone; BAGUVIX completes normally afterwards. Algorithm cross-checked offline against the real `cheats_v2.json` (HESOL → prefix 4 → HESOYAM).
+- Note: the first two E2E attempts showed a false negative — the browser daemon was wedged (Runtime.evaluate timeouts) and mis-delivered keys; the identical bundle hash of the clean build (index-BClFSNhw.js) plus a passing run on that exact build ruled out an app bug.
+
+### Next
+- Free choice.
