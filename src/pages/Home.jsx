@@ -605,6 +605,13 @@ export default function Home() {
       return saved ? JSON.parse(saved) : {}
     } catch { return {} }
   })
+  // Option: hide the daily contract card (shop toggle, persisted)
+  const [hideContracts, setHideContracts] = useState(() => localStorage.getItem('hideContractCards') === '1')
+  const toggleHideContracts = () => setHideContracts(prev => {
+    const next = !prev
+    try { localStorage.setItem('hideContractCards', next ? '1' : '0') } catch { /* storage blocked */ }
+    return next
+  })
 
   // Visual-only: compute partial match progress for input characters
   const inputCharStates = useMemo(() => {
@@ -2024,8 +2031,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* Daily Contract card */}
-      {dailyCheat && (
+      {/* Daily Contract card (hideable via the shop options) */}
+      {dailyCheat && !hideContracts && (
         <section
           className={`contract-card ${booted ? 'hud-enter' : ''} ${contractDone ? 'contract-done' : ''}`}
           aria-label="Daily contract"
@@ -3088,6 +3095,18 @@ export default function Home() {
                     </div>
                   </div>
                 )}
+
+                {/* Options — hide contract cards */}
+                <div className="shop-category-header">⚙ OPTIONS</div>
+                <button
+                  type="button"
+                  className={`shop-option-row ${hideContracts ? 'off' : ''}`}
+                  onClick={toggleHideContracts}
+                  aria-pressed={hideContracts}
+                >
+                  <span className="shop-option-label">📋 CONTRACT CARDS</span>
+                  <span className="shop-option-state">{hideContracts ? 'HIDDEN' : 'SHOWN'}</span>
+                </button>
               </div>
             </div>
           </div>
