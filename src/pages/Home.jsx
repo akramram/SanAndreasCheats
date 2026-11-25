@@ -493,6 +493,9 @@ export default function Home() {
   const [cash, setCash] = useState(() => {
     return parseInt(localStorage.getItem('gtaCash') || '0', 10)
   })
+  // Iteration 43 — Konami code easter egg (observed keys, never cheat input)
+  const [konamiFlash, setKonamiFlash] = useState(false)
+  const [konamiBonus, setKonamiBonus] = useState(false)
   const [cashPopups, setCashPopups] = useState([]) // { id, amount, x, y }
 
   // Daily Contract — date-seeded cheat-of-the-day, one bonus per local day
@@ -606,6 +609,41 @@ export default function Home() {
       ? `Sprint over — new record, ${sprintResult.score} cheats`
       : `Sprint over — ${sprintResult.score} cheats`)
   }, [sprintResult])
+
+  // Iteration 43 — Konami code easter egg. Own listener; the buffer only holds
+  // arrow/B/A keys, which the cheat matcher ignores (A–Z only), so cheat input
+  // is untouched. One-time +100 cash, persisted.
+  const konamiBufRef = useRef([])
+  const konamiSeq = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']
+  useEffect(() => {
+    const onKey = (e) => {
+      const key = e.key === 'B' || e.key === 'b' ? 'b' : e.key === 'A' || e.key === 'a' ? 'a' : e.key
+      const buf = [...konamiBufRef.current, key].slice(-konamiSeq.length)
+      konamiBufRef.current = buf
+      if (buf.length === konamiSeq.length && konamiSeq.every((k, i) => buf[i] === k)) {
+        konamiBufRef.current = []
+        let first = false
+        try {
+          first = localStorage.getItem('konamiUnlocked') !== '1'
+          localStorage.setItem('konamiUnlocked', '1')
+        } catch { /* storage blocked */ }
+        if (first) {
+          try {
+            const cur = parseInt(localStorage.getItem('gtaCash') || '0', 10)
+            localStorage.setItem('gtaCash', String(cur + 100))
+          } catch { /* storage blocked */ }
+          setCash(c => c + 100)
+        }
+        setKonamiBonus(first)
+        setKonamiFlash(true)
+        playAchievementSound()
+        announceEvent(first ? 'Konami code accepted — rocket unlocked, 100 dollars bonus' : 'Konami code accepted — rocket unlocked')
+        setTimeout(() => setKonamiFlash(false), 2600)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Gamepad rumble feedback on match (short thump), miss (long shudder) and sprint
   // end (soft thump; double pulse on a new record — iteration 37). Honors mute and
@@ -2525,6 +2563,14 @@ export default function Home() {
       {/* Cheat match display */}
       {/* Screen-reader live region for match / miss / sprint announcements */}
       <div className="sr-announcer" role="status" aria-live="assertive">{announce}</div>
+
+      {/* Iteration 43 — Konami celebration overlay */}
+      {konamiFlash && (
+        <div className="konami-overlay" role="status">
+          <div className="konami-text">🚀 KONAMI CODE ACCEPTED</div>
+          <div className="konami-sub">ROCKET UNLOCKED{konamiBonus ? ' · +$100' : ''}</div>
+        </div>
+      )}
 
       {matchedCheat && (
         <div key={matchedCheat.id} className={`text-center cheat-pop fireworks max-w-2xl mx-auto flex flex-col gap-3 relative z-10 px-6 py-4 pixel-border ${shakeActive ? 'screen-shake' : ''}`}>
