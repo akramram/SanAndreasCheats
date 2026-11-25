@@ -4930,3 +4930,13 @@ html.perf-lite .ambient-dust {
   margin-top: 4px;
   text-shadow: 1px 1px 0 #000;
 }
+
+/* Iteration 58 — zen mode: hide decorative layers, keep HUD + input */
+.zen-active .category-scanner,
+.zen-active .cash-bill,
+.zen-active .confetti-piece,
+.zen-active .radio-vu-meter,
+.zen-active .radio-time,
+.zen-active .radio-track-progress {
+  display: none !important;
+}
