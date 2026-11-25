@@ -311,7 +311,16 @@ export default function Home() {
     const saved = localStorage.getItem('bestTime')
     return saved ? parseFloat(saved) : null
   })
-  const [totalCheats, setTotalCheats] = useState(0)
+  // Iteration 52 — restore the HUD CHEATS counter from persisted stats so it
+  // survives reloads like the codex badge already did (accuracy first, then history)
+  const [totalCheats, setTotalCheats] = useState(() => {
+    try {
+      const acc = JSON.parse(localStorage.getItem('accuracyStats') || 'null')
+      if (acc && Number.isFinite(acc.hits) && acc.hits > 0) return acc.hits
+      const hist = JSON.parse(localStorage.getItem('cheatHistory') || '[]')
+      return Array.isArray(hist) ? hist.length : 0
+    } catch { return 0 }
+  })
   // Iteration 42 — per-cheat best times (id → ms) for codex stamps
   const [cheatBestTimes, setCheatBestTimes] = useState(() => {
     try { return JSON.parse(localStorage.getItem('cheatBestTimes') || '{}') } catch { return {} }

@@ -1819,3 +1819,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 52 — HUD CHEATS Counter Survives Reload (#90)
+**Date:** 2026-11-25
+**Branch:** feat/iter-52-restore-cheat-counter → PR → main
+
+### Found
+- On boot, `cheatHistory` and the codex badge were restored from localStorage, but `totalCheats` initialized to 0 — the HUD CHEATS counter and achievement progress (CHEAT MASTER at 25) reset on every reload while the rest of the save persisted.
+
+### Changed
+- `src/pages/Home.jsx` — `totalCheats` initializes from persisted stats: `accuracyStats.hits` (iteration 50) first, falling back to `cheatHistory.length` for older saves, `0` on fresh saves. Matching logic untouched.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: fresh save → HUD 0; seeded save (`accuracyStats {hits:5}` + 2 history entries) → reload → HUD 5; HESOYAM match → HUD 6 and `accuracyStats {hits:6, misses:1}` in sync; second reload → HUD 6. Browser closed after the probe.
+
+### Next
+- Free choice.
