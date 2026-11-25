@@ -1582,3 +1582,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 39 — Screen-Reader Announcer for Match / Miss / Sprint (#64)
+**Date:** 2026-11-25
+**Branch:** feat/iter-39-sr-announcer → PR → main
+
+### Planned
+- All match/miss/sprint feedback was visual + audio (and rumble is muted/reduced-motion gated), leaving screen-reader users without any event feedback. Add a single global `aria-live="assertive"` region announcing those events.
+
+### Changed
+- `src/pages/Home.jsx` — `announce` state + `announceEvent()` helper (clears the text first so identical consecutive messages re-announce); the match-count observer announces "Cheat activated: <name>", the iteration 33 miss branch announces "Missed", and a new observer announces sprint results ("Sprint over — new record, N cheats"). Observer only — input handling untouched.
+- `src/App.css` — `.sr-announcer`: visually hidden (same pattern as `.finder-sr-status`). No animations → nothing for reduced-motion/perf-lite.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: region exists with `aria-live="assertive"`; HESOYAM → "Cheat activated: …"; QWQ → "Missed — cheat buffer cleared"; HESOYAM again re-announces (clear-then-set works).
+
+### Next
+- Free choice.

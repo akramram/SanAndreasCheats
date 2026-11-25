@@ -4603,3 +4603,13 @@ html.perf-lite .ambient-dust {
   border: 1px solid rgba(245, 158, 11, 0.45);
   padding: 2px 8px;
 }
+
+/* Iteration 39 — visually hidden screen-reader announcer */
+.sr-announcer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
