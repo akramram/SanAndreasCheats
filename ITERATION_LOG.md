@@ -1889,3 +1889,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 56 — 7-Day Activity Sparkline in the History Modal (#99)
+**Date:** 2026-11-26
+**Branch:** feat/iter-56-sparkline → PR → main
+
+### Planned
+- The history modal lists events but gives no sense of rhythm over time. Add a compact 7-day bar sparkline above TOP CHEATS.
+
+### Changed
+- `src/pages/Home.jsx` — `sparkline` useMemo buckets `cheatHistory` timestamps into the last 7 local days (render-only, no new storage); bars in the modal, empty days dimmed, day-count in each bar's `title`, `LAST 7 DAYS · N CHEATS` total.
+- `src/App.css` — `.sparkline` pixel panel, green bars with glow, dim empty bars.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (seeded history: 2 yesterday, 1 each on day −2/−3 across local midnight): 7 bars, `4 CHEATS`, tallest on yesterday, 4 dimmed empties; live HESOYAM → `5 CHEATS` and today's bar grows. Browser closed after the probe.
+
+### Next
+- Free choice.
