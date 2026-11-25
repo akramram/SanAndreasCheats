@@ -4689,3 +4689,33 @@ html.perf-lite .ambient-dust {
   display: inline-block;
   margin-top: 4px;
 }
+
+/* Iteration 43 — Konami celebration overlay */
+.konami-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 160;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(8, 8, 8, 0.82);
+  animation: konami-pop 300ms ease-out;
+}
+.konami-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(14px, 3vw, 24px);
+  color: #fbbf24;
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.9);
+}
+.konami-sub {
+  font-family: 'VT323', monospace;
+  font-size: clamp(18px, 2.4vw, 26px);
+  color: #34d399;
+}
+@keyframes konami-pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}

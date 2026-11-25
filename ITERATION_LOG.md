@@ -1654,3 +1654,24 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 43 — Konami Code Easter Egg (#72)
+**Date:** 2026-11-25
+**Branch:** feat/iter-43-konami-egg → PR → main
+
+### Planned
+- ↑ ↑ ↓ ↓ ← → ← → B A triggers a ROCKET celebration overlay, SR announcement, achievement sound and a one-time +$100 cash bonus (persisted `konamiUnlocked`).
+
+### Changed
+- `src/pages/Home.jsx` — own keydown listener with a sliding 10-key buffer (arrows/B/A only — keys the A–Z cheat matcher ignores, so cheat input is untouched); `konamiFlash`/`konamiBonus` state; +100 cash written through to `gtaCash` on first unlock (state alone wasn't persisted); `announceEvent` for SR; auto-hide after 2.6 s; re-entry celebrates without paying.
+- `src/App.css` — `.konami-overlay` / `-text` / `-sub` (+ pop keyframe, covered by the iteration 29 reduced-motion collapse).
+
+### Found (during verification)
+- First cut called the effect-local `playNotif()` → lint `no-undef` error; switched to the imported `playAchievementSound()`. Also caught that `setCash` alone doesn't persist (other paths write `gtaCash` directly) — probe verified `localStorage.gtaCash` after reload.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: overlay + "+$100" + `gtaCash` 50→150 + flag persisted; overlay auto-hides; repeat entry celebrates with no bonus and no cash change; HESOYAM still matches.
+
+### Next
+- Free choice.
