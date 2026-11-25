@@ -1527,3 +1527,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 36 — TOP CHEATS Frequency Strip in History (#58)
+**Date:** 2026-11-25
+**Branch:** feat/iter-36-top-cheats → PR → main
+
+### Planned
+- History modal: a "TOP CHEATS" strip above the entry list showing the 5 most-used cheats with counts, derived from the stored history — no new storage.
+
+### Changed
+- `src/pages/Home.jsx` — `topCheats` useMemo (counts by entry name, desc, top 5); rendered as chips inside the history dialog only when history is non-empty. Additive; list, dialog semantics and input handling untouched.
+- `src/App.css` — `.top-cheats` flex-wrap strip (amber hairline separator), `.top-cheats-title` pixel label, `.top-cheat-chip` VT323 chips. No animations.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (puppeteer-core): HESOYAM ×2 + BAGUVIX → open history → strip shows "TOP CHEATS" with chips `Armor, health and $250,000 in money ×2` and `Unlimited health ×1` (names as stored by the history entries), sorted by count, 3 entries listed below; Escape still closes the dialog; HESOYAM still matches afterwards.
+
+### Next
+- Free choice.
