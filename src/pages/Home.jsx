@@ -1528,6 +1528,19 @@ export default function Home() {
     return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)
   }, [cheatHistory])
 
+  // Iteration 56 — 7-day activity sparkline (render-only from history timestamps)
+  const sparkline = useMemo(() => {
+    const days = [...Array(7)].map((_, i) => {
+      const d = new Date()
+      d.setHours(0, 0, 0, 0)
+      d.setDate(d.getDate() - (6 - i))
+      return d
+    })
+    const counts = days.map(d => cheatHistory.filter(e => e.timestamp >= d.getTime() && e.timestamp < d.getTime() + 86400000).length)
+    const max = Math.max(...counts, 1)
+    return { counts, max, total: counts.reduce((a, b) => a + b, 0), labels: days.map(d => d.toLocaleDateString()) }
+  }, [cheatHistory])
+
   // Function to reset input and counter on inactivity
   const resetOnInactivity = () => {
     // If there was input but no match — that's a fail
@@ -2826,6 +2839,23 @@ export default function Home() {
                     {Math.round((accuracy.hits / (accuracy.hits + accuracy.misses)) * 100)}%
                   </span>
                   <span className="accuracy-detail">{accuracy.hits} HITS · {accuracy.misses} MISSES</span>
+                </div>
+              )}
+              {/* Iteration 56 — 7-day activity sparkline */}
+              {cheatHistory.length > 0 && (
+                <div className="sparkline" aria-label="Cheat activity, last 7 days">
+                  <span className="sparkline-title">LAST 7 DAYS</span>
+                  <span className="sparkline-bars" aria-hidden="true">
+                    {sparkline.counts.map((c, i) => (
+                      <span
+                        key={i}
+                        className={`sparkline-bar ${c === 0 ? 'sparkline-bar-empty' : ''}`}
+                        style={{ height: `${Math.max(3, Math.round((c / sparkline.max) * 28))}px` }}
+                        title={`${sparkline.labels[i]} — ${c}`}
+                      />
+                    ))}
+                  </span>
+                  <span className="sparkline-total">{sparkline.total} CHEATS</span>
                 </div>
               )}
               {cheatHistory.length > 0 && topCheats.length > 0 && (
