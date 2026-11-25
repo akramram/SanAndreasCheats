@@ -4733,3 +4733,48 @@ html.perf-lite .ambient-dust {
   0%, 100% { text-shadow: 0 0 8px rgba(251, 146, 60, 0.9), 0 0 18px rgba(248, 113, 113, 0.7), 0 0 30px rgba(245, 158, 11, 0.5); }
   50% { text-shadow: 0 0 14px rgba(251, 146, 60, 1), 0 0 28px rgba(248, 113, 113, 0.9), 0 0 44px rgba(245, 158, 11, 0.7); }
 }
+
+/* Iteration 45 — random target roulette */
+.roulette-bar {
+  position: fixed;
+  top: 64px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: rgba(10, 10, 10, 0.85);
+  border: 2px solid rgba(52, 211, 153, 0.45);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+.roulette-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #34d399;
+}
+.roulette-name {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: #fbbf24;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.roulette-hits {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #e5e7eb;
+}
+.roulette-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  padding: 6px 8px;
+  cursor: pointer;
+}
+.roulette-btn:hover { background: rgba(52, 211, 153, 0.2); }
+.roulette-close { color: #f87171; border-color: rgba(248, 113, 113, 0.45); background: rgba(248, 113, 113, 0.08); }

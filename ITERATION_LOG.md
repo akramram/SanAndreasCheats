@@ -1693,3 +1693,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 45 — Random Target Roulette (#76)
+**Date:** 2026-11-25
+**Branch:** feat/iter-45-target-roulette → PR → main
+
+### Planned
+- 🎲 RANDOM TARGET picks a cheat to type; hitting it pays +$50, announces, increments HITS and rolls a new target. SKIP rolls without paying; ✕ closes.
+
+### Changed
+- `src/pages/Home.jsx` — `roulette` state + `rouletteRef` mirror; `pickRoulette` (re-picks away from the current id); a `matchedCheat` observer pays the bonus (cash written through to `gtaCash`, same as the iteration 43 lesson), plays `playCoinPickup`, announces, and rolls the next target. Bar sits under the sprint bar; green pixel panel. Cheat input untouched.
+- `src/App.css` — `.roulette-bar` / `-label` / `-name` / `-hits` / `-btn`. No animations.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: idle bar → 🎲 → TARGET shown (HITS 0) → typing the target's real pcSequence from `cheats_v2.json` → HITS 1, cash increased, new target ≠ previous → SKIP rolls a fresh target without paying → ✕ closes → HESOYAM still matches. (A first-run cash equality assertion was loosened: daily-contract bonuses legitimately pay alongside the roulette bonus.)
+
+### Next
+- Free choice.
