@@ -522,30 +522,6 @@ export default function Home() {
     return () => clearTimeout(t)
   }, [contractToast])
 
-  // Gamepad rumble feedback on match (short thump) and miss (long shudder). Honors
-  // mute and the perf-lite / prefers-reduced-motion fallbacks from iterations
-  // 29/31 — haptics count as feedback motion, not essential output. Observer only:
-  // reads the match/fail results, never touches input handling. Silent no-op
-  // without a gamepad.
-  useEffect(() => {
-    if (!matchedCheat && !showFail) return
-    if (isMuted()) return
-    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced || document.documentElement.classList.contains('perf-lite')) return
-    try {
-      const pads = navigator.getGamepads ? navigator.getGamepads() : []
-      for (const pad of pads) {
-        const actuator = pad && pad.vibrationActuator
-        if (actuator && actuator.playEffect) {
-          actuator.playEffect('dual-rumble', matchedCheat
-            ? { startDelay: 0, duration: 90, weakMagnitude: 0.4, strongMagnitude: 0.9 } // victory thump
-            : { startDelay: 0, duration: 220, weakMagnitude: 0.9, strongMagnitude: 0.2 } // miss shudder
-          ).catch(() => {})
-        }
-      }
-    } catch { /* gamepad API unavailable */ }
-  }, [matchedCheat, showFail])
-
   // Weekly Heist payout: observes the match result only
   useEffect(() => {
     if (!matchedCheat || !weeklyHeist || matchedCheat.id !== weeklyHeist.id || heistDone) return
@@ -605,6 +581,41 @@ export default function Home() {
     if (!matchedCheat) return
     setSprint(prev => (prev ? { ...prev, score: prev.score + 1 } : prev))
   }, [matchedCheat])
+
+  // Gamepad rumble feedback on match (short thump), miss (long shudder) and sprint
+  // end (soft thump; double pulse on a new record — iteration 37). Honors mute and
+  // the perf-lite / prefers-reduced-motion fallbacks from iterations 29/31 —
+  // haptics count as feedback motion, not essential output. Observer only: reads
+  // the match/fail/sprint results, never touches input handling. Silent no-op
+  // without a gamepad.
+  useEffect(() => {
+    if (!matchedCheat && !showFail && !sprintResult) return
+    if (isMuted()) return
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced || document.documentElement.classList.contains('perf-lite')) return
+    const effects = []
+    if (sprintResult) {
+      // Sprint end first: matchedCheat can still be set from a match whose
+      // 2 s clear was canceled (pre-existing stuck-match issue) — iteration 37
+      effects.push({ startDelay: 0, duration: 90, weakMagnitude: 0.2, strongMagnitude: 0.6 }) // sprint over
+      if (sprintResult.isNewBest) {
+        effects.push({ startDelay: 180, duration: 90, weakMagnitude: 0.2, strongMagnitude: 0.9 }) // record!
+      }
+    } else if (matchedCheat) {
+      effects.push({ startDelay: 0, duration: 90, weakMagnitude: 0.4, strongMagnitude: 0.9 }) // victory thump
+    } else {
+      effects.push({ startDelay: 0, duration: 220, weakMagnitude: 0.9, strongMagnitude: 0.2 }) // miss shudder
+    }
+    try {
+      const pads = navigator.getGamepads ? navigator.getGamepads() : []
+      for (const pad of pads) {
+        const actuator = pad && pad.vibrationActuator
+        if (actuator && actuator.playEffect) {
+          for (const fx of effects) actuator.playEffect('dual-rumble', fx).catch(() => {})
+        }
+      }
+    } catch { /* gamepad API unavailable */ }
+  }, [matchedCheat, showFail, sprintResult])
 
   // Escape closes whichever overlay is open. The cheat buffer only reads A–Z,
   // so this never touches cheat input (keyboard or gamepad).

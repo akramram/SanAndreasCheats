@@ -1541,7 +1541,27 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Verification
 - `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
-- Headless Chromium (puppeteer-core): HESOYAM ×2 + BAGUVIX → open history → strip shows "TOP CHEATS" with chips `Armor, health and $250,000 in money ×2` and `Unlimited health ×1` (names as stored by the history entries), sorted by count, 3 entries listed below; Escape still closes the dialog; HESOYAM still matches afterwards.
+- Headless Chromium (puppeteer-core): HESOYAM ×2 + BAGUVIX → history dialog shows "TOP CHEATS" with chips `Armor, health and $250,000 in money ×2` and `Unlimited health ×1` (names as stored by the history entries), sorted by count, 3 entries listed below; Escape still closes the dialog; HESOYAM still matches afterwards.
 
 ### Next
 - Free choice.
+
+## Iteration 37 — Sprint-End Rumble: Double Pulse on New Record (#60)
+**Date:** 2026-11-25
+**Branch:** feat/iter-37-sprint-rumble → PR → main
+
+### Planned
+- Extend the iteration 33 gamepad rumble to sprint end: soft thump on expiry, double pulse (staged second effect, 180 ms apart) when the sprint ends on a NEW RECORD. Same mute / reduced-motion / perf-lite gates.
+
+### Changed
+- `src/pages/Home.jsx` — rumble effect gains a `sprintResult` branch (moved next to the sprint state so `sprintResult` is in scope; a first cut placed before the declaration crashed the app with a TDZ ReferenceError, caught immediately by the E2E boot probe). End effects take priority over the (possibly stale) match state.
+
+### Found (headless, during verification — filed as #61)
+- Pre-existing on main: `matchedCheat` never auto-clears after a match — the input effect re-runs on `matchedCheat` change and its cleanup cancels the 2 s clear the match keystroke scheduled; banner + `.screen-flash` sampled every 500 ms for 14 s post-match never clear (reproduced on the iteration 36 bundle). Not fixed here (out of scope); the sprint-end rumble reads `sprintResult` first so it stays correct regardless.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (puppeteer-core + mocked `vibrationActuator`): sprint with 1 match → NEW RECORD! + thumps `[90/0.4/0.9]` at match, then `[90/0.2/0.6, 180/0.2/0.9]` at expiry; second sprint with no matches → SPRINT OVER + only `[90/0.2/0.6]` (no record pulse); `perf-lite` re-added → HESOYAM matches (banner) with zero rumble calls (gate holds). Match/miss variants unchanged from iteration 33.
+
+### Next
+- Fix the stuck matchedCheat (#61); free choice otherwise.
