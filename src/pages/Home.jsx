@@ -710,6 +710,9 @@ export default function Home() {
             localStorage.setItem('gtaCash', String(cur + 100))
           } catch { /* storage blocked */ }
           setCash(c => c + 100)
+          // Iteration 55 — floating +$ popup for the first-time Konami bonus
+          setCashPopups(prev => [...prev, { id: `cash-konami-${Date.now()}`, amount: 100, x: 50, y: 30 }])
+          setTimeout(() => setCashPopups(prev => prev.filter(p => !p.id.startsWith('cash-konami-'))), 1500)
         }
         setKonamiBonus(first)
         setKonamiFlash(true)

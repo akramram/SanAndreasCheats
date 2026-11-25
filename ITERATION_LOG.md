@@ -1872,3 +1872,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 55 — Cash Popup for the Konami Bonus (#97)
+**Date:** 2026-11-26
+**Branch:** feat/iter-55-konami-cash-popup → PR → main
+
+### Planned
+- Cheat matches show a floating +$ popup but the Konami first-time +$100 bonus only appeared as text inside the rocket banner. Reuse the popup.
+
+### Changed
+- `src/pages/Home.jsx` — inside the existing first-time Konami branch: push a `cash-popup` (+$100 at 50%/30%) via `setCashPopups`, self-removing after 1.5 s. Konami detection, payment and storage untouched.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: cleared `konamiUnlocked` → Konami sequence → `+$100` popup visible then gone after 1.5 s → repeat sequence → no popup, `konamiUnlocked=1`; HESOYAM still MATCHED. Browser closed after the probe.
+
+### Next
+- Free choice.
