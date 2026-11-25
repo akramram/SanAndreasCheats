@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { fuzzyFilter } from '../utils/fuzzy'
 import { RadioVuMeter, RadioClock } from '../components/RadioWidgets'
+import SprintTimer from '../components/SprintTimer'
 import {
   DAILY_CONTRACT_BONUS, DAILY_CONTRACT_STORAGE_KEY, localDayKey, pickDailyCheat,
   parseContractState, activeStreak, completeContract, lastNDays,
@@ -562,6 +563,44 @@ export default function Home() {
   }, [contractToast])
 
   const [showShop, setShowShop] = useState(false)
+
+  // Sprint mode (iteration 34): optional 30 s time attack. Purely additive —
+  // counts matches via a matchedCheat observer; cheat input untouched.
+  const SPRINT_MS = 30000
+  const [sprint, setSprint] = useState(null) // { endsAt: number, score: number } | null
+  const [sprintResult, setSprintResult] = useState(null) // { score, best, isNewBest } | null
+  const [sprintBest, setSprintBest] = useState(() => {
+    try { return parseInt(localStorage.getItem('sprintBest') || '0', 10) || 0 } catch { return 0 }
+  })
+  const sprintRef = useRef(null)
+  const sprintTimerRef = useRef(null)
+  useEffect(() => { sprintRef.current = sprint }, [sprint])
+  useEffect(() => () => { if (sprintTimerRef.current) clearTimeout(sprintTimerRef.current) }, [])
+  const startSprint = () => {
+    if (sprintTimerRef.current) clearTimeout(sprintTimerRef.current)
+    setSprintResult(null)
+    setSprint({ endsAt: Date.now() + SPRINT_MS, score: 0 })
+    sprintTimerRef.current = setTimeout(() => {
+      const score = sprintRef.current ? sprintRef.current.score : 0
+      let best = score
+      let isNewBest = false
+      try {
+        const prevBest = parseInt(localStorage.getItem('sprintBest') || '0', 10) || 0
+        isNewBest = score > prevBest
+        best = Math.max(prevBest, score)
+        localStorage.setItem('sprintBest', String(best))
+      } catch { /* storage blocked */ }
+      setSprintBest(best)
+      setSprintResult({ score, best, isNewBest })
+      setSprint(null)
+      sprintTimerRef.current = null
+    }, SPRINT_MS)
+  }
+  // Counts each match exactly once (matchedCheat identity changes per match)
+  useEffect(() => {
+    if (!matchedCheat) return
+    setSprint(prev => (prev ? { ...prev, score: prev.score + 1 } : prev))
+  }, [matchedCheat])
 
   // Escape closes whichever overlay is open. The cheat buffer only reads A–Z,
   // so this never touches cheat input (keyboard or gamepad).
@@ -2327,6 +2366,31 @@ export default function Home() {
       >
         <span className="text-xl">🔎</span>
       </button>
+
+      {/* Sprint mode (iteration 34) */}
+      <div className="sprint-bar">
+        {sprint ? (
+          <>
+            <span className="sprint-label">SPRINT</span>
+            <SprintTimer endsAt={sprint.endsAt} />
+            <span className="sprint-score">SCORE {sprint.score}</span>
+          </>
+        ) : sprintResult ? (
+          <>
+            <span className={sprintResult.isNewBest ? 'sprint-record' : 'sprint-label'}>
+              {sprintResult.isNewBest ? 'NEW RECORD!' : 'SPRINT OVER'}
+            </span>
+            <span className="sprint-result">{sprintResult.score} cheats · best {sprintResult.best}</span>
+            <button type="button" className="sprint-btn" onClick={startSprint}>RETRY</button>
+            <button type="button" className="sprint-btn sprint-close" onClick={() => setSprintResult(null)} aria-label="Close sprint result">✕</button>
+          </>
+        ) : (
+          <>
+            <button type="button" className="sprint-btn" onClick={startSprint} aria-label="Start 30 second sprint">⚡ START 30s SPRINT</button>
+            {sprintBest > 0 && <span className="sprint-best">BEST {sprintBest}</span>}
+          </>
+        )}
+      </div>
 
       {/* CJ Avatar with reactive animations */}
       <div className="text-2xl font-semibold tracking-tight text-center relative z-10">
