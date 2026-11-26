@@ -914,6 +914,13 @@ export default function Home() {
     try { localStorage.setItem('zenMode', next ? '1' : '0') } catch { /* storage blocked */ }
     return next
   })
+  // Iteration 81 — CRT EFFECT toggle: drop the scanline overlay (default ON)
+  const [crtOff, setCrtOff] = useState(() => localStorage.getItem('crtOff') === '1')
+  const toggleCrt = () => setCrtOff(prev => {
+    const next = !prev
+    try { localStorage.setItem('crtOff', next ? '1' : '0') } catch { /* storage blocked */ }
+    return next
+  })
   // Iteration 62 — two-step reset of stat keys only (cash/cosmetics survive)
   const [resetArmed, setResetArmed] = useState(false)
   const resetArmedTimerRef = useRef(null)
@@ -2314,7 +2321,7 @@ export default function Home() {
       {/* CRT Boot Screen */}
       {!booted && <BootScreen onBooted={() => setBooted(true)} />}
 
-      <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative scanlines ${booted ? 'main-ui-booted' : ''} ${activeThemeClass} ${activeEffectClass} ${memoryMode ? 'memory-mode' : ''} ${zenMode ? 'zen-active' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
+      <main className={`h-screen flex flex-col items-center justify-center gap-3 bg-[#080808] text-amber-200 px-4 relative ${crtOff ? '' : 'scanlines'} ${booted ? 'main-ui-booted' : ''} ${activeThemeClass} ${activeEffectClass} ${memoryMode ? 'memory-mode' : ''} ${zenMode ? 'zen-active' : ''}`} style={{ opacity: booted ? undefined : 0 }}>
         {/* Weather System Layers */}
       {booted && (
         <>
@@ -3967,6 +3974,15 @@ export default function Home() {
                 >
                   <span className="shop-option-label">🧘 ZEN MODE</span>
                   <span className="shop-option-state">{zenMode ? 'ON' : 'OFF'}</span>
+                </button>
+                <button
+                  type="button"
+                  className={`shop-option-row ${crtOff ? 'off' : ''}`}
+                  onClick={toggleCrt}
+                  aria-pressed={crtOff}
+                >
+                  <span className="shop-option-label">📺 CRT EFFECT</span>
+                  <span className="shop-option-state">{crtOff ? 'OFF' : 'ON'}</span>
                 </button>
                 <button
                   type="button"
