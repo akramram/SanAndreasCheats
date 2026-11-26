@@ -1648,6 +1648,17 @@ export default function Home() {
     return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)
   }, [cheatHistory])
 
+  // Iteration 69 — lifetime hits per category, render-only from history
+  const categoryStats = useMemo(() => {
+    const byName = new Map(cheatsData.cheats.map(c => [c.name, c.category || 'misc']))
+    const counts = new Map()
+    for (const e of cheatHistory) {
+      const cat = byName.get(e.name) || 'misc'
+      counts.set(cat, (counts.get(cat) || 0) + 1)
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1])
+  }, [cheatHistory])
+
   // Iteration 56 — 7-day activity sparkline (render-only from history timestamps)
   const sparkline = useMemo(() => {
     const days = [...Array(7)].map((_, i) => {
@@ -3011,6 +3022,24 @@ export default function Home() {
                     ))}
                   </span>
                   <span className="sparkline-total">{sparkline.total} CHEATS</span>
+                </div>
+              )}
+              {/* Iteration 69 — lifetime hits by category */}
+              {cheatHistory.length > 0 && categoryStats.length > 0 && (
+                <div className="accuracy-stat" aria-label="Hits by category">
+                  <span className="accuracy-title">BY CATEGORY</span>
+                  <span className="cat-bars">
+                    {categoryStats.map(([cat, n]) => (
+                      <span key={cat} className="cat-row">
+                        <span className="cat-name">{cat.toUpperCase()}</span>
+                        <span
+                          className="cat-bar"
+                          style={{ '--w': `${Math.max(8, Math.round((n / categoryStats[0][1]) * 100))}%` }}
+                        />
+                        <span className="cat-count">{n}</span>
+                      </span>
+                    ))}
+                  </span>
                 </div>
               )}
               {cheatHistory.length > 0 && topCheats.length > 0 && (
