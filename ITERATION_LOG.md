@@ -2172,3 +2172,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 72 — Session Pulse Sparkline in the History Modal
+**Date:** 2026-11-26
+**Branch:** feat/iter-72-session-pulse → PR → main
+
+### Planned
+- THIS SESSION shows a count but no shape. Add a per-minute sparkline of the current session hits (last 15 minutes) next to it.
+
+### Changed
+- `src/pages/Home.jsx` — `sessionStats` now also collects hit timestamps; new `sessionPulse` useMemo buckets them per minute (render-only, no storage changes); `SESSION PULSE` block reuses the `.sparkline` markup/CSS with 15 bars and tooltips. Zero new CSS.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: booted, typed HESOYAM - `CHEAT ACTIVATED` fired, history recorded (1 entry). History modal: SESSION PULSE renders 15 bars, 1 filled, total `1 CHEATS`; THIS SESSION, LAST 7 DAYS and PLAY CLOCK intact.
+
+### Next
+- Free choice.
