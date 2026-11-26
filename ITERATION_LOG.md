@@ -2274,3 +2274,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 78 — PB Crown on Record-Setting History Entries (#140)
+**Date:** 2026-11-26
+**Branch:** feat/iter-78-pb-crown → PR → main
+
+### Planned
+- The history list never shows which run actually set a per-cheat record. Crown the record holder.
+
+### Changed
+- `src/pages/Home.jsx` — `saveCheatToHistory` entries now carry the base `cheatId` (additive field; old entries without it simply never crown); history rows render a `👑` span (`.pb-crown`, `title="Personal best run"`) when `elapsedTime <= cheatBestTimes[cheatId]` (`<=` covers the new-record run whose stored best is measured a tick after the entry's elapsed). Zero new CSS rules.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: seeded RIPOLL (900ms = PB) and AEZAKMI (1900ms vs best 1700ms), typed HESOYAM (first run = new PB) - matched and recorded. History modal: 3 rows; RIPOLL and the new PB run crowned, AEZAKMI uncrowned. Browser closed after the probe.
+
+### Next
+- Free choice.
