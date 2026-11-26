@@ -1629,7 +1629,7 @@ export default function Home() {
     setCheatHistory(updatedHistory)
     localStorage.setItem('cheatHistory', JSON.stringify(updatedHistory))
     // Iteration 65 — count this session's matches for the history modal
-    setSessionStats(s => ({ matches: s.matches + 1 }))
+    setSessionStats(s => ({ matches: s.matches + 1, hits: [...(s.hits || []), Date.now()] }))
     // Iteration 68 — persist best typing speed (CPM)
     const chars = cheat.pcSequence?.[0]?.length || 0
     const cpm = elapsedMs > 0 && chars > 0 ? Math.round(chars / (elapsedMs / 60000)) : 0
@@ -1680,6 +1680,15 @@ export default function Home() {
     const max = Math.max(...counts, 1)
     return { counts, max, total: counts.reduce((a, b) => a + b, 0) }
   }, [cheatHistory])
+
+  // Iteration 72 — session pulse: hits per minute over the last 15 minutes, render-only
+  const sessionPulse = useMemo(() => {
+    const now = Date.now()
+    const counts = [...Array(15)].map((_, i) =>
+      (sessionStats.hits || []).filter(t => t > now - (15 - i) * 60000 && t <= now - (14 - i) * 60000).length)
+    const max = Math.max(...counts, 1)
+    return { counts, max, total: counts.reduce((a, b) => a + b, 0) }
+  }, [sessionStats])
 
   // Function to reset input and counter on inactivity
   const resetOnInactivity = () => {
@@ -3007,6 +3016,23 @@ export default function Home() {
                   <span className="accuracy-title">THIS SESSION</span>
                   <span className="accuracy-value">{sessionStats.matches} CHEATS</span>
                   <span className="accuracy-detail">{sessionMins} MIN PLAYED</span>
+                </div>
+              )}
+              {/* Iteration 72 — session pulse sparkline (hits per minute, last 15 min) */}
+              {(sessionStats.hits || []).length > 0 && (
+                <div className="sparkline" aria-label="This session, hits per minute">
+                  <span className="sparkline-title">SESSION PULSE</span>
+                  <span className="sparkline-bars" aria-hidden="true">
+                    {sessionPulse.counts.map((c, i) => (
+                      <span
+                        key={i}
+                        className={`sparkline-bar ${c === 0 ? 'sparkline-bar-empty' : ''}`}
+                        style={{ height: `${Math.max(3, Math.round((c / sessionPulse.max) * 28))}px` }}
+                        title={`-${15 - i} min — ${c}`}
+                      />
+                    ))}
+                  </span>
+                  <span className="sparkline-total">{sessionPulse.total} CHEATS</span>
                 </div>
               )}
               {(accuracy.hits > 0 || accuracy.misses > 0) && (
