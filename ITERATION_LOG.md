@@ -2067,3 +2067,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 66 — Share-Progress Button in Shop Options (#119)
+**Date:** 2026-11-26
+**Branch:** feat/iter-66-share-progress → PR → main
+
+### Planned
+- No way to show off a run. Add a one-click stats summary copy in shop OPTIONS.
+
+### Changed
+- `src/pages/Home.jsx` — `shareProgress` builds `SAN ANDREAS CHEATS — N/101 DECODED · ACC P% (hits/misses) · BEST STREAK N · CASH $X` and copies via the clipboard API with the execCommand fallback (same pattern as the finder copy button); `📣 SHARE PROGRESS` row in OPTIONS reusing `.shop-option-row` styling (zero new CSS), label flips COPY → COPIED/FAILED for 1.5 s; SR announce + optional vibrate.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (clipboard permissions granted, trusted CDP click): label `COPIED`, clipboard starts with `SAN ANDREAS CHEATS — 0/101 DECODED`; shop closes; typed HESOYAM recorded in `cheatHistory` (0 → 1). Browser closed after the probe.
+
+### Next
+- Free choice.
