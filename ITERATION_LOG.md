@@ -2206,3 +2206,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 74 — Streak Milestone Toast
+**Date:** 2026-11-26
+**Branch:** feat/iter-74-streak-milestone → PR → main
+
+### Planned
+- Streak growth is invisible beyond the HUD counter. Flash a `STREAK N IN A ROW` banner when the streak hits a milestone (5/10/25/50) and announce it for screen readers.
+
+### Changed
+- `src/pages/Home.jsx` — new `streakToast` state; milestone check in the match path (observer only, no logic changes) plus `announceEvent`; banner reuses the `.cheat-banner .pb-banner` CSS with `role="status"`. Zero new CSS.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: cleared storage, typed 5 distinct cheats (MUNASEF, HESOYAM, SZCMAWO, NCSGDAG, AEZAKMI) via keydown at 250ms/char - toast `🔥 STREAK 5 IN A ROW!` appeared exactly at streak 5 and auto-cleared on the next cheat (2.5s timeout); 6 hits, 0 misses; core matching intact.
+
+### Next
+- Free choice.

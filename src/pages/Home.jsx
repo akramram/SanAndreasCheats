@@ -289,6 +289,8 @@ export default function Home() {
   const [bannerKey, setBannerKey] = useState(0)
   // Iteration 70 — NEW PB flash when a per-cheat best time is beaten
   const [pbFlash, setPbFlash] = useState(null)
+  // Iteration 74 — streak milestone toast
+  const [streakToast, setStreakToast] = useState(null)
   const [isKeyboardInput, setIsKeyboardInput] = useState(false)
   const [startTime, setStartTime] = useState(null)
   const [elapsedTime, setElapsedTime] = useState(null)
@@ -1981,6 +1983,12 @@ export default function Home() {
 
           // Update streak & combo
           setCurrentStreak(newStreak)
+          // Iteration 74 — streak milestone toast + announcement
+          if ([5, 10, 25, 50].includes(newStreak)) {
+            setStreakToast(newStreak)
+            announceEvent(`Streak milestone: ${newStreak} cheats in a row`)
+            setTimeout(() => setStreakToast(null), 2500)
+          }
           setTotalCheats(t => t + 1)
           // Iteration 50 — count the successful attempt (observer only)
           setAccuracy(a => {
@@ -2663,6 +2671,13 @@ export default function Home() {
       {matchedCheat && pbFlash === matchedCheat.id && (
         <div className="cheat-banner pb-banner">
           🏆 NEW PERSONAL BEST!
+        </div>
+      )}
+
+      {/* Iteration 74 — streak milestone toast */}
+      {streakToast && (
+        <div className="cheat-banner pb-banner" role="status">
+          🔥 STREAK {streakToast} IN A ROW!
         </div>
       )}
 
