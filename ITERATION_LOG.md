@@ -2326,3 +2326,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 81 — CRT Effect Toggle in Shop Options (#146)
+**Date:** 2026-11-26
+**Branch:** feat/iter-81-crt-toggle → PR → main
+
+### Planned
+- The CRT scanline overlay runs permanently. Players who find it noisy (or want maximum clarity on small screens) had no way to turn it off.
+
+### Changed
+- `src/pages/Home.jsx` — new `crtOff` state (`crtOff` localStorage key, default ON) + `toggleCrt` mirroring the zen/memory toggles; `<main>` drops its `scanlines` class when OFF; new `📺 CRT EFFECT` row in shop OPTIONS with `aria-pressed` and ON/OFF state, styled `off` when disabled.
+- No CSS changes — reuses the existing `.shop-option-row` markup and removes the overlay class instead of hiding it.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: typed HESOYAM - matched; `scanlines` present by default; toggling CRT EFFECT removes the class and persists `crtOff=1` across reload (boot screen included); toggling back restores it. Browser closed after the probe.
+
+### Next
+- Free choice.
