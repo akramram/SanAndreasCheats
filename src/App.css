@@ -5027,3 +5027,13 @@ html.perf-lite .ambient-dust {
   from { transform: translate(-50%, -24px); opacity: 0; }
   to { transform: translate(-50%, 0); opacity: 1; }
 }
+
+/* Iteration 67 — cash HUD bump pulse on payout */
+.cash-amount.bump {
+  animation: cash-bump 0.6s ease-out;
+}
+@keyframes cash-bump {
+  0% { transform: scale(1); color: #34d399; text-shadow: 0 0 14px rgba(52, 211, 153, 0.9); }
+  35% { transform: scale(1.35); color: #fde68a; }
+  100% { transform: scale(1); color: inherit; }
+}

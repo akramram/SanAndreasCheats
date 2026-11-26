@@ -913,6 +913,16 @@ export default function Home() {
   // Iteration 66 — share-progress: copy a one-line stats summary to the clipboard
   const [shareCopied, setShareCopied] = useState(null) // null | 'ok' | 'err'
   const shareTimerRef = useRef(null)
+  // Iteration 67 — pulse the cash HUD whenever the cash value changes
+  const [cashBump, setCashBump] = useState(false)
+  const cashBumpPrevRef = useRef(cash)
+  useEffect(() => {
+    if (cash === cashBumpPrevRef.current) return
+    cashBumpPrevRef.current = cash
+    setCashBump(true)
+    const t = setTimeout(() => setCashBump(false), 600)
+    return () => clearTimeout(t)
+  }, [cash])
   const shareProgress = async () => {
     const all = cheatsData?.cheats?.length || 0
     const accTotal = accuracy.hits + accuracy.misses
@@ -2627,7 +2637,7 @@ export default function Home() {
       {booted && (
         <div className={`cash-hud ${totalCheats > 0 ? 'visible' : ''}`}>
           <span className="cash-dollar-sign">$</span>
-          <span className="cash-amount">{cash.toLocaleString()}</span>
+          <span className={`cash-amount ${cashBump ? 'bump' : ''}`}>{cash.toLocaleString()}</span>
         </div>
       )}
 
