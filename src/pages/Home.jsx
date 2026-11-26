@@ -1690,6 +1690,17 @@ export default function Home() {
     return { counts, max, total: counts.reduce((a, b) => a + b, 0) }
   }, [sessionStats])
 
+  // Iteration 73 — weak spot: the cheat the player has attempted the most (render-only)
+  const weakSpot = useMemo(() => {
+    let top = null
+    for (const [id, n] of Object.entries(cheatAttempts)) {
+      if (n > 0 && (!top || n > top.n)) top = { id, n }
+    }
+    if (!top) return null
+    const cheat = cheatsData.cheats.find(c => c.id === top.id)
+    return cheat ? { name: cheat.name, attempts: top.n } : null
+  }, [cheatAttempts])
+
   // Function to reset input and counter on inactivity
   const resetOnInactivity = () => {
     // If there was input but no match — that's a fail
@@ -3084,6 +3095,14 @@ export default function Home() {
                     ))}
                   </span>
                   <span className="sparkline-total">{playClock.total} CHEATS</span>
+                </div>
+              )}
+              {/* Iteration 73 — weak spot: most-attempted cheat */}
+              {weakSpot && (
+                <div className="accuracy-stat" aria-label="Weak spot">
+                  <span className="accuracy-title">WEAK SPOT</span>
+                  <span className="accuracy-value">{weakSpot.name}</span>
+                  <span className="accuracy-detail">{weakSpot.attempts} ATTEMPTS</span>
                 </div>
               )}
               {/* Iteration 69 — lifetime hits by category */}

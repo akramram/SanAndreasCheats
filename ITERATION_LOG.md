@@ -2189,3 +2189,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 73 — Weak Spot Stat in the History Modal
+**Date:** 2026-11-26
+**Branch:** feat/iter-73-weak-spot → PR → main
+
+### Planned
+- The Codex shows per-cheat attempt counts, but nothing surfaces the one the player struggles with most. Add a WEAK SPOT stat to the history modal.
+
+### Changed
+- `src/pages/Home.jsx` — `weakSpot` useMemo picks the highest-count entry from the existing `cheatAttempts` storage and resolves its display name (render-only, no storage changes); `WEAK SPOT` block reuses the `.accuracy-stat` markup. Zero new CSS.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: seeded 2 attempt counts, typed HESOYAM - `CHEAT ACTIVATED` fired. History modal: WEAK SPOT shows `Armor, health and $250,000 in money / 13 ATTEMPTS` (12 seeded + 1 from this run); SESSION PULSE and LAST 7 DAYS intact.
+
+### Next
+- Free choice.
