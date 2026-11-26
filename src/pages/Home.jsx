@@ -910,6 +910,36 @@ export default function Home() {
     }
     window.location.reload()
   }
+  // Iteration 66 — share-progress: copy a one-line stats summary to the clipboard
+  const [shareCopied, setShareCopied] = useState(null) // null | 'ok' | 'err'
+  const shareTimerRef = useRef(null)
+  const shareProgress = async () => {
+    const all = cheatsData?.cheats?.length || 0
+    const accTotal = accuracy.hits + accuracy.misses
+    const pct = accTotal > 0 ? Math.round((accuracy.hits / accTotal) * 100) : 0
+    const text = `SAN ANDREAS CHEATS — ${totalCheats}/${all} DECODED · ACC ${pct}% (${accuracy.hits}/${accuracy.misses}) · BEST STREAK ${bestStreak} · CASH $${cash.toLocaleString()}`
+    let ok = false
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text)
+        ok = true
+      }
+    } catch { /* fall through to execCommand */ }
+    if (!ok) {
+      const ta = document.createElement('textarea')
+      ta.value = text
+      ta.setAttribute('readonly', '')
+      ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0'
+      document.body.appendChild(ta)
+      ta.select()
+      try { ok = document.execCommand('copy') } catch { ok = false }
+      document.body.removeChild(ta)
+    }
+    setShareCopied(ok ? 'ok' : 'err')
+    announceEvent(ok ? 'Progress summary copied to clipboard' : 'Copy failed')
+    if (shareTimerRef.current) clearTimeout(shareTimerRef.current)
+    shareTimerRef.current = setTimeout(() => setShareCopied(null), 1500)
+  }
   // Iteration 41 — save export/import (shop OPTIONS). Exports the whole
   // localStorage (this app owns it) as JSON; import writes back string-valued
   // keys only and reloads.
@@ -3731,6 +3761,14 @@ export default function Home() {
                 >
                   <span className="shop-option-label">🧘 ZEN MODE</span>
                   <span className="shop-option-state">{zenMode ? 'ON' : 'OFF'}</span>
+                </button>
+                <button
+                  type="button"
+                  className="shop-option-row"
+                  onClick={shareProgress}
+                >
+                  <span className="shop-option-label">📣 SHARE PROGRESS</span>
+                  <span className="shop-option-state">{shareCopied === 'ok' ? 'COPIED' : shareCopied === 'err' ? 'FAILED' : 'COPY'}</span>
                 </button>
                 <button
                   type="button"
