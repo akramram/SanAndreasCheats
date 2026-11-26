@@ -144,6 +144,15 @@ const STATION_TRACK_DURATIONS = [
 /* ── Cash Economy Constants ── */
 const CASH_BASE = 100       // Base payout per cheat
 const CASH_SPEED_BONUS = 50 // Bonus for <2s, extra for <1s
+
+// Iteration 64 — compact time-ago for the welcome-back ribbon
+const timeAgo = (ts) => {
+  const ms = Date.now() - (ts || 0)
+  if (!Number.isFinite(ms) || ms < 60000) return 'JUST NOW'
+  if (ms < 3600000) return `${Math.floor(ms / 60000)}M AGO`
+  if (ms < 86400000) return `${Math.floor(ms / 3600000)}H AGO`
+  return `${Math.floor(ms / 86400000)}D AGO`
+}
 const CASH_COMBO_MULT = 1.5 // Multiplier per combo level
 const CASH_RARE_MULT = 2.0  // Multiplier for "rare" cheats (longer sequences)
 
@@ -554,6 +563,17 @@ export default function Home() {
   const [gamepadOn, setGamepadOn] = useState(false)
   const [konamiBonus, setKonamiBonus] = useState(false)
   const [cashPopups, setCashPopups] = useState([]) // { id, amount, x, y }
+
+  // Iteration 64 — welcome-back ribbon: last matched cheat from the previous session
+  const [welcomeBack, setWelcomeBack] = useState(null)
+  useEffect(() => {
+    let last = null
+    try { last = (JSON.parse(localStorage.getItem('cheatHistory') || '[]') || [])[0] } catch { /* storage blocked */ }
+    if (!last || !last.name) return
+    setWelcomeBack({ name: last.name, ts: last.timestamp })
+    const t = setTimeout(() => setWelcomeBack(null), 6000)
+    return () => clearTimeout(t)
+  }, [])
 
   // Daily Contract — date-seeded cheat-of-the-day, one bonus per local day
   const [contractDay] = useState(() => localDayKey())
@@ -2557,6 +2577,15 @@ export default function Home() {
           }}
         />
       ))}
+
+      {/* Welcome-back ribbon (iteration 64) — render-only, auto-hides */}
+      {welcomeBack && (
+        <div className="welcome-back" role="status">
+          <span className="welcome-back-label">WELCOME BACK</span>
+          <span className="welcome-back-last">LAST: {welcomeBack.name} · {timeAgo(welcomeBack.ts)}</span>
+          <button type="button" className="welcome-back-close" aria-label="Dismiss welcome back" onClick={() => setWelcomeBack(null)}>✕</button>
+        </div>
+      )}
 
       {/* Cash HUD Display */}
       {booted && (

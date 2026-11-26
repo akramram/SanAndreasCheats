@@ -2032,3 +2032,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 64 — Welcome-Back Ribbon (#115)
+**Date:** 2026-11-26
+**Branch:** feat/iter-64-welcome-back → PR → main
+
+### Planned
+- Returning players had no memory of their last session. Show what they matched last time right after load.
+
+### Changed
+- `src/pages/Home.jsx` — `welcomeBack` state hydrated on mount from the newest `cheatHistory` entry (storage read only, no writes); module-level `timeAgo` helper (JUST NOW / 5M / 3H / 2D AGO); dismissible pixel ribbon `WELCOME BACK · LAST: <cheat> · <ago>` above the cash HUD, auto-hides after 6 s.
+- `src/App.css` — `.welcome-back` ribbon panel + steps() slide-in.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: empty storage → no ribbon; seeded history (2 h old) → `LAST: Health, Armor, Money · 2H AGO`; ✕ dismisses; HESOYAM still MATCHED. Browser closed after the probe.
+
+### Next
+- Free choice.
