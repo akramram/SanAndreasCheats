@@ -21,6 +21,17 @@ import {
 } from '../utils/sounds'
 
 /* ── Weather System Constants ── */
+
+// Iteration 77 — relative age of a history entry, e.g. "JUST NOW" / "4M AGO" / "3H AGO" / "2D AGO"
+const relTime = (ts) => {
+  if (!ts) return ''
+  const s = Math.max(0, Math.floor((Date.now() - ts) / 1000))
+  if (s < 60) return 'JUST NOW'
+  if (s < 3600) return `${Math.floor(s / 60)}M AGO`
+  if (s < 86400) return `${Math.floor(s / 3600)}H AGO`
+  return `${Math.floor(s / 86400)}D AGO`
+}
+
 // Weather cycle: clear(25s) → cloudy(12s) → rain(18s) → storm(15s) → clearing(15s) → clear
 const WEATHER_PHASES = [
   { id: 'clear',    duration: 25000 },
@@ -3176,7 +3187,7 @@ export default function Home() {
                       </span>
                       <div className="flex-1">
                         <h3 className="font-pixel text-[10px] text-amber-200">{entry.name}</h3>
-                        <p className="font-vt text-base text-amber-400/50 mt-1">{entry.date}</p>
+                        <p className="font-vt text-base text-amber-400/50 mt-1"><span className="rel-time">{relTime(entry.timestamp)}</span> · {entry.date}</p>
                         {entry.elapsedTime && (
                           <p className="font-pixel text-[9px] text-green-400 mt-1">
                             TIME: {(entry.elapsedTime / 1000).toFixed(2)}s

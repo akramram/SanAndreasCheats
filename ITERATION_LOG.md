@@ -2257,3 +2257,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 77 — Relative Timestamps in the History Modal (#138)
+**Date:** 2026-11-26
+**Branch:** feat/iter-77-rel-time → PR → main
+
+### Planned
+- History entries only show an absolute locale date, which reads poorly when scanning for recent runs. Prefix each entry with a relative age label computed from the stored timestamp.
+
+### Changed
+- `src/pages/Home.jsx` — module-level `relTime(ts)` helper (JUST NOW / `4M AGO` / `3H AGO` / `2D AGO`); history rows render `<span class="rel-time">{relTime(entry.timestamp)}</span> · {entry.date}`. Render-only; the absolute date is kept. Zero new CSS.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: seeded 4 entries (now/5m/3h/2d ago), typed HESOYAM - matched and recorded (`elapsedTime` set). History modal shows 5 rows: two `JUST NOW` (seeded fresh + this run), `5M AGO`, `3H AGO`, `2D AGO`, absolute dates intact after the `·`. Browser closed after the probe.
+
+### Next
+- Free choice.
