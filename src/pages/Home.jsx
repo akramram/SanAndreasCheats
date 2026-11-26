@@ -287,6 +287,8 @@ export default function Home() {
   const [particles, setParticles] = useState([])
   const [confettiPieces, setConfettiPieces] = useState([])
   const [bannerKey, setBannerKey] = useState(0)
+  // Iteration 70 — NEW PB flash when a per-cheat best time is beaten
+  const [pbFlash, setPbFlash] = useState(null)
   const [isKeyboardInput, setIsKeyboardInput] = useState(false)
   const [startTime, setStartTime] = useState(null)
   const [elapsedTime, setElapsedTime] = useState(null)
@@ -1980,6 +1982,9 @@ export default function Home() {
                   map[found.id] = elapsed
                   localStorage.setItem('cheatBestTimes', JSON.stringify(map))
                   setCheatBestTimes(map)
+                  // Iteration 70 — flash NEW PB for 2.5 s when the record falls
+                  setPbFlash(found.id)
+                  setTimeout(() => setPbFlash(null), 2500)
                 }
               } catch { /* storage blocked */ }
             }
@@ -2624,6 +2629,13 @@ export default function Home() {
       {matchedCheat && (
         <div key={`banner-${bannerKey}`} className="cheat-banner">
           ★ CHEAT ACTIVATED ★
+        </div>
+      )}
+
+      {/* Iteration 70 — NEW PB flash under the banner */}
+      {matchedCheat && pbFlash === matchedCheat.id && (
+        <div className="cheat-banner pb-banner">
+          🏆 NEW PERSONAL BEST!
         </div>
       )}
 
