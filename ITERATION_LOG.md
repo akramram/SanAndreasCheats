@@ -2223,3 +2223,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 75 — Average Input Time Stat in the History Modal
+**Date:** 2026-11-26
+**Branch:** feat/iter-75-avg-time → PR → main
+
+### Planned
+- Best typing speed exists (iteration 68) but not the average. Add an AVG INPUT TIME stat computed from recorded history.
+
+### Changed
+- `src/pages/Home.jsx` — `avgInputTime` useMemo averages `elapsedTime` values from `cheatHistory` (render-only, no storage changes); `AVG INPUT TIME` block reuses the `.accuracy-stat` markup. Zero new CSS.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: seeded 3 history entries (1.2s/2.4s/0.6s), typed HESOYAM - `CHEAT ACTIVATED` fired. History modal: `AVG INPUT TIME / 1.77s / OVER 4 CHEATS` (math checks out incl. this-run HESOYAM); WEAK SPOT, SESSION PULSE and LAST 7 DAYS intact.
+
+### Next
+- Free choice.
