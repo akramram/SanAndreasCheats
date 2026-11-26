@@ -2240,3 +2240,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 76 — Live Page Title Stats (#136)
+**Date:** 2026-11-26
+**Branch:** feat/iter-76-page-title → PR → main
+
+### Planned
+- The browser tab is dead space. Make `document.title` show live cash and lifetime decode count so progress rides along even when the tab is in the background.
+
+### Changed
+- `src/pages/Home.jsx` — one `useEffect` (after the cash-bump observer) sets `document.title` to `` `$<cash> · <n> CHEATS · San Andreas Cheats` `` keyed on `[cash, cheatHistory.length]`. Render-only; no input or storage changes. Zero new CSS.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: fresh boot title `$0 · 0 CHEATS · San Andreas Cheats`; typed HESOYAM - `CHEAT ACTIVATED` banner fired; title flipped to `$200 · 1 CHEATS · San Andreas Cheats`. Browser closed after the probe.
+
+### Next
+- Free choice.

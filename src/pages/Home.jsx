@@ -929,6 +929,10 @@ export default function Home() {
     const t = setTimeout(() => setCashBump(false), 600)
     return () => clearTimeout(t)
   }, [cash])
+  // Iteration 76 — live page title: cash + lifetime decode count ride along in the tab
+  useEffect(() => {
+    document.title = `$${cash.toLocaleString('en-US')} · ${cheatHistory.length} CHEATS · San Andreas Cheats`
+  }, [cash, cheatHistory.length])
   const shareProgress = async () => {
     const all = cheatsData?.cheats?.length || 0
     const accTotal = accuracy.hits + accuracy.misses
