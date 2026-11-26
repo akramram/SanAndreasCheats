@@ -5057,3 +5057,20 @@ html.perf-lite .ambient-dust {
   0% { transform: scale(0.4); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+/* Iteration 80 — unread count badge on the View History clock button */
+.history-unread {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 2px;
+  background: #f59e0b;
+  color: #0a0a0a;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  line-height: 16px;
+  text-align: center;
+  pointer-events: none;
+}

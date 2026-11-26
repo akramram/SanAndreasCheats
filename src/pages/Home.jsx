@@ -306,6 +306,10 @@ export default function Home() {
   const [startTime, setStartTime] = useState(null)
   const [elapsedTime, setElapsedTime] = useState(null)
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
+  // Iteration 80 — unread badge: last history size the player has actually seen
+  const [historySeenCount, setHistorySeenCount] = useState(() => {
+    try { return Number(localStorage.getItem('historySeenCount') || '0') || 0 } catch { return 0 }
+  })
   const [cheatHistory, setCheatHistory] = useState([])
   const MAX_INPUTS = 40
   // Iteration 40 — letters typed in the current attempt (drives the key heat strip)
@@ -1659,6 +1663,12 @@ export default function Home() {
 
   // Modal management functions
   const openHistoryModal = () => setIsHistoryModalOpen(true)
+  // Iteration 80 — opening the history modal marks everything read
+  useEffect(() => {
+    if (!isHistoryModalOpen) return
+    setHistorySeenCount(cheatHistory.length)
+    try { localStorage.setItem('historySeenCount', String(cheatHistory.length)) } catch { /* storage blocked */ }
+  }, [isHistoryModalOpen, cheatHistory.length])
   const closeHistoryModal = () => setIsHistoryModalOpen(false)
 
   // Top cheats strip (iteration 36): derived from the stored history — no new storage
@@ -2789,6 +2799,11 @@ export default function Home() {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
+        {cheatHistory.length - historySeenCount > 0 && (
+          <span className="history-unread" role="status" aria-label={`${cheatHistory.length - historySeenCount} new history entries`}>
+            {cheatHistory.length - historySeenCount > 9 ? '9+' : cheatHistory.length - historySeenCount}
+          </span>
+        )}
       </button>
 
       {/* Sound Toggle Button */}

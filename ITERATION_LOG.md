@@ -2308,3 +2308,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 80 — Unread Badge on the History Button (#144)
+**Date:** 2026-11-26
+**Branch:** feat/iter-80-unread-badge → PR → main
+
+### Planned
+- New cheats land silently while the clock icon never changes. Show how many history entries the player has not seen yet, and clear it when the modal is opened.
+
+### Changed
+- `src/pages/Home.jsx` — new `historySeenCount` state (additive `historySeenCount` localStorage key, defaults 0); an effect marks everything read when the history modal opens; the View History button renders a `.history-unread` count (capped `9+`, `role="status"` with an aria-label) for `cheatHistory.length - historySeenCount`.
+- `src/App.css` — small `.history-unread` pixel badge (amber square, Press Start 2P 8px) pinned to the clock button.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: seeded 2 entries + seen=1 - badge `1`; typed HESOYAM - matched, badge bumps to `2`; opening the modal clears it; still clear after close and after reload (persisted). Browser closed after the probe.
+
+### Next
+- Free choice.
