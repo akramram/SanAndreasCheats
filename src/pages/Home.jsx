@@ -3488,6 +3488,11 @@ export default function Home() {
           catStats[catKey] = { total: catCheats.length, discovered: catDiscovered, info: catInfo }
         }
 
+        // Iteration 79 — category holding the most undecoded entries (no cheat names leaked)
+        const huntingGround = Object.entries(catStats)
+          .filter(([, s]) => s.total - s.discovered > 0)
+          .sort((a, b) => (b[1].total - b[1].discovered) - (a[1].total - a[1].discovered))[0]
+
         // Filter by tab
         const activeTab = codexTab
         const filteredByTab = activeTab === 'ALL'
@@ -3538,6 +3543,9 @@ export default function Home() {
                     </div>
                     <span className="codex-pct">{discoveryPct}%</span>
                   </div>
+                  {huntingGround && (
+                    <div className="codex-subtitle codex-hunting">NEXT HUNTING GROUND: {String(huntingGround[1].info.label).toUpperCase()} ({huntingGround[1].total - huntingGround[1].discovered} UNDECODED)</div>
+                  )}
                 </div>
                 {/* Search */}
                 <div className="codex-search">
