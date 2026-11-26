@@ -566,6 +566,10 @@ export default function Home() {
 
   // Iteration 64 — welcome-back ribbon: last matched cheat from the previous session
   const [welcomeBack, setWelcomeBack] = useState(null)
+  // Iteration 65 — this-session stats for the history modal (matches counted in saveCheatToHistory)
+  const [sessionStats, setSessionStats] = useState({ matches: 0 })
+  const sessionStartRef = useRef(Date.now())
+  const sessionMins = Math.max(1, Math.ceil((Date.now() - sessionStartRef.current) / 60000))
   useEffect(() => {
     let last = null
     try { last = (JSON.parse(localStorage.getItem('cheatHistory') || '[]') || [])[0] } catch { /* storage blocked */ }
@@ -1580,6 +1584,8 @@ export default function Home() {
     const updatedHistory = [newEntry, ...cheatHistory].slice(0, 50) // Keep only last 50 entries
     setCheatHistory(updatedHistory)
     localStorage.setItem('cheatHistory', JSON.stringify(updatedHistory))
+    // Iteration 65 — count this session's matches for the history modal
+    setSessionStats(s => ({ matches: s.matches + 1 }))
   }, [cheatHistory])
 
   // Modal management functions
@@ -2916,6 +2922,14 @@ export default function Home() {
 
             {/* Modal Content */}
             <div className="flex-1 overflow-y-auto p-5 space-y-2">
+              {/* Iteration 65 — this-session stats */}
+              {sessionStats.matches > 0 && (
+                <div className="accuracy-stat" aria-label="This session">
+                  <span className="accuracy-title">THIS SESSION</span>
+                  <span className="accuracy-value">{sessionStats.matches} CHEATS</span>
+                  <span className="accuracy-detail">{sessionMins} MIN PLAYED</span>
+                </div>
+              )}
               {(accuracy.hits > 0 || accuracy.misses > 0) && (
                 <div className="accuracy-stat" aria-label="Lifetime accuracy">
                   <span className="accuracy-title">LIFETIME ACCURACY</span>
