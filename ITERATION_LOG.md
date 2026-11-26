@@ -2050,3 +2050,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 65 — This-Session Stats in the History Modal (#117)
+**Date:** 2026-11-26
+**Branch:** feat/iter-65-session-stats → PR → main
+
+### Planned
+- The history modal is all-lifetime. Players had no read on how a fresh session was going.
+
+### Changed
+- `src/pages/Home.jsx` — `sessionStats` counter incremented inside `saveCheatToHistory` (same path as persisted history, deliberately in-memory so a reload starts a fresh session); `sessionStartRef` + per-render `sessionMins`; `THIS SESSION · N CHEATS · M MIN PLAYED` line above LIFETIME ACCURACY, reusing the existing `.accuracy-stat` styling (zero new CSS). Render-only, no storage changes.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: fresh session → line hidden; two live HESOYAM matches → history modal shows `THIS SESSION 2 CHEATS · 1 MIN PLAYED`; counter resets on reload by design. Browser closed after the probe.
+
+### Next
+- Free choice.
