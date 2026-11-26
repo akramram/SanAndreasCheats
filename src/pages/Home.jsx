@@ -1703,6 +1703,13 @@ export default function Home() {
     return cheat ? { name: cheat.name, attempts: top.n } : null
   }, [cheatAttempts])
 
+  // Iteration 75 — average input time across recorded history (render-only)
+  const avgInputTime = useMemo(() => {
+    const times = cheatHistory.map(e => e.elapsedTime).filter(t => typeof t === 'number' && t > 0)
+    if (times.length === 0) return null
+    return { avg: times.reduce((a, b) => a + b, 0) / times.length, n: times.length }
+  }, [cheatHistory])
+
   // Function to reset input and counter on inactivity
   const resetOnInactivity = () => {
     // If there was input but no match — that's a fail
@@ -3118,6 +3125,14 @@ export default function Home() {
                   <span className="accuracy-title">WEAK SPOT</span>
                   <span className="accuracy-value">{weakSpot.name}</span>
                   <span className="accuracy-detail">{weakSpot.attempts} ATTEMPTS</span>
+                </div>
+              )}
+              {/* Iteration 75 — average input time */}
+              {avgInputTime && (
+                <div className="accuracy-stat" aria-label="Average input time">
+                  <span className="accuracy-title">AVG INPUT TIME</span>
+                  <span className="accuracy-value">{(avgInputTime.avg / 1000).toFixed(2)}s</span>
+                  <span className="accuracy-detail">OVER {avgInputTime.n} CHEATS</span>
                 </div>
               )}
               {/* Iteration 69 — lifetime hits by category */}
