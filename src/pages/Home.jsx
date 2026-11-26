@@ -1632,6 +1632,7 @@ export default function Home() {
   const saveCheatToHistory = useCallback((cheat, timestamp, elapsedMs, inputDevice) => {
     const newEntry = {
       id: `${cheat.id}-${timestamp}`,
+      cheatId: cheat.id,
       name: cheat.name,
       timestamp: timestamp,
       date: new Date(timestamp).toLocaleString(),
@@ -3186,7 +3187,7 @@ export default function Home() {
                         {entry.inputDevice === 'keyboard' ? '⌨️' : '🎮'}
                       </span>
                       <div className="flex-1">
-                        <h3 className="font-pixel text-[10px] text-amber-200">{entry.name}</h3>
+                        <h3 className="font-pixel text-[10px] text-amber-200">{entry.name}{entry.elapsedTime != null && entry.cheatId && entry.elapsedTime <= cheatBestTimes[entry.cheatId] && <span className="pb-crown" title="Personal best run"> 👑</span>}</h3>
                         <p className="font-vt text-base text-amber-400/50 mt-1"><span className="rel-time">{relTime(entry.timestamp)}</span> · {entry.date}</p>
                         {entry.elapsedTime && (
                           <p className="font-pixel text-[9px] text-green-400 mt-1">
