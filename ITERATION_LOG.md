@@ -2084,3 +2084,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 67 — Cash HUD Pulse on Payout (#121)
+**Date:** 2026-11-26
+**Branch:** feat/iter-67-cash-pulse → PR → main
+
+### Planned
+- The cash counter changed value silently. Make payouts feel physical.
+
+### Changed
+- `src/pages/Home.jsx` — `cashBump` state + previous-value ref; a `cash` delta flips a 600 ms `bump` class on `.cash-amount`. Observer-only (reads the existing `cash` state; no payout logic touched).
+- `src/App.css` — `@keyframes cash-bump` (scale pop + green flash).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: live HESOYAM → `.cash-amount.bump` visible during the 600 ms window, cleared after, HUD shows $150. Browser closed after the probe.
+
+### Next
+- Free choice.
