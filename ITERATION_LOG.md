@@ -2102,3 +2102,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 68 — Best Typing Speed Stat in the History Modal (#123)
+**Date:** 2026-11-26
+**Branch:** feat/iter-68-best-cpm → PR → main
+
+### Planned
+- Successful decodes record their elapsed time but nothing celebrates raw speed. Persist the fastest decode as CPM and surface it in the history modal.
+
+### Changed
+- `src/pages/Home.jsx` — `bestCpm` state hydrated from localStorage `bestCpm`; `saveCheatToHistory` now derives CPM from the matched cheat's `pcSequence` length ÷ elapsed minutes and persists the record (0 ms / zero-length guards skip). New `BEST SPEED · N CPM · FASTEST DECODE` `.accuracy-stat` line above the sparkline (zero new CSS).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (typed HESOYAM live, 90 ms/key): CHEAT ACTIVATED banner, `localStorage.bestCpm = '693'`, history modal shows `BEST SPEED 693 CPM`, `cheatHistory` grows 0 → 1. Browser closed after the probe.
+
+### Next
+- Free choice.

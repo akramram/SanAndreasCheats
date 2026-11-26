@@ -568,6 +568,8 @@ export default function Home() {
   const [welcomeBack, setWelcomeBack] = useState(null)
   // Iteration 65 — this-session stats for the history modal (matches counted in saveCheatToHistory)
   const [sessionStats, setSessionStats] = useState({ matches: 0 })
+  // Iteration 68 — fastest successful decode, chars per minute
+  const [bestCpm, setBestCpm] = useState(() => parseInt(localStorage.getItem('bestCpm') || '0', 10))
   const sessionStartRef = useRef(Date.now())
   const sessionMins = Math.max(1, Math.ceil((Date.now() - sessionStartRef.current) / 60000))
   useEffect(() => {
@@ -1626,7 +1628,14 @@ export default function Home() {
     localStorage.setItem('cheatHistory', JSON.stringify(updatedHistory))
     // Iteration 65 — count this session's matches for the history modal
     setSessionStats(s => ({ matches: s.matches + 1 }))
-  }, [cheatHistory])
+    // Iteration 68 — persist best typing speed (CPM)
+    const chars = cheat.pcSequence?.[0]?.length || 0
+    const cpm = elapsedMs > 0 && chars > 0 ? Math.round(chars / (elapsedMs / 60000)) : 0
+    if (cpm > bestCpm) {
+      setBestCpm(cpm)
+      localStorage.setItem('bestCpm', String(cpm))
+    }
+  }, [cheatHistory, bestCpm])
 
   // Modal management functions
   const openHistoryModal = () => setIsHistoryModalOpen(true)
@@ -2977,6 +2986,14 @@ export default function Home() {
                     {Math.round((accuracy.hits / (accuracy.hits + accuracy.misses)) * 100)}%
                   </span>
                   <span className="accuracy-detail">{accuracy.hits} HITS · {accuracy.misses} MISSES</span>
+                </div>
+              )}
+              {/* Iteration 68 — best typing speed */}
+              {bestCpm > 0 && (
+                <div className="accuracy-stat" aria-label="Best typing speed">
+                  <span className="accuracy-title">BEST SPEED</span>
+                  <span className="accuracy-value">{bestCpm} CPM</span>
+                  <span className="accuracy-detail">FASTEST DECODE</span>
                 </div>
               )}
               {/* Iteration 56 — 7-day activity sparkline */}
