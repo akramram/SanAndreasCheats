@@ -686,6 +686,9 @@ export default function Home() {
       localStorage.setItem('gtaCash', String(cur + 50))
     } catch { /* storage blocked */ }
     setCash(c => c + 50)
+    // Iteration 63 — floating +$ popup for the roulette target bonus
+    setCashPopups(prev => [...prev, { id: `cash-roulette-${Date.now()}`, amount: 50, x: 50, y: 12 }])
+    setTimeout(() => setCashPopups(prev => prev.filter(p => !p.id.startsWith('cash-roulette-'))), 1500)
     playCoinPickup()
     announceEvent(`Target hit: ${r.name} — 50 dollars bonus, next target rolling`)
     const all = cheatsData?.cheats || []

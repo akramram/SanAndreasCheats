@@ -2015,3 +2015,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 63 — Cash Popup for the Roulette Target Bonus (#113)
+**Date:** 2026-11-26
+**Branch:** feat/iter-63-roulette-popup → PR → main
+
+### Planned
+- Roulette target hits paid +$50 silently — the Konami bonus already had a floating popup (iteration 55). Bring the same feedback to target hits.
+
+### Changed
+- `src/pages/Home.jsx` — roulette-hit effect now pushes a `cash-roulette-*` entry to `cashPopups` (`+$50` at the bar position, 1.5 s lifetime). Bonus logic, reroll and announce untouched.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (random target rolled, its PC sequence typed live): `+$200` match popup + `+$50` roulette popup, `gtaCash` delta +250, target rolled to the next cheat. Browser closed after the probe.
+
+### Next
+- Free choice.
