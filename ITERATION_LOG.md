@@ -2291,3 +2291,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 79 — Next Hunting Ground Hint in the Codex Header (#142)
+**Date:** 2026-11-26
+**Branch:** feat/iter-79-hunting-ground → PR → main
+
+### Planned
+- The codex shows an overall DECODED % but not where undecoded entries concentrate. Point the hunter at the richest category without leaking any cheat names.
+
+### Changed
+- `src/pages/Home.jsx` — inside the codex modal IIFE: `huntingGround` picks the category with the most `total - discovered`; header renders `NEXT HUNTING GROUND: <LABEL> (<n> UNDECODED)` reusing the `.codex-subtitle` styling. Hidden once everything in every category is decoded. Zero new CSS rules.
+
+### Verification
+- `npm run build` OK - `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: typed HESOYAM - matched and recorded (1 history entry); opened codex - `NEXT HUNTING GROUND: <CATEGORY> (<n> UNDECODED)` renders in the expected format with n > 0, DECODED % intact. Browser closed after the probe.
+
+### Next
+- Free choice.
