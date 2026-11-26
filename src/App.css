@@ -4986,3 +4986,44 @@ html.perf-lite .ambient-dust {
 .reset-stats-row .shop-option-state { color: #34d399; }
 .reset-stats-row.armed { border-color: #f87171; background: rgba(248, 113, 113, 0.12); }
 .reset-stats-row.armed .shop-option-state { color: #f87171; }
+
+/* Iteration 64 — welcome-back ribbon */
+.welcome-back {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #111;
+  border: 3px solid #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+  image-rendering: pixelated;
+  animation: welcome-back-in 0.35s steps(4) both;
+}
+.welcome-back-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #34d399;
+  text-shadow: 0 0 6px rgba(52, 211, 153, 0.7);
+}
+.welcome-back-last {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #fbbf24;
+}
+.welcome-back-close {
+  background: none;
+  border: none;
+  color: #f87171;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0 2px;
+}
+@keyframes welcome-back-in {
+  from { transform: translate(-50%, -24px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
