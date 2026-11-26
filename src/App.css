@@ -5044,3 +5044,16 @@ html.perf-lite .ambient-dust {
 .cat-name { width: 92px; color: #fbbf24; letter-spacing: 1px; }
 .cat-bar { height: 8px; width: var(--w, 20%); background: #f59e0b; image-rendering: pixelated; box-shadow: 0 0 6px rgba(245, 158, 11, 0.5); }
 .cat-count { color: #34d399; }
+
+/* Iteration 70 — NEW PB flash under the CHEAT ACTIVATED banner */
+.pb-banner {
+  top: 22%;
+  z-index: 151;
+  font-size: clamp(12px, 2.5vw, 18px);
+  color: #fde68a;
+  animation: pb-pop 0.3s steps(3) both;
+}
+@keyframes pb-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

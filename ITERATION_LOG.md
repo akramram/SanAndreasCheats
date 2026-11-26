@@ -2137,3 +2137,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 70 — NEW PB Flash When a Per-Cheat Record Falls
+**Date:** 2026-11-26
+**Branch:** feat/iter-70-pb-flash → PR → main
+
+### Planned
+- Per-cheat best times updated silently in the codex (iteration 42). Beating your own record deserves an in-the-moment celebration.
+
+### Changed
+- `src/pages/Home.jsx` — `pbFlash` state; the iteration 42 best-time branch now sets it to the matched cheat id for 2.5 s whenever a record is beaten. Below the CHEAT ACTIVATED banner a `🏆 NEW PERSONAL BEST!` line renders while `pbFlash === matchedCheat.id`. Cheat matching logic untouched.
+- `src/App.css` — `.pb-banner` (below-banner position, gold text) + `pb-pop` steps() pop-in.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium: fresh storage → HESOYAM shows banner + `NEW PERSONAL BEST!`, `cheatBestTimes` written (776 ms); flash gone after 2.5 s; first BAGUVIX flashes PB again; slower repeat of HESOYAM shows the banner with NO PB flash. Browser closed after the probe.
+
+### Next
+- Free choice.
