@@ -2119,3 +2119,21 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 69 — Category Breakdown Bars in the History Modal
+**Date:** 2026-11-26
+**Branch:** feat/iter-69-category-bars → PR → main
+
+### Planned
+- The history modal lists entries but never aggregates them by cheat category. Add a lifetime hits-per-category breakdown.
+
+### Changed
+- `src/pages/Home.jsx` — `categoryStats` useMemo maps history names → cheat categories via `cheatsData` and counts them (unknown → misc); renders a `BY CATEGORY` `.accuracy-stat` block with one pixel bar per category, width normalized to the top category (floor 8%).
+- `src/App.css` — `.cat-bars` / `.cat-row` / `.cat-name` / `.cat-bar` / `.cat-count` (VT323 rows, amber pixel bars, green counts).
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (typed HESOYAM + BAGUVIX live): history has 2 entries; BY CATEGORY shows `WANTED-LEVEL 1 100%` and `PLAYER-STATS 1 100%`, both bars visible; sparkline untouched. Browser closed after the probe.
+
+### Next
+- Free choice.
