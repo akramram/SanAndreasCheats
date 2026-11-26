@@ -1674,6 +1674,13 @@ export default function Home() {
     return { counts, max, total: counts.reduce((a, b) => a + b, 0), labels: days.map(d => d.toLocaleDateString()) }
   }, [cheatHistory])
 
+  // Iteration 71 — play clock: hits per hour of day, render-only from history timestamps
+  const playClock = useMemo(() => {
+    const counts = [...Array(24)].map((_, h) => cheatHistory.filter(e => new Date(e.timestamp).getHours() === h).length)
+    const max = Math.max(...counts, 1)
+    return { counts, max, total: counts.reduce((a, b) => a + b, 0) }
+  }, [cheatHistory])
+
   // Function to reset input and counter on inactivity
   const resetOnInactivity = () => {
     // If there was input but no match — that's a fail
@@ -3034,6 +3041,23 @@ export default function Home() {
                     ))}
                   </span>
                   <span className="sparkline-total">{sparkline.total} CHEATS</span>
+                </div>
+              )}
+              {/* Iteration 71 — play clock histogram */}
+              {cheatHistory.length > 0 && (
+                <div className="sparkline" aria-label="Cheat activity by hour of day">
+                  <span className="sparkline-title">PLAY CLOCK</span>
+                  <span className="sparkline-bars" aria-hidden="true">
+                    {playClock.counts.map((c, h) => (
+                      <span
+                        key={h}
+                        className={`sparkline-bar ${c === 0 ? 'sparkline-bar-empty' : ''}`}
+                        style={{ height: `${Math.max(3, Math.round((c / playClock.max) * 28))}px` }}
+                        title={`${String(h).padStart(2, '0')}:00 — ${c}`}
+                      />
+                    ))}
+                  </span>
+                  <span className="sparkline-total">{playClock.total} CHEATS</span>
                 </div>
               )}
               {/* Iteration 69 — lifetime hits by category */}

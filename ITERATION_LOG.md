@@ -2155,3 +2155,20 @@ This document tracks all visual iterations made to the San Andreas Cheats projec
 
 ### Next
 - Free choice.
+
+## Iteration 71 — Play Clock Histogram in the History Modal
+**Date:** 2026-11-26
+**Branch:** feat/iter-71-play-clock → PR → main
+
+### Planned
+- The 7-day sparkline answers "when this week?" but not "what time of day?". Add a 24-bar hour-of-day histogram next to it.
+
+### Changed
+- `src/pages/Home.jsx` — `playClock` useMemo buckets `cheatHistory` timestamps by hour (render-only, no storage); `PLAY CLOCK` block reuses the `.sparkline` markup/CSS with 24 bars and `HH:00 — n` tooltips. Zero new CSS.
+
+### Verification
+- `npm run build` ✓ · `npm run lint` 0 errors, 2 pre-existing warnings
+- Headless Chromium (3 seeded history entries: 2 now, 1 an hour ago): PLAY CLOCK renders 24 bars, 2 filled (`16:00 — 1`, `17:00 — 2`), total `3 CHEATS`; LAST 7 DAYS sparkline still present. Browser closed after the probe.
+
+### Next
+- Free choice.
